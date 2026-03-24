@@ -29,36 +29,36 @@ const bebasEmphasis = `${bebasTracked} text-murphs-blue`;
 const bebasOnImage = `${bebasTracked} text-white`;
 
 const requestTypeOptions = [
-  { value: "", label: "How would you like to stay in touch?" },
+  { value: "", label: "How would you like to plug into the conference?" },
   {
     value: "attendee",
     label:
-      "Attendee / learner: I might join workshops or gatherings if you offer them",
+      "Attendee: I want field schools, pasture walks, and regenerative farming intensives",
   },
   {
     value: "event_speaker",
     label:
-      "Speaker or teacher: I could share skills or co-host if there’s a fit",
+      "Speaker or facilitator: I teach soil health, grazing, agroforestry, water, or whole-farm design",
   },
   {
     value: "sponsor",
     label:
-      "Sponsor or partner: I’m exploring support for possible programming",
+      "Sponsor or partner: I want to back a regenerative agriculture convening with real field time",
   },
 ] as const;
 
 const audiencePaths = [
   {
-    title: "Attendees & learners",
-    body: "Raise your hand for hands-on skills, farm visits, or updates. No commitment, just interest.",
+    title: "Conference guests",
+    body: "Come walk pastures, dig soil pits, and swap notes with people who steward land for the long haul. This is a farm conference built around regenerative practice in real fields, not only slide decks.",
   },
   {
-    title: "Teachers & makers",
-    body: "If you teach, demo, or produce on-farm, we’d like to know who might collaborate down the road.",
+    title: "Faculty & demonstrators",
+    body: "We’re recruiting mentors for living classrooms: holistic grazing, cover cropping, compost and biology, integrated livestock, silvopasture, and low-input ways to grow nutrient-dense food.",
   },
   {
-    title: "Sponsors & partners",
-    body: "We’re mapping who might sponsor, host, or co-create, so we can design thoughtfully if we move forward.",
+    title: "Sponsors & allies",
+    body: "Help us fund scholarships, field gear, and translation so regenerative farming education travels further. Ideal partners love soil health, farmer networks, and food systems that regenerate rather than extract.",
   },
 ] as const;
 
@@ -123,7 +123,7 @@ export default function SubmissionFormSection() {
       requestType !== "event_speaker" &&
       requestType !== "sponsor"
     ) {
-      setError("Please choose how you’d like to stay in touch.");
+      setError("Please choose how you’d like to plug into the conference.");
       return;
     }
 
@@ -205,27 +205,39 @@ export default function SubmissionFormSection() {
             <p
               className={`${bebasOnImage} text-center text-xs text-white/90 sm:text-left md:text-sm`}
             >
-              MurphsLife · Food sovereignty
+              MurphsLife · Regenerative farming · Food sovereignty
             </p>
             <h1
               className={`${bebasOnImage} mt-3 text-center text-3xl leading-[1.08] sm:text-4xl md:text-left md:text-5xl`}
             >
-              Interested in what might come next?
+              A regenerative farming conference on the land
             </h1>
             <p className="mt-4 text-center text-sm leading-relaxed text-white/85 sm:text-base md:text-left md:text-[0.95rem]">
-              We’re exploring hands-on programming at our botanical farm, such as
-              organic growing, preserving, small-batch products, beekeeping, and
-              regenerative ranching.{" "}
+              This convening is anchored in{" "}
               <strong className="font-semibold text-white">
-                Nothing is locked in yet;
+                regenerative agriculture
+              </strong>
+              : building living soil, cycling nutrients with animals and plants,
+              catching rainfall in the landscape, and farming in ways that leave
+              land more resilient season after season. Picture sunrise pasture moves,
+              soil pits beside cover-crop cocktails, maker studios for pantry goods,
+              tasting alleys, and late-night debate about how communities feed
+              themselves from healthy ground. Organic systems, small-batch
+              products, beekeeping, and regenerative ranching still have a home
+              here, but the throughline is stewardship that regenerates.{" "}
+              <strong className="font-semibold text-white">
+                We’re in a listening season:
               </strong>{" "}
-              we’re listening first so we can shape ideas around real interest.
+              learning who would travel, who would teach field sessions, and who
+              would champion the gathering so the program can grow out of real
+              appetite for this work.
             </p>
             <p className="mt-3 text-center text-sm leading-relaxed text-white/80 sm:text-base md:text-left md:text-[0.95rem]">
-              If we pilot workshops, gatherings, or partner-led days, we want to
-              know who might attend, teach, or sponsor.{" "}
+              If this regenerative farming conference takes shape, we want a sincere
+              read on attendance, faculty, and sponsorship before logistics firm
+              up.{" "}
               <strong className="font-semibold text-white/95">
-                We are not promising dates or a launch timeline.
+                As shareable details emerge, we’ll pass them along thoughtfully.
               </strong>
             </p>
 
@@ -250,9 +262,9 @@ export default function SubmissionFormSection() {
             </div>
 
             <p className="mt-8 text-center text-xs leading-relaxed text-white/65 md:text-left">
-              Share what you’re curious about. We’ll only use your details to
-              follow up about possible opportunities, and you can opt into lists
-              below.
+              Tell us the regenerative topics, species, or landscapes you want to
+              learn beside. We’ll only use your details to follow up with news that
+              matches your note, and you can opt into the mailing lists below.
             </p>
           </motion.div>
 
@@ -269,20 +281,19 @@ export default function SubmissionFormSection() {
                 <p
                   className={`${bebasEmphasis} text-center text-xs md:text-sm`}
                 >
-                  Expression of interest
+                  Regenerative farming conference
                 </p>
                 <h2
                   className={`${bebasEmphasis} mt-2 text-center text-xl leading-snug sm:text-2xl md:text-3xl`}
                 >
-                  Tell us how you’d like to stay in touch
+                  Map yourself onto this convening
                 </h2>
                 <p className="mx-auto mt-3 max-w-xl text-center text-sm leading-relaxed text-zinc-600">
-                  This form helps us understand demand:{" "}
-                  <strong className="font-medium text-zinc-800">
-                    it does not confirm an event.
-                  </strong>{" "}
-                  We read every note and reach out when there’s something
-                  concrete to share.
+                  Help us line up curious farmers, graziers, researchers, and allies
+                  who want conference craft with muddy boots. Tell us if you learn
+                  best beside cattle, compost, nursery rows, or watershed work. We
+                  read every note and reach out when there’s news that lines up
+                  with what you shared.
                 </p>
 
                 {submitted ? (
@@ -297,10 +308,11 @@ export default function SubmissionFormSection() {
                       ✓
                     </span>
                     <p className="max-w-md text-sm leading-relaxed text-zinc-700">
-                      Thank you for raising your hand. We’ve got your message. We
-                      may follow up by email if there’s a fit or when we have
-                      clearer plans. No spam; only what’s relevant to what you
-                      shared.
+                      Thank you for raising your hand for this regenerative farming
+                      conference idea. We’ve got your message, and we’re grateful you
+                      took the time. If it makes sense, we may follow up by email
+                      with updates that match what you shared. No spam, just what
+                      feels useful for your role in the convening.
                     </p>
                   </div>
                 ) : (
@@ -367,7 +379,7 @@ export default function SubmissionFormSection() {
                         htmlFor="request_type"
                         className="block text-xs font-medium uppercase tracking-wider text-zinc-500"
                       >
-                        You are reaching out as…
+                        Your conference role (best fit today)
                       </label>
                       <select
                         id="request_type"
@@ -413,7 +425,7 @@ export default function SubmissionFormSection() {
                         htmlFor="message"
                         className="block text-xs font-medium uppercase tracking-wider text-zinc-500"
                       >
-                        What should we know?
+                        What should we know for the regenerative conference?
                       </label>
                       <textarea
                         id="message"
@@ -421,7 +433,7 @@ export default function SubmissionFormSection() {
                         required
                         rows={5}
                         className="w-full resize-y rounded-xl border border-zinc-200/90 bg-white px-4 py-3 text-zinc-900 shadow-sm outline-none ring-murphs-blue/25 transition-shadow focus:border-murphs-blue/35 focus:ring-2"
-                        placeholder="e.g. skills you’d like to learn, how you might sponsor, topics you could teach, or questions about possible timing in your region."
+                        placeholder="e.g. grazing topics you live for, soil health labs you’d teach, agroforestry ideas, water in the landscape, livestock class you’d host, sponsor gear, travel radius, or access needs in the field."
                       />
                     </div>
 
@@ -437,11 +449,12 @@ export default function SubmissionFormSection() {
                           className="mt-0.5 h-4 w-4 shrink-0 rounded border-zinc-300 text-murphs-blue focus:ring-murphs-blue"
                         />
                         <span>
-                          Email me if you share news about{" "}
+                          Email me about{" "}
                           <strong className="font-semibold text-zinc-900">
-                            possible farm programming or gatherings
+                            this regenerative farming conference
                           </strong>{" "}
-                          tied to this interest form. Unsubscribe anytime.
+                          as plans evolve (field schools, grazing tracks, tickets,
+                          hospitality, sponsor briefs). Unsubscribe anytime.
                         </span>
                       </label>
                       <label className="mt-3 flex cursor-pointer gap-3 text-sm leading-snug text-zinc-700">
@@ -501,7 +514,7 @@ export default function SubmissionFormSection() {
                       }
                       className={`${bebasTracked} h-14 w-full rounded-full bg-murphs-blue text-base uppercase text-white shadow-lg shadow-murphs-blue/25 transition-all hover:brightness-110 hover:shadow-xl hover:shadow-murphs-blue/20 disabled:cursor-not-allowed disabled:opacity-55`}
                     >
-                      {pending ? "Sending…" : "Share my interest"}
+                      {pending ? "Sending…" : "Share my regenerative ag interest"}
                     </button>
                     <p className="text-center text-xs text-zinc-500">
                       We keep your details private and use them only to respond
