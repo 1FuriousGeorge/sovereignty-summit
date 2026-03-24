@@ -1,14 +1,9 @@
 "use client";
 
 import { Turnstile, type TurnstileInstance } from "@marsidev/react-turnstile";
-import { Bebas_Neue, Dela_Gothic_One } from "next/font/google";
+import { Bebas_Neue } from "next/font/google";
 import { motion } from "framer-motion";
 import { FormEvent, useCallback, useRef, useState } from "react";
-
-const delaGothic = Dela_Gothic_One({
-  subsets: ["latin"],
-  weight: "400",
-});
 
 const bebasNeue = Bebas_Neue({
   subsets: ["latin"],
@@ -19,6 +14,15 @@ const SUBMISSION_BACKGROUND =
   "https://assets.murphslifefoundation.com/blue-bg.jpg";
 
 const TURNSTILE_SITE_KEY = process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY ?? "";
+
+/** Bebas + letter-spacing used for tagline, headings, and primary actions. */
+const bebasTracked = `${bebasNeue.className} font-normal tracking-[0.2em]`;
+
+/** Matches “MurphsLife · Food sovereignty” (same font + tracking + brand blue). */
+const bebasEmphasis = `${bebasTracked} text-murphs-blue`;
+
+/** Tighter tracking for inline bold inside body copy (still Bebas + blue). */
+const bebasBold = `${bebasNeue.className} font-normal tracking-[0.12em] text-murphs-blue`;
 
 const requestTypeOptions = [
   { value: "", label: "How would you like to connect?" },
@@ -149,13 +153,11 @@ export default function SubmissionFormSection() {
           transition={{ duration: 0.45, ease: "easeOut" }}
           className="rounded-2xl border border-white/20 bg-white/95 p-6 shadow-xl backdrop-blur-sm sm:p-10"
         >
-          <p
-            className={`${bebasNeue.className} text-center text-sm font-normal tracking-[0.2em] text-murphs-blue md:text-base`}
-          >
+          <p className={`${bebasEmphasis} text-center text-sm md:text-base`}>
             MurphsLife · Food sovereignty
           </p>
           <h2
-            className={`${delaGothic.className} mt-3 text-center text-xl font-normal uppercase leading-snug tracking-wide text-murphs-blue sm:text-2xl md:text-3xl`}
+            className={`${bebasEmphasis} mt-3 text-center text-xl leading-snug sm:text-2xl md:text-3xl`}
           >
             Homestead & farm skills
           </h2>
@@ -168,18 +170,23 @@ export default function SubmissionFormSection() {
           </p>
           <p className="mt-4 text-center text-sm leading-relaxed text-zinc-700 sm:text-base">
             We are building accessible pricing so more people can participate
-            while <strong>supporting local farmers</strong>, with the goal of
-            strengthening <strong>food sovereignty</strong> in{" "}
-            <strong>El Salvador</strong> and wherever partners show up.
+            while{" "}
+            <strong className={bebasBold}>supporting local farmers</strong>,
+            with the goal of strengthening{" "}
+            <strong className={bebasBold}>food sovereignty</strong> in{" "}
+            <strong className={bebasBold}>El Salvador</strong> and wherever
+            partners show up.
           </p>
           <p className="mt-4 text-center text-sm leading-relaxed text-zinc-700 sm:text-base">
-            Use this form to <strong>contact our team</strong>, join the mailing
-            list for updates, and tell us <strong>how you want to get involved</strong>
+            Use this form to{" "}
+            <strong className={bebasBold}>contact our team</strong>, join the
+            mailing list for updates, and tell us{" "}
+            <strong className={bebasBold}>how you want to get involved</strong>
             —whether you hope to attend, teach, sponsor, or explore something
             else we should know about.
           </p>
           <p
-            className={`${bebasNeue.className} mt-6 text-center text-lg font-normal tracking-[0.12em] text-murphs-blue md:text-xl`}
+            className={`${bebasEmphasis} mt-6 text-center text-lg md:text-xl`}
           >
             Connect with us
           </p>
@@ -369,7 +376,7 @@ export default function SubmissionFormSection() {
                 disabled={
                   pending || !TURNSTILE_SITE_KEY || !turnstileToken
                 }
-                className={`${delaGothic.className} mt-1 h-14 w-full rounded-full bg-murphs-blue text-base uppercase tracking-wide text-white transition-opacity hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-60`}
+                className={`${bebasTracked} mt-1 h-14 w-full rounded-full bg-murphs-blue text-base uppercase text-white transition-opacity hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-60`}
               >
                 {pending ? "Sending…" : "Send message"}
               </button>
