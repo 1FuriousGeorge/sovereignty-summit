@@ -1030,8 +1030,8 @@ export default function SubmissionFormSection() {
           El Salvador & United States
         </p>
         <p className="mx-auto mt-4 max-w-md font-sans text-xs leading-relaxed text-white/20">
-          The Regenerative Homestead Sovereignty Summit at Casa Conejo. Event
-          dates and full program details coming soon. Partnerships and speaker
+          The Regenerative Homestead Sovereignty Summit at Casa Conejo. Dates
+          and complete program details coming soon. Partnerships and the speaker
           lineup are currently being finalized.
         </p>
       </footer>

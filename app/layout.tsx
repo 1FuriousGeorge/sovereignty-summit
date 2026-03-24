@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Cormorant_Garamond, Josefin_Sans } from "next/font/google";
+import { getSiteUrl } from "@/lib/site-url";
 import "./globals.css";
 
 const josefinSans = Josefin_Sans({
@@ -15,14 +16,8 @@ const cormorantDisplay = Cormorant_Garamond({
   style: ["normal", "italic"],
 });
 
-const metadataBaseUrl =
-  process.env.NEXT_PUBLIC_SITE_URL ??
-  (process.env.VERCEL_URL
-    ? `https://${process.env.VERCEL_URL}`
-    : "http://localhost:3000");
-
 export const metadata: Metadata = {
-  metadataBase: new URL(metadataBaseUrl),
+  metadataBase: new URL(getSiteUrl()),
   title: {
     default: "MurphsLife Foundation",
     template: "%s · MurphsLife Foundation",
