@@ -13,9 +13,9 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "MurphsLife Foundation — Submissions",
+  title: "MurphsLife — Homestead & food sovereignty interest list",
   description:
-    "Share your story, proposal, or partnership idea with MurphsLife Foundation.",
+    "Sign up for updates about hands-on homestead training, food sovereignty, and farm workshops with MurphsLife Foundation in El Salvador.",
 };
 
 export default function RootLayout({
