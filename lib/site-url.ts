@@ -3,7 +3,7 @@
  * Set NEXT_PUBLIC_SITE_URL in Vercel to the public domain so previews never
  * resolve against *.vercel.app or localhost.
  */
-const PRODUCTION_SITE_URL = "https://sovereignty.murphslifefoundation.com";
+const PRODUCTION_SITE_URL = "https://submit.murphslifefoundation.com";
 
 export function getSiteUrl(): string {
   const fromEnv = process.env.NEXT_PUBLIC_SITE_URL?.trim();
