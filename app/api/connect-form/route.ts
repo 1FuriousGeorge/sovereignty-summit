@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 
 import {
-  buildConnectFormMessage,
+  buildConnectFormMetadata,
   CONNECT_FORM_MAILING_LIST_ID,
   CONNECT_FORM_TYPE,
   isValidRequestType,
@@ -94,13 +94,14 @@ export async function POST(request: Request) {
     );
   }
 
-  const message = buildConnectFormMessage(messageBody, location, mailingList);
+  const metadata = buildConnectFormMetadata(location, mailingList);
 
   const { error: insertError } = await supabase.from("connect_form").insert({
     first_name: firstName || null,
     last_name: lastName || null,
     email,
-    message,
+    message: messageBody,
+    metadata,
     form_type: CONNECT_FORM_TYPE,
     request_type: requestType,
   });

@@ -5,17 +5,19 @@ export const CONNECT_FORM_TYPE = "food_sovereignty_farm";
 export const CONNECT_FORM_MAILING_LIST_ID =
   "26b99ddd-24a7-4bb2-88bd-1bad59f07060";
 
-export function buildConnectFormMessage(
-  body: string,
+/** JSON stored in `connect_form.metadata` for this portal. */
+export function buildConnectFormMetadata(
   location: string,
   mailingList: boolean,
-): string {
-  const parts = [body.trim()];
-  if (location.trim()) {
-    parts.push(`Location: ${location.trim()}`);
+): Record<string, unknown> {
+  const meta: Record<string, unknown> = {
+    email_updates_mailing_list: mailingList,
+  };
+  const loc = location.trim();
+  if (loc) {
+    meta.location = loc;
   }
-  parts.push(`Email updates (mailing list): ${mailingList ? "yes" : "no"}`);
-  return parts.join("\n\n");
+  return meta;
 }
 
 export function isValidRequestType(
