@@ -309,7 +309,7 @@ export default function SubmissionFormSection() {
                 <input
                   name="consent"
                   type="checkbox"
-                  required
+                  defaultChecked
                   className="mt-0.5 h-4 w-4 shrink-0 rounded border-zinc-300 text-murphs-blue focus:ring-murphs-blue"
                 />
                 <span>
