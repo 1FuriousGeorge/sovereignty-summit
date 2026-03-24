@@ -4,6 +4,8 @@ import { Bebas_Neue, Dela_Gothic_One } from "next/font/google";
 import { motion } from "framer-motion";
 import { FormEvent, useState } from "react";
 
+import { createSupabaseBrowserClient } from "@/lib/supabase/client";
+
 const delaGothic = Dela_Gothic_One({
   subsets: ["latin"],
   weight: "400",
@@ -17,29 +19,103 @@ const bebasNeue = Bebas_Neue({
 const SUBMISSION_BACKGROUND =
   "https://assets.murphslifefoundation.com/blue-bg.jpg";
 
-const interestOptions = [
-  { value: "", label: "How do you want to take part?" },
-  { value: "attend", label: "I want to attend a future workshop or conference" },
+/** Stored in `connect_form.form_type` to identify this page’s submissions. */
+const CONNECT_FORM_TYPE = "food_sovereignty_farm";
+
+const requestTypeOptions = [
+  { value: "", label: "How would you like to connect?" },
   {
-    value: "volunteer",
-    label: "I'd like to volunteer or help organize",
+    value: "attendee",
+    label: "Attendee — hear more, join updates, or take part in programs",
   },
   {
-    value: "farmer-artisan",
-    label: "I'm a local farmer, maker, or teacher",
+    value: "event_speaker",
+    label: "Speaker or teacher — teach or demonstrate at a future event",
   },
-  { value: "sponsor", label: "I'm interested in sponsoring or partnering" },
-  { value: "media", label: "Press or media" },
-  { value: "share", label: "Just sharing / spreading the word" },
-  { value: "other", label: "Something else" },
-];
+  {
+    value: "sponsor",
+    label: "Sponsor or partner — support this work",
+  },
+] as const;
+
+function buildMessage(
+  body: string,
+  location: string,
+  mailingList: boolean,
+): string {
+  const parts = [body.trim()];
+  if (location.trim()) {
+    parts.push(`Location: ${location.trim()}`);
+  }
+  parts.push(`Email updates (mailing list): ${mailingList ? "yes" : "no"}`);
+  return parts.join("\n\n");
+}
 
 export default function SubmissionFormSection() {
   const [submitted, setSubmitted] = useState(false);
+  const [pending, setPending] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
-  function handleSubmit(e: FormEvent<HTMLFormElement>) {
+  async function handleSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
+    setError(null);
+
+    const form = e.currentTarget;
+    const fd = new FormData(form);
+    const firstName = String(fd.get("first_name") ?? "").trim();
+    const lastName = String(fd.get("last_name") ?? "").trim();
+    const email = String(fd.get("email") ?? "").trim();
+    const requestType = String(fd.get("request_type") ?? "").trim();
+    const location = String(fd.get("location") ?? "").trim();
+    const messageBody = String(fd.get("message") ?? "").trim();
+    const consent = fd.get("consent") === "on";
+
+    if (!messageBody) {
+      setError("Please add a short message so we know how we can help.");
+      return;
+    }
+
+    if (
+      requestType !== "attendee" &&
+      requestType !== "event_speaker" &&
+      requestType !== "sponsor"
+    ) {
+      setError("Please choose how you would like to connect.");
+      return;
+    }
+
+    const supabase = createSupabaseBrowserClient();
+    if (!supabase) {
+      setError(
+        "This form is not configured yet. Please try again later or email the foundation directly.",
+      );
+      return;
+    }
+
+    setPending(true);
+    const message = buildMessage(messageBody, location, consent);
+
+    const { error: insertError } = await supabase.from("connect_form").insert({
+      first_name: firstName || null,
+      last_name: lastName || null,
+      email,
+      message,
+      form_type: CONNECT_FORM_TYPE,
+      request_type: requestType,
+    });
+
+    setPending(false);
+
+    if (insertError) {
+      setError(
+        insertError.message ||
+          "Something went wrong sending your message. Please try again.",
+      );
+      return;
+    }
+
     setSubmitted(true);
+    form.reset();
   }
 
   return (
@@ -68,37 +144,35 @@ export default function SubmissionFormSection() {
           <h2
             className={`${delaGothic.className} mt-3 text-center text-xl font-normal uppercase leading-snug tracking-wide text-murphs-blue sm:text-2xl md:text-3xl`}
           >
-            Homestead skills on our farm
+            Homestead & farm skills
           </h2>
           <p className="mt-4 text-center text-sm leading-relaxed text-zinc-700 sm:text-base">
-            What if we hosted a conference at our botanical farm that teaches{" "}
-            <strong>you</strong> how to run <strong>your own</strong> homestead?
-            Hands-on learning on a real farm—growing organic food, preserving
-            and canning, and small-batch crafts like soaps, shampoo, candles,
-            kombucha, sourdough, jerky, essential oils, beekeeping, and more.
-            We would also teach regenerative cattle ranching, on the ground,
-            where it actually happens.
+            MurphsLife is developing hands-on programming at our botanical farm:
+            organic growing, preserving and canning, small-batch products like
+            soaps, shampoo, candles, kombucha, sourdough, jerky, essential oils,
+            beekeeping, and regenerative cattle ranching—taught on a working
+            farm, not from a slide deck.
           </p>
           <p className="mt-4 text-center text-sm leading-relaxed text-zinc-700 sm:text-base">
-            Instead of a typical high ticket price, we are exploring something
-            closer to <strong>$50</strong> so more people can take part and
-            <strong> support local farmers</strong>—not hundreds of dollars for
-            the same depth of training.
+            We are building accessible pricing so more people can participate
+            while <strong>supporting local farmers</strong>, with the goal of
+            strengthening <strong>food sovereignty</strong> in{" "}
+            <strong>El Salvador</strong> and wherever partners show up.
           </p>
           <p className="mt-4 text-center text-sm leading-relaxed text-zinc-700 sm:text-base">
-            Most people do not feel the urgency of <strong>food sovereignty</strong>{" "}
-            until it is late. This is still an idea—we want to see whether there
-            is interest in <strong>El Salvador</strong> and beyond for this kind
-            of gathering.
+            Use this form to <strong>contact our team</strong>, join the mailing
+            list for updates, and tell us <strong>how you want to get involved</strong>
+            —whether you hope to attend, teach, sponsor, or explore something
+            else we should know about.
           </p>
           <p
             className={`${bebasNeue.className} mt-6 text-center text-lg font-normal tracking-[0.12em] text-murphs-blue md:text-xl`}
           >
-            Join the interest list
+            Connect with us
           </p>
           <p className="mt-2 text-center text-xs text-zinc-500 sm:text-sm">
-            Add your email and we will keep you posted if we move forward.
-            Share with friends who care about resilient food and local skills.
+            Share your details and a short message. We read every submission and
+            will follow up by email when there is news about this project.
           </p>
 
           {submitted ? (
@@ -106,27 +180,45 @@ export default function SubmissionFormSection() {
               className="mt-8 rounded-xl bg-murphs-blue/10 px-4 py-6 text-center text-sm leading-relaxed text-murphs-blue"
               role="status"
             >
-              You are on the list. Thank you for raising your hand—when there is
-              news about workshops, timing, or how to take part in El Salvador,
-              we will reach out by email.
+              Thank you. Your message is in our inbox—we will reach out when we
+              have updates about programs, timing, or next steps for your
+              request.
             </p>
           ) : (
             <form className="mt-8 flex flex-col gap-5" onSubmit={handleSubmit}>
-              <div>
-                <label
-                  htmlFor="name"
-                  className="mb-1.5 block text-xs font-medium uppercase tracking-wider text-zinc-500"
-                >
-                  Full name
-                </label>
-                <input
-                  id="name"
-                  name="name"
-                  type="text"
-                  required
-                  autoComplete="name"
-                  className="w-full rounded-lg border border-zinc-200 bg-white px-4 py-3 text-zinc-900 outline-none ring-murphs-blue/30 transition-shadow focus:ring-2"
-                />
+              <div className="grid gap-5 sm:grid-cols-2">
+                <div>
+                  <label
+                    htmlFor="first_name"
+                    className="mb-1.5 block text-xs font-medium uppercase tracking-wider text-zinc-500"
+                  >
+                    First name
+                  </label>
+                  <input
+                    id="first_name"
+                    name="first_name"
+                    type="text"
+                    required
+                    autoComplete="given-name"
+                    className="w-full rounded-lg border border-zinc-200 bg-white px-4 py-3 text-zinc-900 outline-none ring-murphs-blue/30 transition-shadow focus:ring-2"
+                  />
+                </div>
+                <div>
+                  <label
+                    htmlFor="last_name"
+                    className="mb-1.5 block text-xs font-medium uppercase tracking-wider text-zinc-500"
+                  >
+                    Last name{" "}
+                    <span className="font-normal normal-case">(optional)</span>
+                  </label>
+                  <input
+                    id="last_name"
+                    name="last_name"
+                    type="text"
+                    autoComplete="family-name"
+                    className="w-full rounded-lg border border-zinc-200 bg-white px-4 py-3 text-zinc-900 outline-none ring-murphs-blue/30 transition-shadow focus:ring-2"
+                  />
+                </div>
               </div>
               <div>
                 <label
@@ -146,35 +238,19 @@ export default function SubmissionFormSection() {
               </div>
               <div>
                 <label
-                  htmlFor="location"
+                  htmlFor="request_type"
                   className="mb-1.5 block text-xs font-medium uppercase tracking-wider text-zinc-500"
                 >
-                  Location <span className="font-normal normal-case">(optional)</span>
-                </label>
-                <input
-                  id="location"
-                  name="location"
-                  type="text"
-                  autoComplete="address-level1"
-                  placeholder="City, country"
-                  className="w-full rounded-lg border border-zinc-200 bg-white px-4 py-3 text-zinc-900 outline-none ring-murphs-blue/30 transition-shadow placeholder:text-zinc-400 focus:ring-2"
-                />
-              </div>
-              <div>
-                <label
-                  htmlFor="interest"
-                  className="mb-1.5 block text-xs font-medium uppercase tracking-wider text-zinc-500"
-                >
-                  Your connection to this idea
+                  Your connection
                 </label>
                 <select
-                  id="interest"
-                  name="interest"
+                  id="request_type"
+                  name="request_type"
                   required
                   defaultValue=""
                   className="w-full rounded-lg border border-zinc-200 bg-white px-4 py-3 text-zinc-900 outline-none ring-murphs-blue/30 transition-shadow focus:ring-2"
                 >
-                  {interestOptions.map((opt) => (
+                  {requestTypeOptions.map((opt) => (
                     <option
                       key={opt.value || "placeholder"}
                       value={opt.value}
@@ -187,18 +263,35 @@ export default function SubmissionFormSection() {
               </div>
               <div>
                 <label
-                  htmlFor="comments"
+                  htmlFor="location"
                   className="mb-1.5 block text-xs font-medium uppercase tracking-wider text-zinc-500"
                 >
-                  Comments{" "}
+                  Location{" "}
                   <span className="font-normal normal-case">(optional)</span>
                 </label>
+                <input
+                  id="location"
+                  name="location"
+                  type="text"
+                  autoComplete="address-level1"
+                  placeholder="City, country"
+                  className="w-full rounded-lg border border-zinc-200 bg-white px-4 py-3 text-zinc-900 outline-none ring-murphs-blue/30 transition-shadow placeholder:text-zinc-400 focus:ring-2"
+                />
+              </div>
+              <div>
+                <label
+                  htmlFor="message"
+                  className="mb-1.5 block text-xs font-medium uppercase tracking-wider text-zinc-500"
+                >
+                  Message
+                </label>
                 <textarea
-                  id="comments"
-                  name="comments"
-                  rows={4}
+                  id="message"
+                  name="message"
+                  required
+                  rows={5}
                   className="w-full resize-y rounded-lg border border-zinc-200 bg-white px-4 py-3 text-zinc-900 outline-none ring-murphs-blue/30 transition-shadow focus:ring-2"
-                  placeholder="Skills you’d like to learn, ideas, or how you’d like to help."
+                  placeholder="What you want to learn, how you’d like to help, or questions for our team."
                 />
               </div>
               <label className="flex cursor-pointer gap-3 text-sm leading-snug text-zinc-700">
@@ -209,16 +302,26 @@ export default function SubmissionFormSection() {
                   className="mt-0.5 h-4 w-4 shrink-0 rounded border-zinc-300 text-murphs-blue focus:ring-murphs-blue"
                 />
                 <span>
-                  I agree to receive email updates from MurphsLife Foundation
-                  about this homestead / food sovereignty initiative and related
-                  programs. You can unsubscribe anytime.
+                  Add me to the mailing list for updates on this project and
+                  related MurphsLife programs. You can unsubscribe anytime.
                 </span>
               </label>
+
+              {error ? (
+                <p
+                  className="rounded-lg bg-red-50 px-3 py-2 text-sm text-red-800"
+                  role="alert"
+                >
+                  {error}
+                </p>
+              ) : null}
+
               <button
                 type="submit"
-                className={`${delaGothic.className} mt-2 h-14 w-full rounded-full bg-murphs-blue text-base uppercase tracking-wide text-white transition-opacity hover:opacity-90`}
+                disabled={pending}
+                className={`${delaGothic.className} mt-1 h-14 w-full rounded-full bg-murphs-blue text-base uppercase tracking-wide text-white transition-opacity hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-60`}
               >
-                Join the list
+                {pending ? "Sending…" : "Send message"}
               </button>
             </form>
           )}
