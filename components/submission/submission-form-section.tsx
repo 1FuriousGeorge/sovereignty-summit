@@ -2,6 +2,32 @@
 
 import { Turnstile, type TurnstileInstance } from "@marsidev/react-turnstile";
 import { motion } from "framer-motion";
+import type { LucideIcon } from "lucide-react";
+import {
+  ArrowDown,
+  ArrowRight,
+  Backpack,
+  Beef,
+  Building2,
+  Camera,
+  ChevronDown,
+  ClipboardList,
+  ExternalLink,
+  FlaskConical,
+  Globe,
+  Hand,
+  Handshake,
+  Home,
+  Leaf,
+  Loader2,
+  Mic,
+  Package,
+  Smartphone,
+  Sprout,
+  Tag,
+  Wrench,
+  Zap,
+} from "lucide-react";
 import Image from "next/image";
 import { FormEvent, useCallback, useEffect, useRef, useState } from "react";
 
@@ -33,117 +59,133 @@ const requestTypeOptions = [
   },
 ] as const;
 
-const pillarCards = [
+const pillarCards: readonly {
+  icon: LucideIcon;
+  title: string;
+  body: string;
+}[] = [
   {
-    emoji: "🌱",
+    icon: Sprout,
     title: "Food Sovereignty",
     body: "Growing, preserving, and building independence from fragile supply chains.",
   },
   {
-    emoji: "🏡",
+    icon: Home,
     title: "Regenerative Living",
     body: "Land stewardship, livestock systems, and circular inputs that build rather than deplete.",
   },
   {
-    emoji: "🔧",
+    icon: Wrench,
     title: "Practical Self-Reliance",
     body: "Skills you can actually use — preservation, products, systems, and tools.",
   },
   {
-    emoji: "🤝",
+    icon: Handshake,
     title: "Aligned Community",
     body: "People building real things, not just talking about them.",
   },
-] as const;
+];
 
-const whyCards = [
+const whyCards: readonly {
+  icon: LucideIcon;
+  title: string;
+  body: string;
+}[] = [
   {
-    emoji: "🛠️",
+    icon: Wrench,
     title: "Learn skills you can actually use",
     body: "Not theory. Hands-on, practical knowledge around food, land, and resilient systems — taught by people who live it.",
   },
   {
-    emoji: "🌐",
+    icon: Globe,
     title: "Connect with aligned people and companies",
     body: "A curated room of builders, operators, educators, brands, and community members who care about the same things you do.",
   },
   {
-    emoji: "🌿",
+    icon: Leaf,
     title: "Experience it on a real regenerative farm",
     body: "Casa Conejo is a working campus in El Salvador — 46 acres of real land, real systems, and real community being built right now.",
   },
   {
-    emoji: "✋",
+    icon: Hand,
     title: "Get in early and help shape it",
     body: "We're building the program, the speaker lineup, and the partner roster now. The people who engage first will have the most direct influence on what this becomes.",
   },
-] as const;
+];
 
-const topicCards = [
+const topicCards: readonly {
+  icon: LucideIcon;
+  title: string;
+  body: string;
+}[] = [
   {
-    emoji: "🥬",
+    icon: Leaf,
     title: "Growing Food",
     body: "Soil health, garden systems, high-yield crops, and practical cultivation",
   },
   {
-    emoji: "🫙",
+    icon: Package,
     title: "Preserving Food",
     body: "Fermentation, canning, dehydration, and long-term storage systems",
   },
   {
-    emoji: "🧴",
+    icon: FlaskConical,
     title: "Making Products",
     body: "Value-added goods, herbal medicine, household products, and cottage industry",
   },
   {
-    emoji: "🐄",
+    icon: Beef,
     title: "Regenerative Livestock & Land",
     body: "Rotational grazing, animal integration, and land restoration systems",
   },
   {
-    emoji: "⚡",
+    icon: Zap,
     title: "Building Resilient Systems",
     body: "Water, energy, waste, and infrastructure for long-term self-sufficiency",
   },
   {
-    emoji: "📱",
+    icon: Smartphone,
     title: "Modern Tools & Community",
     body: "Business systems, digital tools, and community models that support sovereignty",
   },
-] as const;
+];
 
-const whoCards = [
+const whoCards: readonly {
+  icon: LucideIcon;
+  title: string;
+  body: string;
+}[] = [
   {
-    emoji: "🎒",
+    icon: Backpack,
     title: "Aspiring Attendees",
     body: "You want to learn, connect, and leave with skills and relationships that last.",
   },
   {
-    emoji: "🎤",
+    icon: Mic,
     title: "Teachers & Speakers",
     body: "You have knowledge worth sharing and want to teach it in a real-world setting.",
   },
   {
-    emoji: "🏷️",
+    icon: Tag,
     title: "Sponsors & Brands",
     body: "You want to reach a highly aligned audience and support something mission-driven.",
   },
   {
-    emoji: "🏢",
+    icon: Building2,
     title: "Partner Companies",
     body: "You have tools, products, or services that belong in this ecosystem.",
   },
   {
-    emoji: "📸",
+    icon: Camera,
     title: "Creators & Media",
     body: "You want to document, share, and amplify something worth covering.",
   },
   {
-    emoji: "🌍",
+    icon: Globe,
     title: "Volunteers & Local Support",
     body: "You're in El Salvador or nearby and want to be part of building this on the ground.",
   },
-] as const;
+];
 
 const statCards = [
   {
@@ -321,8 +363,9 @@ export default function SubmissionFormSection() {
         <button
           type="button"
           onClick={scrollToForm}
-          className="rounded-full bg-foliage px-5 py-2.5 text-xs font-bold uppercase tracking-widest text-creme transition-transform duration-200 hover:-translate-y-0.5"
+          className="inline-flex items-center gap-2 rounded-full bg-foliage px-5 py-2.5 text-xs font-bold uppercase tracking-widest text-creme transition-transform duration-200 hover:-translate-y-0.5"
         >
+          <ArrowDown className="size-3.5 shrink-0 stroke-[2.5]" aria-hidden />
           Join the Interest List
         </button>
       </nav>
@@ -376,13 +419,15 @@ export default function SubmissionFormSection() {
               onClick={scrollToForm}
               className="flex items-center gap-2 rounded-full bg-foliage px-8 py-4 text-sm font-bold tracking-wide text-creme shadow-[0_4px_20px_rgba(44,52,45,0.5)] transition-transform duration-200 hover:-translate-y-0.5"
             >
-              ↓ Join the Interest List
+              <ArrowDown className="size-4 shrink-0 stroke-[2.5]" aria-hidden />
+              Join the Interest List
             </button>
             <button
               type="button"
               onClick={scrollToForm}
               className="flex items-center gap-2 rounded-full border border-white/35 bg-white/10 px-7 py-4 text-sm font-semibold tracking-wide text-white backdrop-blur-md transition-transform duration-200 hover:-translate-y-0.5"
             >
+              <ClipboardList className="size-4 shrink-0 stroke-[2]" aria-hidden />
               Tell Us How You Want to Be Involved
             </button>
           </motion.div>
@@ -400,17 +445,7 @@ export default function SubmissionFormSection() {
           className="animate-scroll-hint absolute bottom-8 left-1/2 flex flex-col items-center gap-2 text-xs uppercase tracking-widest text-white/35"
           aria-hidden
         >
-          <svg
-            width="20"
-            height="20"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="1.5"
-            viewBox="0 0 24 24"
-          >
-            <title>Scroll</title>
-            <path d="M19 9l-7 7-7-7" />
-          </svg>
+          <ChevronDown className="size-5 stroke-[1.5]" />
           Scroll
         </div>
       </section>
@@ -450,24 +485,29 @@ export default function SubmissionFormSection() {
               </p>
             </motion.div>
             <div className="space-y-3">
-              {pillarCards.map((card, i) => (
-                <motion.div
-                  key={card.title}
-                  {...fadeUp}
-                  transition={{ ...fadeUp.transition, delay: i * 0.1 }}
-                  className="flex items-start gap-4 rounded-xl border-l-4 border-foliage bg-creme p-5"
-                >
-                  <span className="mt-0.5 shrink-0 text-2xl">{card.emoji}</span>
-                  <div>
-                    <p className="font-sans text-sm font-semibold text-foliage">
-                      {card.title}
-                    </p>
-                    <p className="mt-1 font-sans text-xs leading-relaxed text-foliage/60">
-                      {card.body}
-                    </p>
-                  </div>
-                </motion.div>
-              ))}
+              {pillarCards.map((card, i) => {
+                const Icon = card.icon;
+                return (
+                  <motion.div
+                    key={card.title}
+                    {...fadeUp}
+                    transition={{ ...fadeUp.transition, delay: i * 0.1 }}
+                    className="flex items-start gap-4 rounded-xl border-l-4 border-foliage bg-creme p-5"
+                  >
+                    <span className="mt-0.5 flex shrink-0 text-foliage">
+                      <Icon className="size-7 stroke-[1.5]" aria-hidden />
+                    </span>
+                    <div>
+                      <p className="font-sans text-sm font-semibold text-foliage">
+                        {card.title}
+                      </p>
+                      <p className="mt-1 font-sans text-xs leading-relaxed text-foliage/60">
+                        {card.body}
+                      </p>
+                    </div>
+                  </motion.div>
+                );
+              })}
             </div>
           </div>
         </div>
@@ -493,24 +533,27 @@ export default function SubmissionFormSection() {
             here&apos;s why this summit is worth showing up for.
           </motion.p>
           <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
-            {whyCards.map((card, i) => (
-              <motion.div
-                key={card.title}
-                {...fadeUp}
-                transition={{ ...fadeUp.transition, delay: i * 0.08 }}
-                className="cursor-default rounded-2xl border border-gold/15 bg-white p-8 shadow-[0_2px_8px_rgba(44,52,45,0.06)] transition-[transform,box-shadow] duration-200 hover:-translate-y-1 hover:shadow-[0_12px_40px_rgba(44,52,45,0.12)]"
-              >
-                <div className="mb-5 flex h-14 w-14 items-center justify-center rounded-2xl bg-foliage/10 text-2xl">
-                  {card.emoji}
-                </div>
-                <h3 className="font-display mb-2 text-lg font-bold text-foliage">
-                  {card.title}
-                </h3>
-                <p className="font-sans text-sm leading-relaxed text-foliage/60">
-                  {card.body}
-                </p>
-              </motion.div>
-            ))}
+            {whyCards.map((card, i) => {
+              const Icon = card.icon;
+              return (
+                <motion.div
+                  key={card.title}
+                  {...fadeUp}
+                  transition={{ ...fadeUp.transition, delay: i * 0.08 }}
+                  className="cursor-default rounded-2xl border border-gold/15 bg-white p-8 shadow-[0_2px_8px_rgba(44,52,45,0.06)] transition-[transform,box-shadow] duration-200 hover:-translate-y-1 hover:shadow-[0_12px_40px_rgba(44,52,45,0.12)]"
+                >
+                  <div className="mb-5 flex h-14 w-14 items-center justify-center rounded-2xl bg-foliage/10 text-foliage">
+                    <Icon className="size-7 stroke-[1.5]" aria-hidden />
+                  </div>
+                  <h3 className="font-display mb-2 text-lg font-bold text-foliage">
+                    {card.title}
+                  </h3>
+                  <p className="font-sans text-sm leading-relaxed text-foliage/60">
+                    {card.body}
+                  </p>
+                </motion.div>
+              );
+            })}
           </div>
         </div>
       </section>
@@ -535,22 +578,27 @@ export default function SubmissionFormSection() {
             practical, hands-on, and grounded in what actually works.
           </motion.p>
           <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-            {topicCards.map((card, i) => (
-              <motion.div
-                key={card.title}
-                {...fadeUp}
-                transition={{ ...fadeUp.transition, delay: i * 0.06 }}
-                className="cursor-default rounded-xl border border-white/10 bg-white/10 p-6 text-center transition-all duration-200 hover:-translate-y-0.5 hover:bg-white/[0.12]"
-              >
-                <span className="mb-3 block text-3xl">{card.emoji}</span>
-                <p className="font-sans text-sm font-semibold text-white">
-                  {card.title}
-                </p>
-                <p className="mt-2 font-sans text-xs leading-relaxed text-white/50">
-                  {card.body}
-                </p>
-              </motion.div>
-            ))}
+            {topicCards.map((card, i) => {
+              const Icon = card.icon;
+              return (
+                <motion.div
+                  key={card.title}
+                  {...fadeUp}
+                  transition={{ ...fadeUp.transition, delay: i * 0.06 }}
+                  className="cursor-default rounded-xl border border-white/10 bg-white/10 p-6 text-center transition-all duration-200 hover:-translate-y-0.5 hover:bg-white/[0.12]"
+                >
+                  <span className="mb-3 flex justify-center text-white">
+                    <Icon className="size-9 stroke-[1.35]" aria-hidden />
+                  </span>
+                  <p className="font-sans text-sm font-semibold text-white">
+                    {card.title}
+                  </p>
+                  <p className="mt-2 font-sans text-xs leading-relaxed text-white/50">
+                    {card.body}
+                  </p>
+                </motion.div>
+              );
+            })}
           </div>
         </div>
       </section>
@@ -575,24 +623,27 @@ export default function SubmissionFormSection() {
             people. Here&apos;s who we&apos;re looking for.
           </motion.p>
           <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-            {whoCards.map((card, i) => (
-              <motion.div
-                key={card.title}
-                {...fadeUp}
-                transition={{ ...fadeUp.transition, delay: i * 0.05 }}
-                className="cursor-default rounded-xl border border-gold/15 bg-creme p-6 text-center transition-colors duration-200 hover:border-gold"
-              >
-                <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-full bg-foliage/10 text-2xl">
-                  {card.emoji}
-                </div>
-                <h3 className="mb-2 font-sans text-sm font-bold text-foliage">
-                  {card.title}
-                </h3>
-                <p className="font-sans text-xs leading-relaxed text-foliage/55">
-                  {card.body}
-                </p>
-              </motion.div>
-            ))}
+            {whoCards.map((card, i) => {
+              const Icon = card.icon;
+              return (
+                <motion.div
+                  key={card.title}
+                  {...fadeUp}
+                  transition={{ ...fadeUp.transition, delay: i * 0.05 }}
+                  className="cursor-default rounded-xl border border-gold/15 bg-creme p-6 text-center transition-colors duration-200 hover:border-gold"
+                >
+                  <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-full bg-foliage/10 text-foliage">
+                    <Icon className="size-7 stroke-[1.5]" aria-hidden />
+                  </div>
+                  <h3 className="mb-2 font-sans text-sm font-bold text-foliage">
+                    {card.title}
+                  </h3>
+                  <p className="font-sans text-xs leading-relaxed text-foliage/55">
+                    {card.body}
+                  </p>
+                </motion.div>
+              );
+            })}
           </div>
         </div>
       </section>
@@ -623,8 +674,11 @@ export default function SubmissionFormSection() {
                   className="py-12 text-center"
                   role="status"
                 >
-                  <div className="mb-4 text-5xl" aria-hidden>
-                    🌱
+                  <div
+                    className="mb-4 flex justify-center text-gold"
+                    aria-hidden
+                  >
+                    <Sprout className="size-14 stroke-[1.25]" />
                   </div>
                   <h3 className="font-display mb-3 text-2xl font-bold text-foliage">
                     You&apos;re on the list.
@@ -817,9 +871,22 @@ export default function SubmissionFormSection() {
                     disabled={
                       pending || !TURNSTILE_SITE_KEY || !turnstileToken
                     }
-                    className="w-full rounded-full bg-foliage py-4 text-sm font-bold uppercase tracking-widest text-creme shadow-[0_4px_20px_rgba(44,52,45,0.3)] transition-all duration-200 hover:-translate-y-0.5 disabled:cursor-not-allowed disabled:opacity-55"
+                    className="inline-flex w-full items-center justify-center gap-2 rounded-full bg-foliage py-4 text-sm font-bold uppercase tracking-widest text-creme shadow-[0_4px_20px_rgba(44,52,45,0.3)] transition-all duration-200 hover:-translate-y-0.5 disabled:cursor-not-allowed disabled:opacity-55"
                   >
-                    {pending ? "Sending…" : "Raise My Hand →"}
+                    {pending ? (
+                      <>
+                        <Loader2
+                          className="size-4 shrink-0 animate-spin stroke-[2.5]"
+                          aria-hidden
+                        />
+                        Sending…
+                      </>
+                    ) : (
+                      <>
+                        Raise My Hand
+                        <ArrowRight className="size-4 shrink-0 stroke-[2.5]" aria-hidden />
+                      </>
+                    )}
                   </button>
                   <p className="text-center font-sans text-xs text-foliage/40">
                     We&apos;ll reach out with dates and details as
@@ -873,7 +940,8 @@ export default function SubmissionFormSection() {
                   rel="noopener noreferrer"
                   className="inline-flex items-center gap-2 font-sans text-xs font-bold uppercase tracking-widest text-foliage/50 transition-colors hover:text-foliage"
                 >
-                  Explore the Casa Conejo Ecosystem →
+                  Explore the Casa Conejo Ecosystem
+                  <ExternalLink className="size-3.5 shrink-0 stroke-[2]" aria-hidden />
                 </a>
               </div>
             </motion.div>
@@ -936,7 +1004,8 @@ export default function SubmissionFormSection() {
               onClick={scrollToForm}
               className="inline-flex items-center gap-3 rounded-full bg-creme px-10 py-4 text-sm font-bold uppercase tracking-widest text-foliage shadow-[0_4px_24px_rgba(0,0,0,0.3)] transition-transform duration-200 hover:-translate-y-0.5"
             >
-              Raise Your Hand →
+              Raise Your Hand
+              <ArrowRight className="size-4 shrink-0 stroke-[2.5]" aria-hidden />
             </button>
             <p className="mt-5 font-sans text-xs text-white/30">
               Dates and details coming soon. We&apos;ll reach out to everyone
