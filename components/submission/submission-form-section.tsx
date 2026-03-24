@@ -79,7 +79,8 @@ export default function SubmissionFormSection() {
     const requestType = String(fd.get("request_type") ?? "").trim();
     const location = String(fd.get("location") ?? "").trim();
     const messageBody = String(fd.get("message") ?? "").trim();
-    const consent = fd.get("consent") === "on";
+    const mailingListEvent = fd.get("mailing_list_event") === "on";
+    const mailingListGeneral = fd.get("mailing_list_general") === "on";
 
     if (!messageBody) {
       setError("Please add a short message so we know how we can help.");
@@ -108,7 +109,8 @@ export default function SubmissionFormSection() {
         requestType,
         location,
         messageBody,
-        mailingList: consent,
+        mailingListEvent,
+        mailingListGeneral,
       }),
     });
 
@@ -307,14 +309,25 @@ export default function SubmissionFormSection() {
               </div>
               <label className="flex cursor-pointer gap-3 text-sm leading-snug text-zinc-700">
                 <input
-                  name="consent"
+                  name="mailing_list_event"
                   type="checkbox"
                   defaultChecked
                   className="mt-0.5 h-4 w-4 shrink-0 rounded border-zinc-300 text-murphs-blue focus:ring-murphs-blue"
                 />
                 <span>
-                  Add me to the mailing list for updates on this project and
-                  related MurphsLife programs. You can unsubscribe anytime.
+                  Email me updates about <strong>this event</strong> and this food
+                  sovereignty project. You can unsubscribe anytime.
+                </span>
+              </label>
+              <label className="flex cursor-pointer gap-3 text-sm leading-snug text-zinc-700">
+                <input
+                  name="mailing_list_general"
+                  type="checkbox"
+                  className="mt-0.5 h-4 w-4 shrink-0 rounded border-zinc-300 text-murphs-blue focus:ring-murphs-blue"
+                />
+                <span>
+                  Also add me to broader MurphsLife news and program updates
+                  (separate mailing list). You can unsubscribe anytime.
                 </span>
               </label>
 

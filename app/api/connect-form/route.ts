@@ -1,8 +1,10 @@
 import { NextResponse } from "next/server";
+import type { SupabaseClient } from "@supabase/supabase-js";
 
 import {
   buildConnectFormMetadata,
-  CONNECT_FORM_MAILING_LIST_ID,
+  CONNECT_FORM_EVENT_MAILING_LIST_ID,
+  CONNECT_FORM_GENERAL_MAILING_LIST_ID,
   CONNECT_FORM_TYPE,
   isValidRequestType,
 } from "@/lib/connect-form";
@@ -21,6 +23,11 @@ type Body = {
   requestType?: string;
   location?: string;
   messageBody?: string;
+  /** Event / portal-specific mailing list (default on in UI). */
+  mailingListEvent?: boolean;
+  /** Broader MurphsLife mailing list (opt-in). */
+  mailingListGeneral?: boolean;
+  /** Legacy alias for mailingListEvent. */
   mailingList?: boolean;
 };
 
@@ -59,7 +66,10 @@ export async function POST(request: Request) {
   const requestType = String(json.requestType ?? "").trim();
   const location = String(json.location ?? "").trim().slice(0, 500);
   const messageBody = String(json.messageBody ?? "").trim().slice(0, MAX_MESSAGE);
-  const mailingList = Boolean(json.mailingList);
+  const mailingListEvent = Boolean(
+    json.mailingListEvent ?? json.mailingList,
+  );
+  const mailingListGeneral = Boolean(json.mailingListGeneral);
 
   if (!firstName) {
     return NextResponse.json(
@@ -94,7 +104,11 @@ export async function POST(request: Request) {
     );
   }
 
-  const metadata = buildConnectFormMetadata(location, mailingList);
+  const metadata = buildConnectFormMetadata(
+    location,
+    mailingListEvent,
+    mailingListGeneral,
+  );
 
   const { error: insertError } = await supabase.from("connect_form").insert({
     first_name: firstName || null,
@@ -113,60 +127,93 @@ export async function POST(request: Request) {
     );
   }
 
-  if (mailingList) {
-    const { data: existing } = await supabase
-      .from("mailing_list_subscriptions")
-      .select("id")
-      .eq("email", email)
-      .eq("mailing_list_id", CONNECT_FORM_MAILING_LIST_ID)
-      .maybeSingle();
+  if (mailingListEvent) {
+    const syncEvent = await syncMailingListSubscription(supabase, {
+      mailingListId: CONNECT_FORM_EVENT_MAILING_LIST_ID,
+      email,
+      firstName,
+      lastName,
+    });
+    if (syncEvent.error) {
+      return NextResponse.json(
+        {
+          error:
+            syncEvent.error ||
+            "Could not add you to the event updates mailing list.",
+        },
+        { status: 500 },
+      );
+    }
+  }
 
-    const now = new Date().toISOString();
-
-    if (existing) {
-      const { error: updateError } = await supabase
-        .from("mailing_list_subscriptions")
-        .update({
-          status: "subscribed",
-          subscribed_at: now,
-          unsubscribed_at: null,
-          first_name: firstName || null,
-          last_name: lastName || null,
-        })
-        .eq("id", existing.id);
-
-      if (updateError) {
-        return NextResponse.json(
-          {
-            error:
-              updateError.message || "Could not update your mailing list sign-up.",
-          },
-          { status: 500 },
-        );
-      }
-    } else {
-      const { error: subError } = await supabase
-        .from("mailing_list_subscriptions")
-        .insert({
-          email,
-          mailing_list_id: CONNECT_FORM_MAILING_LIST_ID,
-          first_name: firstName || null,
-          last_name: lastName || null,
-          people_id: null,
-          status: "subscribed",
-          subscribed_at: now,
-        });
-
-      if (subError) {
-        return NextResponse.json(
-          {
-            error: subError.message || "Could not add you to the mailing list.",
-          },
-          { status: 500 },
-        );
-      }
+  if (mailingListGeneral) {
+    const syncGeneral = await syncMailingListSubscription(supabase, {
+      mailingListId: CONNECT_FORM_GENERAL_MAILING_LIST_ID,
+      email,
+      firstName,
+      lastName,
+    });
+    if (syncGeneral.error) {
+      return NextResponse.json(
+        {
+          error:
+            syncGeneral.error ||
+            "Could not add you to the general MurphsLife mailing list.",
+        },
+        { status: 500 },
+      );
     }
   }
 
   return NextResponse.json({ ok: true });
+}
+
+async function syncMailingListSubscription(
+  supabase: SupabaseClient,
+  args: {
+    mailingListId: string;
+    email: string;
+    firstName: string;
+    lastName: string;
+  },
+): Promise<{ error: string | null }> {
+  const { mailingListId, email, firstName, lastName } = args;
+
+  const { data: existing } = await supabase
+    .from("mailing_list_subscriptions")
+    .select("id")
+    .eq("email", email)
+    .eq("mailing_list_id", mailingListId)
+    .maybeSingle();
+
+  const now = new Date().toISOString();
+
+  if (existing) {
+    const { error: updateError } = await supabase
+      .from("mailing_list_subscriptions")
+      .update({
+        status: "subscribed",
+        subscribed_at: now,
+        unsubscribed_at: null,
+        first_name: firstName || null,
+        last_name: lastName || null,
+      })
+      .eq("id", existing.id);
+
+    return { error: updateError?.message ?? null };
+  }
+
+  const { error: insertErr } = await supabase
+    .from("mailing_list_subscriptions")
+    .insert({
+      email,
+      mailing_list_id: mailingListId,
+      first_name: firstName || null,
+      last_name: lastName || null,
+      people_id: null,
+      status: "subscribed",
+      subscribed_at: now,
+    });
+
+  return { error: insertErr?.message ?? null };
 }
