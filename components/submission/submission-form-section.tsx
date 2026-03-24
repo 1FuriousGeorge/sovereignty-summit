@@ -1,10 +1,9 @@
 "use client";
 
+import { Turnstile, type TurnstileInstance } from "@marsidev/react-turnstile";
 import { Bebas_Neue, Dela_Gothic_One } from "next/font/google";
 import { motion } from "framer-motion";
-import { FormEvent, useState } from "react";
-
-import { createSupabaseBrowserClient } from "@/lib/supabase/client";
+import { FormEvent, useCallback, useRef, useState } from "react";
 
 const delaGothic = Dela_Gothic_One({
   subsets: ["latin"],
@@ -19,8 +18,7 @@ const bebasNeue = Bebas_Neue({
 const SUBMISSION_BACKGROUND =
   "https://assets.murphslifefoundation.com/blue-bg.jpg";
 
-/** Stored in `connect_form.form_type` to identify this page’s submissions. */
-const CONNECT_FORM_TYPE = "food_sovereignty_farm";
+const TURNSTILE_SITE_KEY = process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY ?? "";
 
 const requestTypeOptions = [
   { value: "", label: "How would you like to connect?" },
@@ -38,27 +36,40 @@ const requestTypeOptions = [
   },
 ] as const;
 
-function buildMessage(
-  body: string,
-  location: string,
-  mailingList: boolean,
-): string {
-  const parts = [body.trim()];
-  if (location.trim()) {
-    parts.push(`Location: ${location.trim()}`);
-  }
-  parts.push(`Email updates (mailing list): ${mailingList ? "yes" : "no"}`);
-  return parts.join("\n\n");
-}
-
 export default function SubmissionFormSection() {
   const [submitted, setSubmitted] = useState(false);
   const [pending, setPending] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [turnstileToken, setTurnstileToken] = useState<string | null>(null);
+  const turnstileRef = useRef<TurnstileInstance>(null);
+
+  const handleTurnstileSuccess = useCallback((token: string) => {
+    setTurnstileToken(token);
+  }, []);
+
+  const handleTurnstileExpire = useCallback(() => {
+    setTurnstileToken(null);
+  }, []);
+
+  const handleTurnstileError = useCallback(() => {
+    setTurnstileToken(null);
+  }, []);
 
   async function handleSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
     setError(null);
+
+    if (!TURNSTILE_SITE_KEY) {
+      setError(
+        "Human verification is not configured. Add NEXT_PUBLIC_TURNSTILE_SITE_KEY and TURNSTILE_SECRET_KEY.",
+      );
+      return;
+    }
+
+    if (!turnstileToken) {
+      setError("Please complete the verification below before sending.");
+      return;
+    }
 
     const form = e.currentTarget;
     const fd = new FormData(form);
@@ -84,38 +95,38 @@ export default function SubmissionFormSection() {
       return;
     }
 
-    const supabase = createSupabaseBrowserClient();
-    if (!supabase) {
-      setError(
-        "This form is not configured yet. Please try again later or email the foundation directly.",
-      );
-      return;
-    }
-
     setPending(true);
-    const message = buildMessage(messageBody, location, consent);
 
-    const { error: insertError } = await supabase.from("connect_form").insert({
-      first_name: firstName || null,
-      last_name: lastName || null,
-      email,
-      message,
-      form_type: CONNECT_FORM_TYPE,
-      request_type: requestType,
+    const res = await fetch("/api/connect-form", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        turnstileToken,
+        firstName,
+        lastName: lastName || undefined,
+        email,
+        requestType,
+        location,
+        messageBody,
+        mailingList: consent,
+      }),
     });
+
+    const data = (await res.json()) as { error?: string };
 
     setPending(false);
 
-    if (insertError) {
-      setError(
-        insertError.message ||
-          "Something went wrong sending your message. Please try again.",
-      );
+    if (!res.ok) {
+      setError(data.error || "Something went wrong. Please try again.");
+      turnstileRef.current?.reset();
+      setTurnstileToken(null);
       return;
     }
 
     setSubmitted(true);
     form.reset();
+    turnstileRef.current?.reset();
+    setTurnstileToken(null);
   }
 
   return (
@@ -307,6 +318,30 @@ export default function SubmissionFormSection() {
                 </span>
               </label>
 
+              {TURNSTILE_SITE_KEY ? (
+                <div className="flex flex-col items-center gap-2">
+                  <Turnstile
+                    ref={turnstileRef}
+                    siteKey={TURNSTILE_SITE_KEY}
+                    onSuccess={handleTurnstileSuccess}
+                    onExpire={handleTurnstileExpire}
+                    onError={handleTurnstileError}
+                    options={{ theme: "light", size: "flexible" }}
+                  />
+                  <p className="text-center text-xs text-zinc-500">
+                    Protected by Cloudflare Turnstile
+                  </p>
+                </div>
+              ) : (
+                <p className="rounded-lg bg-amber-50 px-3 py-2 text-center text-sm text-amber-900">
+                  Add{" "}
+                  <code className="rounded bg-amber-100/80 px-1">
+                    NEXT_PUBLIC_TURNSTILE_SITE_KEY
+                  </code>{" "}
+                  to your environment to enable verification.
+                </p>
+              )}
+
               {error ? (
                 <p
                   className="rounded-lg bg-red-50 px-3 py-2 text-sm text-red-800"
@@ -318,7 +353,9 @@ export default function SubmissionFormSection() {
 
               <button
                 type="submit"
-                disabled={pending}
+                disabled={
+                  pending || !TURNSTILE_SITE_KEY || !turnstileToken
+                }
                 className={`${delaGothic.className} mt-1 h-14 w-full rounded-full bg-murphs-blue text-base uppercase tracking-wide text-white transition-opacity hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-60`}
               >
                 {pending ? "Sending…" : "Send message"}

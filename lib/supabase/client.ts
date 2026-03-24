@@ -1,5 +1,7 @@
 import { createClient } from "@supabase/supabase-js";
 
+import { SUPABASE_ANON_OPTIONS } from "./options";
+
 const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
 const anonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
 
@@ -13,11 +15,5 @@ export function createSupabaseBrowserClient() {
   if (!url || !anonKey) {
     return null;
   }
-  return createClient(url, anonKey, {
-    auth: {
-      persistSession: false,
-      autoRefreshToken: false,
-      detectSessionInUrl: false,
-    },
-  });
+  return createClient(url, anonKey, SUPABASE_ANON_OPTIONS);
 }
