@@ -11,6 +11,12 @@ const PAGE_DESCRIPTION =
 const SOCIAL_TITLE =
   "The Regenerative Homestead Sovereignty Summit at Casa Conejo · MurphsLife Foundation";
 
+/** Used for Open Graph, Twitter/X, and other link previews (`public/og-image.png`). */
+const SHARE_IMAGE = "/og-image.png";
+
+const SHARE_IMAGE_ALT =
+  "MurphsLife Foundation — farm landscape at sunrise with foundation wordmark";
+
 export const metadata: Metadata = {
   title: PAGE_TITLE,
   description: PAGE_DESCRIPTION,
@@ -29,11 +35,18 @@ export const metadata: Metadata = {
     description: PAGE_DESCRIPTION,
     type: "website",
     siteName: "MurphsLife Foundation",
+    images: [
+      {
+        url: SHARE_IMAGE,
+        alt: SHARE_IMAGE_ALT,
+      },
+    ],
   },
   twitter: {
     card: "summary_large_image",
     title: SOCIAL_TITLE,
     description: PAGE_DESCRIPTION,
+    images: [SHARE_IMAGE],
   },
 };
 
