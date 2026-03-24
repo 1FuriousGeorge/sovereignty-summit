@@ -21,8 +21,12 @@ const PAGE_DESCRIPTION =
 const SOCIAL_TITLE =
   "The Regenerative Homestead Sovereignty Summit at Casa Conejo";
 
-// Images: `app/opengraph-image.png` + `app/twitter-image.png` (Next.js file convention).
-// Ensures og:image and twitter:image are emitted the way crawlers expect.
+/** Served from `public/og.png` — absolute HTTPS URL for WhatsApp, X, iMessage, LinkedIn. */
+const SHARE_IMAGE = `${siteUrl}/og.png`;
+const SHARE_IMAGE_WIDTH = 1200;
+const SHARE_IMAGE_HEIGHT = 630;
+const SHARE_IMAGE_ALT =
+  "The Regenerative Homestead Sovereignty Summit — Casa Conejo regenerative farm at golden hour, El Salvador";
 
 // ─── Metadata export ──────────────────────────────────────────────────────────
 export const metadata: Metadata = {
@@ -57,15 +61,33 @@ export const metadata: Metadata = {
     title: SOCIAL_TITLE,
     description: PAGE_DESCRIPTION,
     siteName: "MurphsLife Foundation",
+    images: [
+      {
+        url: SHARE_IMAGE,
+        secureUrl: SHARE_IMAGE,
+        width: SHARE_IMAGE_WIDTH,
+        height: SHARE_IMAGE_HEIGHT,
+        alt: SHARE_IMAGE_ALT,
+        type: "image/png",
+      },
+    ],
   },
 
   // ── Twitter / X  (summary_large_image = big hero card in feed)
   twitter: {
     card: "summary_large_image",
-    site: "@MurphsLife",          // Twitter @handle — enables attribution
+    site: "@MurphsLife",
     creator: "@MurphsLife",
     title: SOCIAL_TITLE,
     description: PAGE_DESCRIPTION,
+    images: [
+      {
+        url: SHARE_IMAGE,
+        width: SHARE_IMAGE_WIDTH,
+        height: SHARE_IMAGE_HEIGHT,
+        alt: SHARE_IMAGE_ALT,
+      },
+    ],
   },
 };
 
