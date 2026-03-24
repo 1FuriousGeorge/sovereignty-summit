@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 
 import {
   buildConnectFormMessage,
+  CONNECT_FORM_MAILING_LIST_ID,
   CONNECT_FORM_TYPE,
   isValidRequestType,
 } from "@/lib/connect-form";
@@ -109,6 +110,61 @@ export async function POST(request: Request) {
       { error: insertError.message || "Could not save your message." },
       { status: 500 },
     );
+  }
+
+  if (mailingList) {
+    const { data: existing } = await supabase
+      .from("mailing_list_subscriptions")
+      .select("id")
+      .eq("email", email)
+      .eq("mailing_list_id", CONNECT_FORM_MAILING_LIST_ID)
+      .maybeSingle();
+
+    const now = new Date().toISOString();
+
+    if (existing) {
+      const { error: updateError } = await supabase
+        .from("mailing_list_subscriptions")
+        .update({
+          status: "subscribed",
+          subscribed_at: now,
+          unsubscribed_at: null,
+          first_name: firstName || null,
+          last_name: lastName || null,
+        })
+        .eq("id", existing.id);
+
+      if (updateError) {
+        return NextResponse.json(
+          {
+            error:
+              updateError.message || "Could not update your mailing list sign-up.",
+          },
+          { status: 500 },
+        );
+      }
+    } else {
+      const { error: subError } = await supabase
+        .from("mailing_list_subscriptions")
+        .insert({
+          email,
+          mailing_list_id: CONNECT_FORM_MAILING_LIST_ID,
+          first_name: firstName || null,
+          last_name: lastName || null,
+          people_id: null,
+          status: "subscribed",
+          subscribed_at: now,
+        });
+
+      if (subError) {
+        return NextResponse.json(
+          {
+            error: subError.message || "Could not add you to the mailing list.",
+          },
+          { status: 500 },
+        );
+      }
+    }
   }
 
   return NextResponse.json({ ok: true });
