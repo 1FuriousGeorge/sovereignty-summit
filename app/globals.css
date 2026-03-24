@@ -1,16 +1,21 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --background: #f2ebd9;
+  --foreground: #2c342d;
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --color-murphs-blue: #0f2847;
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --color-foliage: #2c342d;
+  --color-gold: #bcb273;
+  --color-creme: #f2ebd9;
+  --color-clay: #deddd4;
+  --color-summit-mint: #a8d5b5;
+  --font-sans: var(--font-josefin), ui-sans-serif, system-ui, sans-serif;
+  --font-display: var(--font-cormorant), ui-serif, Georgia, serif;
 }
 
 @keyframes float-right {
@@ -52,15 +57,34 @@
   }
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+@keyframes kenburns-summit {
+  0% {
+    transform: scale(1.04);
+  }
+  100% {
+    transform: scale(1);
   }
 }
 
+@keyframes scroll-hint-bounce {
+  0%,
+  100% {
+    transform: translateX(-50%) translateY(0);
+  }
+  50% {
+    transform: translateX(-50%) translateY(-8px);
+  }
+}
+
+.animate-hero-kenburns {
+  animation: kenburns-summit 18s ease-out forwards;
+}
+
+.animate-scroll-hint {
+  animation: scroll-hint-bounce 2s ease-in-out infinite;
+}
+
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: var(--color-creme);
+  color: var(--color-foliage);
 }

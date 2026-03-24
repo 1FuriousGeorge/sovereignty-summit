@@ -2,13 +2,14 @@ import type { Metadata } from "next";
 import SubmissionLandingPage from "@/components/submission/submission-landing-page";
 
 /** Shorter segment; root layout template adds " · MurphsLife Foundation". */
-const PAGE_TITLE = "Regenerative farming conference · Interest form";
+const PAGE_TITLE =
+  "The Regenerative Homestead Sovereignty Summit · Casa Conejo · Interest form";
 
 const PAGE_DESCRIPTION =
-  "Expression of interest for a food-sovereignty convening on the farm: pasture walks, soil and grazing field schools, faculty, sponsors, and updates as regenerative agriculture plans take shape. Share how you would attend, teach, or partner.";
+  "A hands-on gathering at Casa Conejo's 46-acre regenerative farm in El Salvador. Food sovereignty, practical skills, resilient systems, and aligned community. Coming 2026. Join the interest list.";
 
 const SOCIAL_TITLE =
-  "Regenerative farming conference · Expression of interest · MurphsLife Foundation";
+  "The Regenerative Homestead Sovereignty Summit at Casa Conejo · MurphsLife Foundation";
 
 export const metadata: Metadata = {
   title: PAGE_TITLE,
