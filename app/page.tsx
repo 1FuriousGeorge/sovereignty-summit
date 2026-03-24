@@ -1,8 +1,9 @@
 import type { Metadata } from "next";
 import SubmissionLandingPage from "@/components/submission/submission-landing-page";
+import { getSiteUrl } from "@/lib/site-url";
 
 // ─── Canonical site URL ───────────────────────────────────────────────────────
-const SITE_URL = "https://sovereignty.murphslifefoundation.com";
+const siteUrl = getSiteUrl();
 
 // ─── Page copy ────────────────────────────────────────────────────────────────
 /** Browser tab / <title> */
@@ -20,16 +21,8 @@ const PAGE_DESCRIPTION =
 const SOCIAL_TITLE =
   "The Regenerative Homestead Sovereignty Summit at Casa Conejo";
 
-// ─── OG image ─────────────────────────────────────────────────────────────────
-/**
- * Absolute HTTPS URL — required by WhatsApp, iMessage, Telegram, and LinkedIn.
- * Relative paths work for Facebook/Twitter but silently fail on messaging apps.
- */
-const SHARE_IMAGE = `${SITE_URL}/og-image.png`;
-const SHARE_IMAGE_WIDTH = 1200;
-const SHARE_IMAGE_HEIGHT = 630;
-const SHARE_IMAGE_ALT =
-  "The Regenerative Homestead Sovereignty Summit — Casa Conejo regenerative farm at golden hour, El Salvador";
+// Images: `app/opengraph-image.png` + `app/twitter-image.png` (Next.js file convention).
+// Ensures og:image and twitter:image are emitted the way crawlers expect.
 
 // ─── Metadata export ──────────────────────────────────────────────────────────
 export const metadata: Metadata = {
@@ -38,7 +31,7 @@ export const metadata: Metadata = {
 
   // Absolute canonical URL — prevents duplicate-content issues and helps crawlers
   alternates: {
-    canonical: SITE_URL,
+    canonical: siteUrl,
   },
 
   keywords: [
@@ -57,25 +50,13 @@ export const metadata: Metadata = {
   ],
 
   // ── Open Graph (Facebook · WhatsApp · iMessage · LinkedIn · Telegram · Slack)
-  // WhatsApp and iMessage require og:image to be an absolute HTTPS URL with
-  // explicit width/height. LinkedIn additionally requires og:image:secure_url.
   openGraph: {
     type: "website",
     locale: "en_US",
-    url: SITE_URL,
+    url: siteUrl,
     title: SOCIAL_TITLE,
     description: PAGE_DESCRIPTION,
     siteName: "MurphsLife Foundation",
-    images: [
-      {
-        url: SHARE_IMAGE,
-        secureUrl: SHARE_IMAGE,   // LinkedIn requires og:image:secure_url
-        width: SHARE_IMAGE_WIDTH,
-        height: SHARE_IMAGE_HEIGHT,
-        alt: SHARE_IMAGE_ALT,
-        type: "image/png",
-      },
-    ],
   },
 
   // ── Twitter / X  (summary_large_image = big hero card in feed)
@@ -85,14 +66,6 @@ export const metadata: Metadata = {
     creator: "@MurphsLife",
     title: SOCIAL_TITLE,
     description: PAGE_DESCRIPTION,
-    images: [
-      {
-        url: SHARE_IMAGE,
-        width: SHARE_IMAGE_WIDTH,
-        height: SHARE_IMAGE_HEIGHT,
-        alt: SHARE_IMAGE_ALT,
-      },
-    ],
   },
 };
 
