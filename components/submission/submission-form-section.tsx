@@ -197,7 +197,7 @@ const statCards = [
     label: "Social media followers across MurphsLife distribution",
   },
   {
-    stat: "El SV",
+    stat: "SV",
     label: "Government-aligned regenerative development partnership",
   },
   {
