@@ -11,8 +11,12 @@ const PAGE_DESCRIPTION =
 const SOCIAL_TITLE =
   "The Regenerative Homestead Sovereignty Summit at Casa Conejo · MurphsLife Foundation";
 
-/** Used for Open Graph, Twitter/X, and other link previews (`public/og-image.png`). */
+/** Served from `public/og-image.png` — must match real file dimensions for OG parsers. */
 const SHARE_IMAGE = "/og-image.png";
+
+/** Measured from `public/og-image.png` (standard 1.91:1 OG size — works across WhatsApp, FB, iMessage, etc.). */
+const SHARE_IMAGE_WIDTH = 1200;
+const SHARE_IMAGE_HEIGHT = 630;
 
 const SHARE_IMAGE_ALT =
   "MurphsLife Foundation — farm landscape at sunrise with foundation wordmark";
@@ -20,6 +24,9 @@ const SHARE_IMAGE_ALT =
 export const metadata: Metadata = {
   title: PAGE_TITLE,
   description: PAGE_DESCRIPTION,
+  alternates: {
+    canonical: "/",
+  },
   keywords: [
     "MurphsLife",
     "food sovereignty",
@@ -31,14 +38,19 @@ export const metadata: Metadata = {
     "soil health",
   ],
   openGraph: {
+    type: "website",
+    locale: "en_US",
+    url: "/",
     title: SOCIAL_TITLE,
     description: PAGE_DESCRIPTION,
-    type: "website",
     siteName: "MurphsLife Foundation",
     images: [
       {
         url: SHARE_IMAGE,
+        width: SHARE_IMAGE_WIDTH,
+        height: SHARE_IMAGE_HEIGHT,
         alt: SHARE_IMAGE_ALT,
+        type: "image/png",
       },
     ],
   },
@@ -46,7 +58,14 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: SOCIAL_TITLE,
     description: PAGE_DESCRIPTION,
-    images: [SHARE_IMAGE],
+    images: [
+      {
+        url: SHARE_IMAGE,
+        width: SHARE_IMAGE_WIDTH,
+        height: SHARE_IMAGE_HEIGHT,
+        alt: SHARE_IMAGE_ALT,
+      },
+    ],
   },
 };
 
