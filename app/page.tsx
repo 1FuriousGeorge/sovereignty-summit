@@ -21,8 +21,8 @@ const PAGE_DESCRIPTION =
 const SOCIAL_TITLE =
   "The Regenerative Homestead Sovereignty Summit at Casa Conejo";
 
-/** Served from `public/og.png` — absolute HTTPS URL for WhatsApp, X, iMessage, LinkedIn. */
-const SHARE_IMAGE = `${siteUrl}/og.png`;
+/** Served from `public/og.jpg` — absolute HTTPS URL for WhatsApp, X, iMessage, LinkedIn. */
+const SHARE_IMAGE = `${siteUrl}/og.jpg`;
 const SHARE_IMAGE_WIDTH = 1200;
 const SHARE_IMAGE_HEIGHT = 630;
 const SHARE_IMAGE_ALT =
@@ -68,7 +68,7 @@ export const metadata: Metadata = {
         width: SHARE_IMAGE_WIDTH,
         height: SHARE_IMAGE_HEIGHT,
         alt: SHARE_IMAGE_ALT,
-        type: "image/png",
+        type: "image/jpeg",
       },
     ],
   },
