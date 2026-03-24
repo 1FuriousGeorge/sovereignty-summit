@@ -32,7 +32,7 @@ import Image from "next/image";
 import { FormEvent, useCallback, useEffect, useRef, useState } from "react";
 
 const HERO_BACKGROUND =
-  "https://assets.murphslifefoundation.com/HEL3tnRagAAMBFs.jpeg";
+  "https://assets.murphslifefoundation.com/hero.jpg";
 
 const SUBMISSION_BACKGROUND =
   "https://assets.murphslifefoundation.com/blue-bg.jpg";
