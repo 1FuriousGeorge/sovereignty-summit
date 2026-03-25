@@ -1,7 +1,7 @@
 "use client";
 
 import { Turnstile, type TurnstileInstance } from "@marsidev/react-turnstile";
-import { motion } from "framer-motion";
+import { motion, useReducedMotion } from "framer-motion";
 import type { LucideIcon } from "lucide-react";
 import {
   ArrowDown,
@@ -206,12 +206,8 @@ const statCards = [
   },
 ] as const;
 
-const fadeUp = {
-  initial: { opacity: 0, y: 16 },
-  whileInView: { opacity: 1, y: 0 },
-  viewport: { once: true, margin: "0px 0px -10px 0px" as const },
-  transition: { duration: 0.45, ease: [0.22, 1, 0.36, 1] as const },
-};
+// fadeUp is defined inside the component so it can respect useReducedMotion
+// (see useFadeUp hook below)
 
 function scrollToForm() {
   document
@@ -226,6 +222,23 @@ const labelClass =
   "mb-1.5 block text-xs font-semibold tracking-wide text-foliage/70 uppercase";
 
 export default function SubmissionFormSection() {
+  const prefersReducedMotion = useReducedMotion();
+
+  // When the user prefers reduced motion, skip translate animation — only fade in.
+  const fadeUp = prefersReducedMotion
+    ? {
+        initial: { opacity: 0 },
+        whileInView: { opacity: 1 },
+        viewport: { once: true, margin: "0px 0px -10px 0px" as const },
+        transition: { duration: 0.2, ease: "easeOut" as const },
+      }
+    : {
+        initial: { opacity: 0, y: 16 },
+        whileInView: { opacity: 1, y: 0 },
+        viewport: { once: true, margin: "0px 0px -10px 0px" as const },
+        transition: { duration: 0.45, ease: [0.22, 1, 0.36, 1] as const },
+      };
+
   const [submitted, setSubmitted] = useState(false);
   const [pending, setPending] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -467,7 +480,7 @@ export default function SubmissionFormSection() {
       {/* What This Is */}
       <section className="bg-white px-6 py-20" aria-label="What this summit is">
         <div className="mx-auto max-w-5xl">
-          <p className="font-sans mb-3 text-xs font-bold uppercase tracking-[0.16em] text-gold">
+          <p className="font-sans mb-3 text-xs font-bold uppercase tracking-[0.16em] text-[#6b6030]">
             What This Is
           </p>
           <motion.h2
@@ -512,9 +525,9 @@ export default function SubmissionFormSection() {
                       <Icon className="size-7 stroke-[1.5]" aria-hidden />
                     </span>
                     <div>
-                      <p className="font-sans text-sm font-semibold text-foliage">
+                      <h3 className="font-sans text-sm font-semibold text-foliage">
                         {card.title}
-                      </p>
+                      </h3>
                       <p className="mt-1 font-sans text-xs leading-relaxed text-foliage/60">
                         {card.body}
                       </p>
@@ -530,7 +543,7 @@ export default function SubmissionFormSection() {
       {/* Why */}
       <section className="bg-creme px-6 py-20" aria-label="Why people are interested">
         <div className="mx-auto max-w-5xl">
-          <p className="font-sans mb-3 text-xs font-bold uppercase tracking-[0.16em] text-gold">
+          <p className="font-sans mb-3 text-xs font-bold uppercase tracking-[0.16em] text-[#6b6030]">
             Why People Are Interested
           </p>
           <motion.h2
@@ -575,7 +588,7 @@ export default function SubmissionFormSection() {
       {/* Topics */}
       <section className="bg-foliage px-6 py-20" aria-label="Summit topics and themes">
         <div className="mx-auto max-w-5xl">
-          <p className="font-sans mb-3 text-xs font-bold uppercase tracking-[0.16em] text-gold">
+          <p className="font-sans mb-3 text-xs font-bold uppercase tracking-[0.16em] text-[#a89a5a]">
             Topics & Themes
           </p>
           <motion.h2
@@ -604,9 +617,9 @@ export default function SubmissionFormSection() {
                   <span className="mb-3 flex justify-center text-white">
                     <Icon className="size-9 stroke-[1.35]" aria-hidden />
                   </span>
-                  <p className="font-sans text-sm font-semibold text-white">
+                  <h3 className="font-sans text-sm font-semibold text-white">
                     {card.title}
-                  </p>
+                  </h3>
                   <p className="mt-2 font-sans text-xs leading-relaxed text-white/50">
                     {card.body}
                   </p>
@@ -620,7 +633,7 @@ export default function SubmissionFormSection() {
       {/* Who */}
       <section className="bg-white px-6 py-20" aria-label="Who this summit is for">
         <div className="mx-auto max-w-5xl">
-          <p className="font-sans mb-3 text-xs font-bold uppercase tracking-[0.16em] text-gold">
+          <p className="font-sans mb-3 text-xs font-bold uppercase tracking-[0.16em] text-[#6b6030]">
             Who This Is For
           </p>
           <motion.h2
@@ -667,7 +680,7 @@ export default function SubmissionFormSection() {
         <div className="mx-auto max-w-5xl">
           <div className="grid items-start gap-16 md:grid-cols-2">
             <motion.div {...fadeUp}>
-              <p className="font-sans mb-3 text-xs font-bold uppercase tracking-[0.16em] text-gold">
+              <p className="font-sans mb-3 text-xs font-bold uppercase tracking-[0.16em] text-[#6b6030]">
                 Interest Form
               </p>
               <h2 className="font-display mb-4 text-[clamp(1.6rem,3.5vw,2.4rem)] font-bold text-foliage">
@@ -809,13 +822,13 @@ export default function SubmissionFormSection() {
                     />
                   </div>
 
-                  <div
+                  <fieldset
                     className="rounded-xl border border-foliage/15 p-5"
                     style={{ background: "rgba(44,52,45,0.06)" }}
                   >
-                    <p className="mb-3 font-sans text-xs font-semibold uppercase tracking-wide text-foliage/55">
+                    <legend className="mb-3 font-sans text-xs font-semibold uppercase tracking-wide text-foliage/70">
                       Email preferences
-                    </p>
+                    </legend>
                     <label className="flex cursor-pointer gap-3 text-sm leading-snug text-foliage/80">
                       <input
                         name="mailing_list_event"
@@ -845,7 +858,7 @@ export default function SubmissionFormSection() {
                         .
                       </span>
                     </label>
-                  </div>
+                  </fieldset>
 
                   {TURNSTILE_SITE_KEY ? (
                     <div className="flex flex-col items-center gap-2 pt-2">
@@ -857,7 +870,7 @@ export default function SubmissionFormSection() {
                         onError={handleTurnstileError}
                         options={{ theme: "light", size: "flexible" }}
                       />
-                      <p className="text-center text-xs text-foliage/45">
+                      <p className="text-center text-xs text-foliage/65">
                         Quick security check · Cloudflare Turnstile
                       </p>
                     </div>
@@ -902,7 +915,7 @@ export default function SubmissionFormSection() {
                       </>
                     )}
                   </button>
-                  <p className="text-center font-sans text-xs text-foliage/40">
+                  <p className="text-center font-sans text-xs text-foliage/60">
                     We&apos;ll reach out with dates and details as
                     they&apos;re confirmed.
                   </p>
@@ -916,7 +929,7 @@ export default function SubmissionFormSection() {
       {/* About */}
       <section className="bg-white px-6 py-20" aria-label="About MurphsLife Foundation and Casa Conejo">
         <div className="mx-auto max-w-5xl">
-          <p className="font-sans mb-3 text-xs font-bold uppercase tracking-[0.16em] text-gold">
+          <p className="font-sans mb-3 text-xs font-bold uppercase tracking-[0.16em] text-[#6b6030]">
             About MurphsLife & Casa Conejo
           </p>
           <motion.h2
@@ -993,7 +1006,7 @@ export default function SubmissionFormSection() {
         <div className="relative z-10 mx-auto max-w-2xl">
           <motion.p
             {...fadeUp}
-            className="font-sans mb-4 text-xs font-bold uppercase tracking-[0.16em] text-gold"
+            className="font-sans mb-4 text-xs font-bold uppercase tracking-[0.16em] text-[#d4c87a]"
           >
             The Regenerative Homestead Sovereignty Summit · Casa Conejo · El
             Salvador
@@ -1039,13 +1052,13 @@ export default function SubmissionFormSection() {
           height={40}
           className="mx-auto mb-4 h-7 w-auto object-contain opacity-60"
         />
-        <p className="font-sans text-xs text-white/35">
+        <p className="font-sans text-xs text-white/60">
           MurphsLife Foundation · 501(c)(3) Nonprofit · EIN 85-3332093
         </p>
-        <p className="mt-2 font-sans text-xs text-white/25">
+        <p className="mt-2 font-sans text-xs text-white/50">
           El Salvador & United States
         </p>
-        <p className="mx-auto mt-4 max-w-md font-sans text-xs leading-relaxed text-white/20">
+        <p className="mx-auto mt-4 max-w-md font-sans text-xs leading-relaxed text-white/45">
           The Regenerative Homestead Sovereignty Summit at Casa Conejo. Dates
           and complete program details coming soon. Partnerships and the speaker
           lineup are currently being finalized.
@@ -1055,7 +1068,7 @@ export default function SubmissionFormSection() {
             href="https://murphslifefoundation.org"
             target="_blank"
             rel="noopener noreferrer"
-            className="font-sans text-xs text-white/30 transition-colors hover:text-white/60"
+            className="font-sans text-xs text-white/55 transition-colors hover:text-white"
           >
             MurphsLife Foundation
           </a>
@@ -1063,13 +1076,13 @@ export default function SubmissionFormSection() {
             href="https://casaconejo.io"
             target="_blank"
             rel="noopener noreferrer"
-            className="font-sans text-xs text-white/30 transition-colors hover:text-white/60"
+            className="font-sans text-xs text-white/55 transition-colors hover:text-white"
           >
             Casa Conejo
           </a>
           <a
             href="/sitemap.xml"
-            className="font-sans text-xs text-white/30 transition-colors hover:text-white/60"
+            className="font-sans text-xs text-white/55 transition-colors hover:text-white"
           >
             Sitemap
           </a>

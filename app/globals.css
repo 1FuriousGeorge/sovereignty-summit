@@ -11,6 +11,8 @@
   --color-murphs-blue: #0f2847;
   --color-foliage: #2c342d;
   --color-gold: #bcb273;
+  /* Accessible gold — passes 4.5:1 on white and creme; used for eyebrow labels */
+  --color-gold-accessible: #6b6030;
   --color-creme: #f2ebd9;
   --color-clay: #deddd4;
   --color-summit-mint: #a8d5b5;
