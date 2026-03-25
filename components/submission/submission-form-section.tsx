@@ -1400,7 +1400,7 @@ export default function SubmissionFormSection() {
             <button
               type="button"
               onClick={scrollToForm}
-              className="inline-flex items-center gap-3 rounded-full bg-creme px-10 py-4 text-sm font-bold uppercase tracking-widest text-foliage transition-transform duration-200 hover:-translate-y-0.5"
+              className="inline-flex items-center gap-3 rounded-full bg-creme px-10 py-4 text-sm font-bold uppercase tracking-widest text-foliage shadow-[0_4px_24px_rgba(0,0,0,0.3)] transition-transform duration-200 hover:-translate-y-0.5"
             >
               Raise Your Hand
               <ArrowRight className="size-4 shrink-0 stroke-[2.5]" aria-hidden />
