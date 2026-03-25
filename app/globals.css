@@ -84,6 +84,25 @@
   animation: scroll-hint-bounce 2s ease-in-out infinite;
 }
 
+/* Smooth scroll for the whole page */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Respect user's reduced-motion preference */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  .animate-hero-kenburns {
+    animation: none;
+    transform: scale(1.02);
+  }
+  .animate-scroll-hint {
+    animation: none;
+  }
+}
+
 body {
   background: var(--color-creme);
   color: var(--color-foliage);

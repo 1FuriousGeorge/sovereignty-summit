@@ -207,10 +207,10 @@ const statCards = [
 ] as const;
 
 const fadeUp = {
-  initial: { opacity: 0, y: 28 },
+  initial: { opacity: 0, y: 16 },
   whileInView: { opacity: 1, y: 0 },
-  viewport: { once: true, margin: "0px 0px -40px 0px" as const },
-  transition: { duration: 0.7, ease: [0.22, 1, 0.36, 1] as const },
+  viewport: { once: true, margin: "0px 0px -10px 0px" as const },
+  transition: { duration: 0.45, ease: [0.22, 1, 0.36, 1] as const },
 };
 
 function scrollToForm() {
@@ -374,7 +374,7 @@ export default function SubmissionFormSection() {
       <section className="relative flex min-h-screen items-center justify-center overflow-hidden text-center">
         <div
           className="animate-hero-kenburns pointer-events-none absolute inset-0 bg-cover bg-center"
-          style={{ backgroundImage: `url("${HERO_BACKGROUND}")` }}
+          style={{ backgroundImage: `url("${HERO_BACKGROUND}")`, willChange: "transform", transform: "translateZ(0)" }}
           aria-hidden
         />
         <div
@@ -383,14 +383,14 @@ export default function SubmissionFormSection() {
         />
 
         <div className="relative z-10 mx-auto max-w-3xl px-6 pb-20 pt-28">
-          <motion.div {...fadeUp} transition={{ ...fadeUp.transition, delay: 0 }}>
+          <motion.div {...fadeUp} transition={{ ...fadeUp.transition, delay: 0 }} style={{ willChange: "opacity, transform" }}>
             <span className="font-sans mb-6 inline-block rounded-full border border-gold/35 bg-gold/20 px-4 py-1.5 text-xs font-bold uppercase tracking-[0.16em] text-gold">
               Casa Conejo · El Salvador · Coming 2026
             </span>
           </motion.div>
           <motion.h1
             {...fadeUp}
-            transition={{ ...fadeUp.transition, delay: 0.12 }}
+            transition={{ ...fadeUp.transition, delay: 0.08 }}
             className="font-display mb-5 text-[clamp(2rem,5vw,3.5rem)] font-bold leading-tight text-white"
             style={{ textShadow: "0 2px 20px rgba(0,0,0,0.4)" }}
           >
@@ -402,7 +402,7 @@ export default function SubmissionFormSection() {
           </motion.h1>
           <motion.p
             {...fadeUp}
-            transition={{ ...fadeUp.transition, delay: 0.24 }}
+            transition={{ ...fadeUp.transition, delay: 0.15 }}
             className="mx-auto mb-8 max-w-xl font-sans text-[clamp(1rem,2.5vw,1.15rem)] leading-relaxed text-white/85"
           >
             A hands-on gathering at our regenerative farm in El Salvador —
@@ -411,7 +411,7 @@ export default function SubmissionFormSection() {
           </motion.p>
           <motion.div
             {...fadeUp}
-            transition={{ ...fadeUp.transition, delay: 0.36 }}
+            transition={{ ...fadeUp.transition, delay: 0.22 }}
             className="mb-5 flex flex-wrap justify-center gap-3"
           >
             <button
@@ -433,7 +433,7 @@ export default function SubmissionFormSection() {
           </motion.div>
           <motion.p
             {...fadeUp}
-            transition={{ ...fadeUp.transition, delay: 0.48 }}
+            transition={{ ...fadeUp.transition, delay: 0.28 }}
             className="text-xs tracking-wide text-white/45"
           >
             Attendees · Speakers · Sponsors · Partners · Creators · Aligned
@@ -491,7 +491,7 @@ export default function SubmissionFormSection() {
                   <motion.div
                     key={card.title}
                     {...fadeUp}
-                    transition={{ ...fadeUp.transition, delay: i * 0.1 }}
+                    transition={{ ...fadeUp.transition, delay: i * 0.04 }}
                     className="flex items-start gap-4 rounded-xl border-l-4 border-foliage bg-creme p-5"
                   >
                     <span className="mt-0.5 flex shrink-0 text-foliage">
@@ -539,7 +539,7 @@ export default function SubmissionFormSection() {
                 <motion.div
                   key={card.title}
                   {...fadeUp}
-                  transition={{ ...fadeUp.transition, delay: i * 0.08 }}
+                  transition={{ ...fadeUp.transition, delay: i * 0.04 }}
                   className="cursor-default rounded-2xl border border-gold/15 bg-white p-8 shadow-[0_2px_8px_rgba(44,52,45,0.06)] transition-[transform,box-shadow] duration-200 hover:-translate-y-1 hover:shadow-[0_12px_40px_rgba(44,52,45,0.12)]"
                 >
                   <div className="mb-5 flex h-14 w-14 items-center justify-center rounded-2xl bg-foliage/10 text-foliage">
@@ -584,7 +584,7 @@ export default function SubmissionFormSection() {
                 <motion.div
                   key={card.title}
                   {...fadeUp}
-                  transition={{ ...fadeUp.transition, delay: i * 0.06 }}
+                  transition={{ ...fadeUp.transition, delay: i * 0.04 }}
                   className="cursor-default rounded-xl border border-white/10 bg-white/10 p-6 text-center transition-all duration-200 hover:-translate-y-0.5 hover:bg-white/[0.12]"
                 >
                   <span className="mb-3 flex justify-center text-white">
@@ -629,7 +629,7 @@ export default function SubmissionFormSection() {
                 <motion.div
                   key={card.title}
                   {...fadeUp}
-                  transition={{ ...fadeUp.transition, delay: i * 0.05 }}
+                  transition={{ ...fadeUp.transition, delay: i * 0.04 }}
                   className="cursor-default rounded-xl border border-gold/15 bg-creme p-6 text-center transition-colors duration-200 hover:border-gold"
                 >
                   <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-full bg-foliage/10 text-foliage">
@@ -950,7 +950,7 @@ export default function SubmissionFormSection() {
                 <motion.div
                   key={s.label}
                   {...fadeUp}
-                  transition={{ ...fadeUp.transition, delay: i * 0.08 }}
+                  transition={{ ...fadeUp.transition, delay: i * 0.04 }}
                   className="rounded-xl border-l-4 border-gold bg-creme p-5"
                 >
                   <p className="font-display text-3xl font-bold leading-none text-foliage">
