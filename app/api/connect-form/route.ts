@@ -14,6 +14,8 @@ import { verifyTurnstileToken } from "@/lib/turnstile";
 const MAX_MESSAGE = 10_000;
 const MAX_NAME = 200;
 const MAX_EMAIL = 320;
+const MAX_SHORT = 500;
+const MAX_LONG = 2_000;
 
 type Body = {
   turnstileToken?: string;
@@ -22,13 +24,31 @@ type Body = {
   email?: string;
   requestType?: string;
   location?: string;
+  phone?: string;
+  socialHandle?: string;
   messageBody?: string;
+  anythingElse?: string;
   /** Event / portal-specific mailing list (default on in UI). */
   mailingListEvent?: boolean;
   /** Broader MurphsLife mailing list (opt-in). */
   mailingListGeneral?: boolean;
   /** Legacy alias for mailingListEvent. */
   mailingList?: boolean;
+  // Speaker-specific
+  speakerTopics?: string;
+  speakerExperience?: string;
+  // Sponsor-specific
+  sponsorCompany?: string;
+  sponsorWebsite?: string;
+  sponsorBudget?: string;
+  // Creator-specific
+  creatorPlatform?: string;
+  creatorAudience?: string;
+  // UTM / source tracking
+  utmSource?: string;
+  utmMedium?: string;
+  utmCampaign?: string;
+  referralSource?: string;
 };
 
 function clientIp(request: Request): string | undefined {
@@ -64,12 +84,28 @@ export async function POST(request: Request) {
   const lastName = String(json.lastName ?? "").trim().slice(0, MAX_NAME);
   const email = String(json.email ?? "").trim().slice(0, MAX_EMAIL);
   const requestType = String(json.requestType ?? "").trim();
-  const location = String(json.location ?? "").trim().slice(0, 500);
+  const location = String(json.location ?? "").trim().slice(0, MAX_SHORT);
+  const phone = String(json.phone ?? "").trim().slice(0, 50);
+  const socialHandle = String(json.socialHandle ?? "").trim().slice(0, 100);
   const messageBody = String(json.messageBody ?? "").trim().slice(0, MAX_MESSAGE);
-  const mailingListEvent = Boolean(
-    json.mailingListEvent ?? json.mailingList,
-  );
+  const anythingElse = String(json.anythingElse ?? "").trim().slice(0, MAX_LONG);
+  const mailingListEvent = Boolean(json.mailingListEvent ?? json.mailingList);
   const mailingListGeneral = Boolean(json.mailingListGeneral);
+
+  // Role-specific fields
+  const speakerTopics = String(json.speakerTopics ?? "").trim().slice(0, MAX_SHORT);
+  const speakerExperience = String(json.speakerExperience ?? "").trim().slice(0, MAX_LONG);
+  const sponsorCompany = String(json.sponsorCompany ?? "").trim().slice(0, MAX_SHORT);
+  const sponsorWebsite = String(json.sponsorWebsite ?? "").trim().slice(0, MAX_SHORT);
+  const sponsorBudget = String(json.sponsorBudget ?? "").trim().slice(0, 50);
+  const creatorPlatform = String(json.creatorPlatform ?? "").trim().slice(0, MAX_SHORT);
+  const creatorAudience = String(json.creatorAudience ?? "").trim().slice(0, 50);
+
+  // UTM / source tracking
+  const utmSource = String(json.utmSource ?? "").trim().slice(0, 200);
+  const utmMedium = String(json.utmMedium ?? "").trim().slice(0, 200);
+  const utmCampaign = String(json.utmCampaign ?? "").trim().slice(0, 200);
+  const referralSource = String(json.referralSource ?? "").trim().slice(0, 200);
 
   if (!firstName) {
     return NextResponse.json(
@@ -104,11 +140,25 @@ export async function POST(request: Request) {
     );
   }
 
-  const metadata = buildConnectFormMetadata(
+  const metadata = buildConnectFormMetadata({
     location,
-    mailingListEvent,
-    mailingListGeneral,
-  );
+    phone,
+    socialHandle,
+    anythingElse,
+    eventMailingList: mailingListEvent,
+    generalMailingList: mailingListGeneral,
+    speakerTopics,
+    speakerExperience,
+    sponsorCompany,
+    sponsorWebsite,
+    sponsorBudget,
+    creatorPlatform,
+    creatorAudience,
+    utmSource,
+    utmMedium,
+    utmCampaign,
+    referralSource,
+  });
 
   const { error: insertError } = await supabase.from("connect_form").insert({
     first_name: firstName || null,

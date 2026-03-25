@@ -43,21 +43,17 @@ const MURPHS_LOGO_WHITE =
 
 const TURNSTILE_SITE_KEY = process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY ?? "";
 
+// Role options — expanded to include creator and volunteer
 const requestTypeOptions = [
   { value: "", label: "Select your role" },
-  {
-    value: "attendee",
-    label: "Attendee — I want to come and learn",
-  },
-  {
-    value: "event_speaker",
-    label: "Speaker / Teacher — I have knowledge to share",
-  },
-  {
-    value: "sponsor",
-    label: "Sponsor / Brand / Partner — I want to support or collaborate",
-  },
+  { value: "attendee", label: "Attendee — I want to come and learn" },
+  { value: "event_speaker", label: "Speaker / Teacher — I have knowledge to share" },
+  { value: "sponsor", label: "Sponsor / Brand / Partner — I want to support or collaborate" },
+  { value: "creator", label: "Creator / Media — I want to document and share this" },
+  { value: "volunteer", label: "Volunteer / Local Support — I want to help build this on the ground" },
 ] as const;
+
+type RequestTypeValue = (typeof requestTypeOptions)[number]["value"];
 
 const pillarCards: readonly {
   icon: LucideIcon;
@@ -206,9 +202,6 @@ const statCards = [
   },
 ] as const;
 
-// fadeUp is defined inside the component so it can respect useReducedMotion
-// (see useFadeUp hook below)
-
 function scrollToForm() {
   document
     .getElementById("form-section")
@@ -224,7 +217,6 @@ const labelClass =
 export default function SubmissionFormSection() {
   const prefersReducedMotion = useReducedMotion();
 
-  // When the user prefers reduced motion, skip translate animation — only fade in.
   const fadeUp = prefersReducedMotion
     ? {
         initial: { opacity: 0 },
@@ -244,6 +236,23 @@ export default function SubmissionFormSection() {
   const [error, setError] = useState<string | null>(null);
   const [turnstileToken, setTurnstileToken] = useState<string | null>(null);
   const turnstileRef = useRef<TurnstileInstance>(null);
+
+  // Role-based conditional form state
+  const [selectedRole, setSelectedRole] = useState<RequestTypeValue>("");
+
+  // UTM / source tracking — read from URL on mount
+  const [utmSource, setUtmSource] = useState<string>("");
+  const [utmMedium, setUtmMedium] = useState<string>("");
+  const [utmCampaign, setUtmCampaign] = useState<string>("");
+  const [referralSource, setReferralSource] = useState<string>("");
+
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    setUtmSource(params.get("utm_source") ?? "");
+    setUtmMedium(params.get("utm_medium") ?? "");
+    setUtmCampaign(params.get("utm_campaign") ?? "");
+    setReferralSource(params.get("ref") ?? params.get("source") ?? "");
+  }, []);
 
   useEffect(() => {
     const nav = document.getElementById("main-nav");
@@ -292,28 +301,38 @@ export default function SubmissionFormSection() {
 
     const form = e.currentTarget;
     const fd = new FormData(form);
+
     const firstName = String(fd.get("first_name") ?? "").trim();
     const lastName = String(fd.get("last_name") ?? "").trim();
     const email = String(fd.get("email") ?? "").trim();
     const requestType = String(fd.get("request_type") ?? "").trim();
     const location = String(fd.get("location") ?? "").trim();
+    const phone = String(fd.get("phone") ?? "").trim();
+    const socialHandle = String(fd.get("social_handle") ?? "").trim();
     const messageBody = String(fd.get("message") ?? "").trim();
+    const anythingElse = String(fd.get("anything_else") ?? "").trim();
     const mailingListEvent = fd.get("mailing_list_event") === "on";
     const mailingListGeneral = fd.get("mailing_list_general") === "on";
 
+    // Role-specific fields
+    const speakerTopics = String(fd.get("speaker_topics") ?? "").trim();
+    const speakerExperience = String(fd.get("speaker_experience") ?? "").trim();
+    const sponsorCompany = String(fd.get("sponsor_company") ?? "").trim();
+    const sponsorWebsite = String(fd.get("sponsor_website") ?? "").trim();
+    const sponsorBudget = String(fd.get("sponsor_budget") ?? "").trim();
+    const creatorPlatform = String(fd.get("creator_platform") ?? "").trim();
+    const creatorAudience = String(fd.get("creator_audience") ?? "").trim();
+
     if (!messageBody) {
       setError(
-        "Please add a short note so we understand what you’re curious about.",
+        "Please add a short note so we understand what you're curious about.",
       );
       return;
     }
 
-    if (
-      requestType !== "attendee" &&
-      requestType !== "event_speaker" &&
-      requestType !== "sponsor"
-    ) {
-      setError("Please choose how you’d like to connect with the summit.");
+    const validRoles = ["attendee", "event_speaker", "sponsor", "creator", "volunteer"];
+    if (!validRoles.includes(requestType)) {
+      setError("Please choose how you'd like to connect with the summit.");
       return;
     }
 
@@ -329,9 +348,25 @@ export default function SubmissionFormSection() {
         email,
         requestType,
         location,
+        phone: phone || undefined,
+        socialHandle: socialHandle || undefined,
         messageBody,
+        anythingElse: anythingElse || undefined,
         mailingListEvent,
         mailingListGeneral,
+        // Role-specific
+        speakerTopics: speakerTopics || undefined,
+        speakerExperience: speakerExperience || undefined,
+        sponsorCompany: sponsorCompany || undefined,
+        sponsorWebsite: sponsorWebsite || undefined,
+        sponsorBudget: sponsorBudget || undefined,
+        creatorPlatform: creatorPlatform || undefined,
+        creatorAudience: creatorAudience || undefined,
+        // UTM tracking
+        utmSource: utmSource || undefined,
+        utmMedium: utmMedium || undefined,
+        utmCampaign: utmCampaign || undefined,
+        referralSource: referralSource || undefined,
       }),
     });
 
@@ -348,6 +383,7 @@ export default function SubmissionFormSection() {
 
     setSubmitted(true);
     form.reset();
+    setSelectedRole("");
     turnstileRef.current?.reset();
     setTurnstileToken(null);
   }
@@ -393,7 +429,7 @@ export default function SubmissionFormSection() {
         </button>
       </nav>
 
-      {/* Hero */}
+      {/* ─── Hero ─────────────────────────────────────────────────────────── */}
       <main id="main-content">
       <section
         className="relative flex min-h-screen items-center justify-center overflow-hidden text-center"
@@ -418,7 +454,7 @@ export default function SubmissionFormSection() {
           <motion.h1
             {...fadeUp}
             transition={{ ...fadeUp.transition, delay: 0.08 }}
-            className="font-display mb-5 text-[clamp(2rem,5vw,3.5rem)] font-bold leading-tight text-white"
+            className="font-display mb-4 text-[clamp(2rem,5vw,3.5rem)] font-bold leading-tight text-white"
             style={{ textShadow: "0 2px 20px rgba(0,0,0,0.4)" }}
           >
             The Regenerative Homestead
@@ -427,10 +463,18 @@ export default function SubmissionFormSection() {
             <br />
             at Casa Conejo.
           </motion.h1>
+          {/* Punch line from the original X post */}
           <motion.p
             {...fadeUp}
-            transition={{ ...fadeUp.transition, delay: 0.15 }}
-            className="mx-auto mb-8 max-w-xl font-sans text-[clamp(1rem,2.5vw,1.15rem)] leading-relaxed text-white/85"
+            transition={{ ...fadeUp.transition, delay: 0.13 }}
+            className="mx-auto mb-5 max-w-lg font-sans text-[clamp(0.95rem,2vw,1.1rem)] font-semibold leading-relaxed text-white/90 tracking-wide"
+          >
+            Grow food. Preserve it. Build products. Learn systems. Meet aligned people.
+          </motion.p>
+          <motion.p
+            {...fadeUp}
+            transition={{ ...fadeUp.transition, delay: 0.18 }}
+            className="mx-auto mb-8 max-w-xl font-sans text-[clamp(0.9rem,2.2vw,1.05rem)] leading-relaxed text-white/70"
           >
             A hands-on gathering at our regenerative farm in El Salvador —
             focused on food sovereignty, practical skills, resilient systems, and
@@ -477,7 +521,7 @@ export default function SubmissionFormSection() {
         </div>
       </section>
 
-      {/* What This Is */}
+      {/* ─── What This Is ─────────────────────────────────────────────────── */}
       <section className="bg-white px-6 py-20" aria-label="What this summit is">
         <div className="mx-auto max-w-5xl">
           <p className="font-sans mb-3 text-xs font-bold uppercase tracking-[0.16em] text-[#6b6030]">
@@ -505,11 +549,13 @@ export default function SubmissionFormSection() {
                 raise their hand first will have the most influence on what this
                 becomes.
               </p>
-              <p>
+              {/* Standout block — per Grok feedback */}
+              <blockquote className="rounded-xl border-l-4 border-foliage bg-foliage px-6 py-5 text-sm leading-relaxed text-white not-italic">
+                <strong className="block mb-1 text-gold text-xs font-bold uppercase tracking-widest">The difference</strong>
                 Real land. Real teachers. Real skills. Real people. Not a
                 ballroom. Not a panel circuit. A working farm and a chance to
                 learn things that actually matter.
-              </p>
+              </blockquote>
             </motion.div>
             <div className="space-y-3">
               {pillarCards.map((card, i) => {
@@ -540,7 +586,27 @@ export default function SubmissionFormSection() {
         </div>
       </section>
 
-      {/* Why */}
+      {/* ─── Farm Photo Break 1 — volcano view ───────────────────────────── */}
+      <div className="relative h-[420px] overflow-hidden md:h-[520px]" aria-hidden>
+        <Image
+          src="/farm-volcano.jpg"
+          alt="Terraced regenerative farm rows at Casa Conejo with volcano in background, El Salvador"
+          fill
+          className="object-cover object-center"
+          sizes="100vw"
+        />
+        <div className="absolute inset-0 bg-gradient-to-b from-white/30 via-transparent to-foliage/60" />
+        <div className="absolute bottom-8 left-1/2 -translate-x-1/2 text-center">
+          <p className="font-sans text-xs font-bold uppercase tracking-[0.18em] text-white/80">
+            Casa Conejo · El Salvador
+          </p>
+          <p className="mt-1 font-sans text-sm text-white/60">
+            46 acres of regenerative land, with volcano views
+          </p>
+        </div>
+      </div>
+
+      {/* ─── Why ──────────────────────────────────────────────────────────── */}
       <section className="bg-creme px-6 py-20" aria-label="Why people are interested">
         <div className="mx-auto max-w-5xl">
           <p className="font-sans mb-3 text-xs font-bold uppercase tracking-[0.16em] text-[#6b6030]">
@@ -582,10 +648,45 @@ export default function SubmissionFormSection() {
               );
             })}
           </div>
+
+          {/* Harvesting photo accent below Why cards */}
+          <motion.div {...fadeUp} className="mt-14 grid gap-6 md:grid-cols-2 items-center">
+            <div className="relative h-72 overflow-hidden rounded-2xl shadow-lg md:h-80">
+              <Image
+                src="/women-harvesting.jpg"
+                alt="Local women harvesting fresh vegetables at Casa Conejo regenerative farm"
+                fill
+                className="object-cover object-center"
+                sizes="(max-width: 768px) 100vw, 50vw"
+              />
+            </div>
+            <div className="space-y-3 text-sm leading-relaxed text-foliage/65">
+              <p className="font-sans text-xs font-bold uppercase tracking-[0.14em] text-[#6b6030]">
+                Real Work. Real People.
+              </p>
+              <p className="font-display text-xl font-bold text-foliage leading-snug">
+                This is what food sovereignty looks like in practice.
+              </p>
+              <p>
+                Casa Conejo employs local community members, grows food year-round,
+                and is actively developing the training and hospitality infrastructure
+                that will host the summit. When you come, you&apos;re not visiting a
+                concept — you&apos;re walking into something already being built.
+              </p>
+              <button
+                type="button"
+                onClick={scrollToForm}
+                className="inline-flex items-center gap-2 rounded-full bg-foliage px-6 py-3 text-xs font-bold uppercase tracking-widest text-creme transition-transform duration-200 hover:-translate-y-0.5"
+              >
+                Raise My Hand
+                <ArrowRight className="size-3.5 shrink-0 stroke-[2.5]" aria-hidden />
+              </button>
+            </div>
+          </motion.div>
         </div>
       </section>
 
-      {/* Topics */}
+      {/* ─── Topics ───────────────────────────────────────────────────────── */}
       <section className="bg-foliage px-6 py-20" aria-label="Summit topics and themes">
         <div className="mx-auto max-w-5xl">
           <p className="font-sans mb-3 text-xs font-bold uppercase tracking-[0.16em] text-[#a89a5a]">
@@ -612,15 +713,15 @@ export default function SubmissionFormSection() {
                   key={card.title}
                   {...fadeUp}
                   transition={{ ...fadeUp.transition, delay: i * 0.04 }}
-                  className="cursor-default rounded-xl border border-white/10 bg-white/10 p-6 text-center transition-all duration-200 hover:-translate-y-0.5 hover:bg-white/[0.12]"
+                  className="rounded-2xl border border-white/10 bg-white/8 p-7 transition-[transform,background-color] duration-200 hover:-translate-y-0.5 hover:bg-white/12"
                 >
-                  <span className="mb-3 flex justify-center text-white">
-                    <Icon className="size-9 stroke-[1.35]" aria-hidden />
-                  </span>
-                  <h3 className="font-sans text-sm font-semibold text-white">
+                  <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-xl bg-white/10 text-white">
+                    <Icon className="size-6 stroke-[1.5]" aria-hidden />
+                  </div>
+                  <h3 className="font-display mb-2 text-base font-bold text-white">
                     {card.title}
                   </h3>
-                  <p className="mt-2 font-sans text-xs leading-relaxed text-white/50">
+                  <p className="font-sans text-sm leading-relaxed text-white/55">
                     {card.body}
                   </p>
                 </motion.div>
@@ -630,7 +731,7 @@ export default function SubmissionFormSection() {
         </div>
       </section>
 
-      {/* Who */}
+      {/* ─── Who This Is For ──────────────────────────────────────────────── */}
       <section className="bg-white px-6 py-20" aria-label="Who this summit is for">
         <div className="mx-auto max-w-5xl">
           <p className="font-sans mb-3 text-xs font-bold uppercase tracking-[0.16em] text-[#6b6030]">
@@ -640,14 +741,14 @@ export default function SubmissionFormSection() {
             {...fadeUp}
             className="font-display mb-4 text-[clamp(1.6rem,3.5vw,2.4rem)] font-bold text-foliage"
           >
-            There&apos;s a seat at the table for you.
+            Builders, learners, brands, and creators.
           </motion.h2>
           <motion.p
             {...fadeUp}
             className="mb-12 max-w-xl text-sm leading-relaxed text-foliage/60"
           >
-            We&apos;re building something that needs multiple kinds of
-            people. Here&apos;s who we&apos;re looking for.
+            This isn&apos;t a general-audience event. It&apos;s for people who
+            are already building, learning, or investing in this direction.
           </motion.p>
           <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
             {whoCards.map((card, i) => {
@@ -657,15 +758,15 @@ export default function SubmissionFormSection() {
                   key={card.title}
                   {...fadeUp}
                   transition={{ ...fadeUp.transition, delay: i * 0.04 }}
-                  className="cursor-default rounded-xl border border-gold/15 bg-creme p-6 text-center transition-colors duration-200 hover:border-gold"
+                  className="cursor-default rounded-2xl border border-foliage/10 bg-creme p-7 transition-[transform,box-shadow] duration-200 hover:-translate-y-1 hover:shadow-[0_8px_30px_rgba(44,52,45,0.1)]"
                 >
-                  <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-full bg-foliage/10 text-foliage">
-                    <Icon className="size-7 stroke-[1.5]" aria-hidden />
+                  <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-xl bg-foliage/10 text-foliage">
+                    <Icon className="size-6 stroke-[1.5]" aria-hidden />
                   </div>
-                  <h3 className="mb-2 font-sans text-sm font-bold text-foliage">
+                  <h3 className="font-display mb-2 text-base font-bold text-foliage">
                     {card.title}
                   </h3>
-                  <p className="font-sans text-xs leading-relaxed text-foliage/55">
+                  <p className="font-sans text-sm leading-relaxed text-foliage/60">
                     {card.body}
                   </p>
                 </motion.div>
@@ -675,29 +776,67 @@ export default function SubmissionFormSection() {
         </div>
       </section>
 
-      {/* Form */}
-      <section id="form-section" className="bg-creme px-6 py-20" aria-label="Interest registration form">
+      {/* ─── Interest Form ────────────────────────────────────────────────── */}
+      <section
+        id="form-section"
+        className="relative overflow-hidden px-6 py-20"
+        aria-label="Summit interest form"
+        style={{ background: "linear-gradient(160deg, #f2ebd9 0%, #e8dfc8 100%)" }}
+      >
         <div className="mx-auto max-w-5xl">
-          <div className="grid items-start gap-16 md:grid-cols-2">
-            <motion.div {...fadeUp}>
-              <p className="font-sans mb-3 text-xs font-bold uppercase tracking-[0.16em] text-[#6b6030]">
-                Interest Form
-              </p>
-              <h2 className="font-display mb-4 text-[clamp(1.6rem,3.5vw,2.4rem)] font-bold text-foliage">
-                Tell us who you are and how you want to be involved.
-              </h2>
-              <p className="font-sans text-sm leading-relaxed text-foliage/60">
-                The summit is happening. Dates and full details are coming soon.
-                Get your name in now — attendees, speakers, sponsors, partners,
-                and creators who register early will hear first.
-              </p>
-            </motion.div>
-
+          <div className="grid items-start gap-12 lg:grid-cols-[1fr_480px]">
+            {/* Left copy */}
             <div>
+              <p className="font-sans mb-3 text-xs font-bold uppercase tracking-[0.16em] text-[#6b6030]">
+                Join the Interest List
+              </p>
+              <motion.h2
+                {...fadeUp}
+                className="font-display mb-4 text-[clamp(1.6rem,3.5vw,2.4rem)] font-bold text-foliage"
+              >
+                Raise your hand early.
+              </motion.h2>
+              <motion.p {...fadeUp} className="mb-6 text-sm leading-relaxed text-foliage/65">
+                The summit is coming. Dates and full details will be announced
+                soon. Tell us who you are and how you want to be involved — and
+                we&apos;ll reach out directly when things are confirmed.
+              </motion.p>
+              <motion.div {...fadeUp} className="space-y-3">
+                {[
+                  "Attendees get early access to registration",
+                  "Speakers get first consideration for the program",
+                  "Sponsors get a direct intro to the team",
+                  "Creators get media credentials and access",
+                ].map((item) => (
+                  <div key={item} className="flex items-start gap-3 text-sm text-foliage/65">
+                    <span className="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-foliage/10 text-foliage">
+                      <ArrowRight className="size-3 stroke-[2.5]" aria-hidden />
+                    </span>
+                    {item}
+                  </div>
+                ))}
+              </motion.div>
+
+              {/* Terraces photo in left column on desktop */}
+              <motion.div
+                {...fadeUp}
+                className="mt-10 hidden overflow-hidden rounded-2xl shadow-md lg:block"
+              >
+                <Image
+                  src="/terraces-volcano.jpg"
+                  alt="View from Casa Conejo main building over terraced gardens with volcano and Pacific coast in background"
+                  width={560}
+                  height={315}
+                  className="w-full object-cover"
+                />
+              </motion.div>
+            </div>
+
+            {/* Right form */}
+            <div className="rounded-2xl bg-white p-8 shadow-[0_8px_40px_rgba(44,52,45,0.12)]">
               {submitted ? (
                 <motion.div
-                  initial={{ opacity: 0, y: 12 }}
-                  animate={{ opacity: 1, y: 0 }}
+                  {...fadeUp}
                   className="py-12 text-center"
                   role="status"
                 >
@@ -718,6 +857,13 @@ export default function SubmissionFormSection() {
                 </motion.div>
               ) : (
                 <form className="space-y-4" onSubmit={handleSubmit}>
+                  {/* Hidden UTM fields */}
+                  <input type="hidden" name="utm_source" value={utmSource} />
+                  <input type="hidden" name="utm_medium" value={utmMedium} />
+                  <input type="hidden" name="utm_campaign" value={utmCampaign} />
+                  <input type="hidden" name="referral_source" value={referralSource} />
+
+                  {/* Name row */}
                   <div className="grid grid-cols-2 gap-4">
                     <div>
                       <label htmlFor="first_name" className={labelClass}>
@@ -751,6 +897,7 @@ export default function SubmissionFormSection() {
                     </div>
                   </div>
 
+                  {/* Email */}
                   <div>
                     <label htmlFor="email" className={labelClass}>
                       Email Address <span className="text-red-500">*</span>
@@ -766,6 +913,7 @@ export default function SubmissionFormSection() {
                     />
                   </div>
 
+                  {/* Role selector */}
                   <div>
                     <label htmlFor="request_type" className={labelClass}>
                       I&apos;m interested as a…{" "}
@@ -775,7 +923,8 @@ export default function SubmissionFormSection() {
                       id="request_type"
                       name="request_type"
                       required
-                      defaultValue=""
+                      value={selectedRole}
+                      onChange={(e) => setSelectedRole(e.target.value as RequestTypeValue)}
                       className={`${fieldClass} appearance-none bg-[rgba(242,235,217,0.6)]`}
                     >
                       {requestTypeOptions.map((opt) => (
@@ -790,26 +939,209 @@ export default function SubmissionFormSection() {
                     </select>
                   </div>
 
+                  {/* ── Role-specific conditional fields ── */}
+
+                  {/* SPEAKER fields */}
+                  {selectedRole === "event_speaker" && (
+                    <motion.div
+                      initial={{ opacity: 0, y: 8 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ duration: 0.25 }}
+                      className="space-y-4 rounded-xl border border-foliage/15 bg-foliage/5 p-4"
+                    >
+                      <p className="text-xs font-bold uppercase tracking-wide text-foliage/60">
+                        Speaker Details
+                      </p>
+                      <div>
+                        <label htmlFor="speaker_topics" className={labelClass}>
+                          Topic(s) you could teach <span className="text-red-500">*</span>
+                        </label>
+                        <input
+                          id="speaker_topics"
+                          name="speaker_topics"
+                          type="text"
+                          required
+                          placeholder="e.g. Fermentation, Soil biology, Water systems…"
+                          className={fieldClass}
+                        />
+                      </div>
+                      <div>
+                        <label htmlFor="speaker_experience" className={labelClass}>
+                          Your background / experience{" "}
+                          <span className="font-normal normal-case tracking-normal text-foliage/40">(optional)</span>
+                        </label>
+                        <textarea
+                          id="speaker_experience"
+                          name="speaker_experience"
+                          rows={3}
+                          placeholder="Tell us about your experience teaching or practicing these skills…"
+                          className={`${fieldClass} resize-y`}
+                        />
+                      </div>
+                    </motion.div>
+                  )}
+
+                  {/* SPONSOR fields */}
+                  {selectedRole === "sponsor" && (
+                    <motion.div
+                      initial={{ opacity: 0, y: 8 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ duration: 0.25 }}
+                      className="space-y-4 rounded-xl border border-foliage/15 bg-foliage/5 p-4"
+                    >
+                      <p className="text-xs font-bold uppercase tracking-wide text-foliage/60">
+                        Sponsor / Partner Details
+                      </p>
+                      <div>
+                        <label htmlFor="sponsor_company" className={labelClass}>
+                          Company or brand name <span className="text-red-500">*</span>
+                        </label>
+                        <input
+                          id="sponsor_company"
+                          name="sponsor_company"
+                          type="text"
+                          required
+                          placeholder="Your company or brand"
+                          className={fieldClass}
+                        />
+                      </div>
+                      <div>
+                        <label htmlFor="sponsor_website" className={labelClass}>
+                          Website{" "}
+                          <span className="font-normal normal-case tracking-normal text-foliage/40">(optional)</span>
+                        </label>
+                        <input
+                          id="sponsor_website"
+                          name="sponsor_website"
+                          type="url"
+                          placeholder="https://yourcompany.com"
+                          className={fieldClass}
+                        />
+                      </div>
+                      <div>
+                        <label htmlFor="sponsor_budget" className={labelClass}>
+                          Budget range / interest level{" "}
+                          <span className="font-normal normal-case tracking-normal text-foliage/40">(optional)</span>
+                        </label>
+                        <select
+                          id="sponsor_budget"
+                          name="sponsor_budget"
+                          className={`${fieldClass} appearance-none bg-[rgba(242,235,217,0.6)]`}
+                        >
+                          <option value="">Select a range</option>
+                          <option value="under_5k">Under $5,000</option>
+                          <option value="5k_15k">$5,000 – $15,000</option>
+                          <option value="15k_50k">$15,000 – $50,000</option>
+                          <option value="50k_plus">$50,000+</option>
+                          <option value="in_kind">In-kind / product partnership</option>
+                          <option value="exploring">Still exploring</option>
+                        </select>
+                      </div>
+                    </motion.div>
+                  )}
+
+                  {/* CREATOR fields */}
+                  {selectedRole === "creator" && (
+                    <motion.div
+                      initial={{ opacity: 0, y: 8 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ duration: 0.25 }}
+                      className="space-y-4 rounded-xl border border-foliage/15 bg-foliage/5 p-4"
+                    >
+                      <p className="text-xs font-bold uppercase tracking-wide text-foliage/60">
+                        Creator / Media Details
+                      </p>
+                      <div>
+                        <label htmlFor="creator_platform" className={labelClass}>
+                          Primary platform(s) <span className="text-red-500">*</span>
+                        </label>
+                        <input
+                          id="creator_platform"
+                          name="creator_platform"
+                          type="text"
+                          required
+                          placeholder="e.g. YouTube, X, Instagram, Podcast…"
+                          className={fieldClass}
+                        />
+                      </div>
+                      <div>
+                        <label htmlFor="creator_audience" className={labelClass}>
+                          Approximate audience size{" "}
+                          <span className="font-normal normal-case tracking-normal text-foliage/40">(optional)</span>
+                        </label>
+                        <select
+                          id="creator_audience"
+                          name="creator_audience"
+                          className={`${fieldClass} appearance-none bg-[rgba(242,235,217,0.6)]`}
+                        >
+                          <option value="">Select a range</option>
+                          <option value="under_10k">Under 10K</option>
+                          <option value="10k_50k">10K – 50K</option>
+                          <option value="50k_250k">50K – 250K</option>
+                          <option value="250k_1m">250K – 1M</option>
+                          <option value="1m_plus">1M+</option>
+                        </select>
+                      </div>
+                    </motion.div>
+                  )}
+
+                  {/* Location + phone row */}
+                  <div className="grid grid-cols-2 gap-4">
+                    <div>
+                      <label htmlFor="location" className={labelClass}>
+                        City / Country{" "}
+                        <span className="font-normal normal-case tracking-normal text-foliage/40">
+                          (optional)
+                        </span>
+                      </label>
+                      <input
+                        id="location"
+                        name="location"
+                        type="text"
+                        autoComplete="address-level1"
+                        placeholder="City, country"
+                        className={fieldClass}
+                      />
+                    </div>
+                    <div>
+                      <label htmlFor="phone" className={labelClass}>
+                        Phone / WhatsApp{" "}
+                        <span className="font-normal normal-case tracking-normal text-foliage/40">
+                          (optional)
+                        </span>
+                      </label>
+                      <input
+                        id="phone"
+                        name="phone"
+                        type="tel"
+                        autoComplete="tel"
+                        placeholder="+1 555 000 0000"
+                        className={fieldClass}
+                      />
+                    </div>
+                  </div>
+
+                  {/* Social handle */}
                   <div>
-                    <label htmlFor="location" className={labelClass}>
-                      Location{" "}
+                    <label htmlFor="social_handle" className={labelClass}>
+                      Instagram or X handle{" "}
                       <span className="font-normal normal-case tracking-normal text-foliage/40">
                         (optional)
                       </span>
                     </label>
                     <input
-                      id="location"
-                      name="location"
+                      id="social_handle"
+                      name="social_handle"
                       type="text"
-                      autoComplete="address-level1"
-                      placeholder="City, country"
+                      placeholder="@yourhandle"
                       className={fieldClass}
                     />
                   </div>
 
+                  {/* Why interested */}
                   <div>
                     <label htmlFor="message" className={labelClass}>
-                      Why are you interested?{" "}
+                      What interests you most?{" "}
                       <span className="text-red-500">*</span>
                     </label>
                     <textarea
@@ -817,11 +1149,29 @@ export default function SubmissionFormSection() {
                       name="message"
                       required
                       rows={4}
-                      placeholder="Tell us a bit about yourself and what draws you to this..."
+                      placeholder="Tell us what draws you to this and what you're hoping to get out of it…"
                       className={`${fieldClass} resize-y`}
                     />
                   </div>
 
+                  {/* Anything else */}
+                  <div>
+                    <label htmlFor="anything_else" className={labelClass}>
+                      Anything else we should know?{" "}
+                      <span className="font-normal normal-case tracking-normal text-foliage/40">
+                        (optional)
+                      </span>
+                    </label>
+                    <textarea
+                      id="anything_else"
+                      name="anything_else"
+                      rows={2}
+                      placeholder="Questions, ideas, context, or anything else…"
+                      className={`${fieldClass} resize-y`}
+                    />
+                  </div>
+
+                  {/* Email preferences */}
                   <fieldset
                     className="rounded-xl border border-foliage/15 p-5"
                     style={{ background: "rgba(44,52,45,0.06)" }}
@@ -860,6 +1210,7 @@ export default function SubmissionFormSection() {
                     </label>
                   </fieldset>
 
+                  {/* Turnstile */}
                   {TURNSTILE_SITE_KEY ? (
                     <div className="flex flex-col items-center gap-2 pt-2">
                       <Turnstile
@@ -926,7 +1277,7 @@ export default function SubmissionFormSection() {
         </div>
       </section>
 
-      {/* About */}
+      {/* ─── About ────────────────────────────────────────────────────────── */}
       <section className="bg-white px-6 py-20" aria-label="About MurphsLife Foundation and Casa Conejo">
         <div className="mx-auto max-w-5xl">
           <p className="font-sans mb-3 text-xs font-bold uppercase tracking-[0.16em] text-[#6b6030]">
@@ -972,28 +1323,40 @@ export default function SubmissionFormSection() {
                 </a>
               </div>
             </motion.div>
-            <div className="grid grid-cols-2 gap-4">
-              {statCards.map((s, i) => (
-                <motion.div
-                  key={s.label}
-                  {...fadeUp}
-                  transition={{ ...fadeUp.transition, delay: i * 0.04 }}
-                  className="rounded-xl border-l-4 border-gold bg-creme p-5"
-                >
-                  <p className="font-display text-3xl font-bold leading-none text-foliage">
-                    {s.stat}
-                  </p>
-                  <p className="mt-1 font-sans text-xs leading-snug text-foliage/55">
-                    {s.label}
-                  </p>
-                </motion.div>
-              ))}
+            <div className="space-y-4">
+              {/* Aerial drone photo above stat cards */}
+              <motion.div {...fadeUp} className="overflow-hidden rounded-2xl shadow-md">
+                <Image
+                  src="/aerial-site.jpg"
+                  alt="Aerial drone view of Casa Conejo 46-acre regenerative campus in El Salvador"
+                  width={560}
+                  height={315}
+                  className="w-full object-cover"
+                />
+              </motion.div>
+              <div className="grid grid-cols-2 gap-4">
+                {statCards.map((s, i) => (
+                  <motion.div
+                    key={s.label}
+                    {...fadeUp}
+                    transition={{ ...fadeUp.transition, delay: i * 0.04 }}
+                    className="rounded-xl border-l-4 border-gold bg-creme p-5"
+                  >
+                    <p className="font-display text-3xl font-bold leading-none text-foliage">
+                      {s.stat}
+                    </p>
+                    <p className="mt-1 font-sans text-xs leading-snug text-foliage/55">
+                      {s.label}
+                    </p>
+                  </motion.div>
+                ))}
+              </div>
             </div>
           </div>
         </div>
       </section>
 
-      {/* Final CTA */}
+      {/* ─── Final CTA ────────────────────────────────────────────────────── */}
       <section className="relative overflow-hidden bg-foliage px-6 py-24 text-center" aria-label="Final call to action">
         <div
           className="pointer-events-none absolute inset-0 bg-cover bg-center opacity-[0.08]"
@@ -1019,11 +1382,19 @@ export default function SubmissionFormSection() {
           </motion.h2>
           <motion.p
             {...fadeUp}
-            className="mx-auto mb-10 max-w-lg text-sm leading-relaxed text-white/70"
+            className="mx-auto mb-4 max-w-lg text-sm leading-relaxed text-white/70"
           >
             The summit is coming. Dates and full details will be announced
             soon. If you want to attend, speak, sponsor, partner, or create —
             add your info now and be among the first to know.
+          </motion.p>
+          {/* Emotional hook from Grok feedback */}
+          <motion.p
+            {...fadeUp}
+            className="mx-auto mb-10 max-w-lg text-sm leading-relaxed text-white/55 italic"
+          >
+            Most people won&apos;t think seriously about food sovereignty until it&apos;s too late.
+            This is a chance to get ahead of that curve.
           </motion.p>
           <motion.div {...fadeUp}>
             <button
