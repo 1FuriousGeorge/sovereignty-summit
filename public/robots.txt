@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://summit.murphslifefoundation.com/sitemap.xml

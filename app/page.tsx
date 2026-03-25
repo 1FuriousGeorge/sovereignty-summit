@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Script from "next/script";
 import SubmissionLandingPage from "@/components/submission/submission-landing-page";
 import { getSiteUrl } from "@/lib/site-url";
 
@@ -28,6 +29,41 @@ const SHARE_IMAGE_HEIGHT = 630;
 const SHARE_IMAGE_ALT =
   "The Regenerative Homestead Sovereignty Summit — Casa Conejo regenerative farm at golden hour, El Salvador";
 
+// ─── JSON-LD structured data ──────────────────────────────────────────────────
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "Event",
+  name: "The Regenerative Homestead Sovereignty Summit",
+  alternateName: "Sovereignty Summit at Casa Conejo",
+  description: PAGE_DESCRIPTION,
+  eventStatus: "https://schema.org/EventScheduled",
+  eventAttendanceMode: "https://schema.org/OfflineEventAttendanceMode",
+  startDate: "2026",
+  location: {
+    "@type": "Place",
+    name: "Casa Conejo",
+    description: "46-acre regenerative farm campus",
+    address: {
+      "@type": "PostalAddress",
+      addressCountry: "SV",
+      addressRegion: "El Salvador",
+    },
+  },
+  organizer: {
+    "@type": "Organization",
+    name: "MurphsLife Foundation",
+    url: "https://murphslifefoundation.org",
+  },
+  image: SHARE_IMAGE,
+  url: siteUrl,
+  offers: {
+    "@type": "Offer",
+    url: siteUrl,
+    availability: "https://schema.org/PreOrder",
+    validFrom: "2026-01-01",
+  },
+};
+
 // ─── Metadata export ──────────────────────────────────────────────────────────
 export const metadata: Metadata = {
   title: PAGE_TITLE,
@@ -51,6 +87,10 @@ export const metadata: Metadata = {
     "Casa Conejo",
     "homesteading",
     "self-sufficiency",
+    "permaculture",
+    "food preservation",
+    "off-grid living",
+    "regenerative homestead",
   ],
 
   // ── Open Graph (Facebook · WhatsApp · iMessage · LinkedIn · Telegram · Slack)
@@ -89,8 +129,38 @@ export const metadata: Metadata = {
       },
     ],
   },
+
+  // ── PWA / mobile
+  manifest: "/manifest.json",
+  themeColor: "#2c342d",
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: "black-translucent",
+    title: "Sovereignty Summit",
+  },
+
+  // ── Robots
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-image-preview": "large",
+      "max-snippet": -1,
+    },
+  },
 };
 
 export default function Home() {
-  return <SubmissionLandingPage />;
+  return (
+    <>
+      <Script
+        id="json-ld-event"
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
+      <SubmissionLandingPage />
+    </>
+  );
 }

@@ -1,0 +1,16 @@
+{
+  "name": "The Regenerative Homestead Sovereignty Summit",
+  "short_name": "Sovereignty Summit",
+  "description": "A hands-on gathering at Casa Conejo's 46-acre regenerative farm in El Salvador. Food sovereignty, practical skills, resilient systems, and aligned community. Coming 2026.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#f2ebd9",
+  "theme_color": "#2c342d",
+  "icons": [
+    {
+      "src": "/favicon.ico",
+      "sizes": "any",
+      "type": "image/x-icon"
+    }
+  ]
+}

@@ -341,13 +341,23 @@ export default function SubmissionFormSection() {
 
   return (
     <>
+      {/* Skip to main content — keyboard/screen-reader accessibility */}
+      <a
+        href="#main-content"
+        className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[100] focus:rounded-full focus:bg-foliage focus:px-5 focus:py-2 focus:text-xs focus:font-bold focus:uppercase focus:tracking-widest focus:text-creme"
+      >
+        Skip to main content
+      </a>
+
       <nav
         id="main-nav"
+        aria-label="Main navigation"
         className="fixed left-0 right-0 top-0 z-50 flex items-center justify-between px-6 py-4 transition-[background,backdrop-filter] duration-300"
       >
         <a
           href="https://murphslifefoundation.org"
           className="shrink-0"
+          aria-label="MurphsLife Foundation homepage"
           target="_blank"
           rel="noopener noreferrer"
         >
@@ -363,7 +373,7 @@ export default function SubmissionFormSection() {
         <button
           type="button"
           onClick={scrollToForm}
-          className="inline-flex items-center gap-2 rounded-full bg-foliage px-5 py-2.5 text-xs font-bold uppercase tracking-widest text-creme transition-transform duration-200 hover:-translate-y-0.5"
+          className="inline-flex items-center gap-2 rounded-full bg-foliage px-5 py-2.5 text-xs font-bold uppercase tracking-widest text-creme transition-transform duration-200 hover:-translate-y-0.5 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-creme"
         >
           <ArrowDown className="size-3.5 shrink-0 stroke-[2.5]" aria-hidden />
           Join the Interest List
@@ -371,7 +381,11 @@ export default function SubmissionFormSection() {
       </nav>
 
       {/* Hero */}
-      <section className="relative flex min-h-screen items-center justify-center overflow-hidden text-center">
+      <main id="main-content">
+      <section
+        className="relative flex min-h-screen items-center justify-center overflow-hidden text-center"
+        aria-label="Summit hero — The Regenerative Homestead Sovereignty Summit at Casa Conejo"
+      >
         <div
           className="animate-hero-kenburns pointer-events-none absolute inset-0 bg-cover bg-center"
           style={{ backgroundImage: `url("${HERO_BACKGROUND}")`, willChange: "transform", transform: "translateZ(0)" }}
@@ -451,7 +465,7 @@ export default function SubmissionFormSection() {
       </section>
 
       {/* What This Is */}
-      <section className="bg-white px-6 py-20">
+      <section className="bg-white px-6 py-20" aria-label="What this summit is">
         <div className="mx-auto max-w-5xl">
           <p className="font-sans mb-3 text-xs font-bold uppercase tracking-[0.16em] text-gold">
             What This Is
@@ -514,7 +528,7 @@ export default function SubmissionFormSection() {
       </section>
 
       {/* Why */}
-      <section className="bg-creme px-6 py-20">
+      <section className="bg-creme px-6 py-20" aria-label="Why people are interested">
         <div className="mx-auto max-w-5xl">
           <p className="font-sans mb-3 text-xs font-bold uppercase tracking-[0.16em] text-gold">
             Why People Are Interested
@@ -559,7 +573,7 @@ export default function SubmissionFormSection() {
       </section>
 
       {/* Topics */}
-      <section className="bg-foliage px-6 py-20">
+      <section className="bg-foliage px-6 py-20" aria-label="Summit topics and themes">
         <div className="mx-auto max-w-5xl">
           <p className="font-sans mb-3 text-xs font-bold uppercase tracking-[0.16em] text-gold">
             Topics & Themes
@@ -604,7 +618,7 @@ export default function SubmissionFormSection() {
       </section>
 
       {/* Who */}
-      <section className="bg-white px-6 py-20">
+      <section className="bg-white px-6 py-20" aria-label="Who this summit is for">
         <div className="mx-auto max-w-5xl">
           <p className="font-sans mb-3 text-xs font-bold uppercase tracking-[0.16em] text-gold">
             Who This Is For
@@ -649,7 +663,7 @@ export default function SubmissionFormSection() {
       </section>
 
       {/* Form */}
-      <section id="form-section" className="bg-creme px-6 py-20">
+      <section id="form-section" className="bg-creme px-6 py-20" aria-label="Interest registration form">
         <div className="mx-auto max-w-5xl">
           <div className="grid items-start gap-16 md:grid-cols-2">
             <motion.div {...fadeUp}>
@@ -871,7 +885,7 @@ export default function SubmissionFormSection() {
                     disabled={
                       pending || !TURNSTILE_SITE_KEY || !turnstileToken
                     }
-                    className="inline-flex w-full items-center justify-center gap-2 rounded-full bg-foliage py-4 text-sm font-bold uppercase tracking-widest text-creme shadow-[0_4px_20px_rgba(44,52,45,0.3)] transition-all duration-200 hover:-translate-y-0.5 disabled:cursor-not-allowed disabled:opacity-55"
+                    className="inline-flex w-full items-center justify-center gap-2 rounded-full bg-foliage py-4 text-sm font-bold uppercase tracking-widest text-creme shadow-[0_4px_20px_rgba(44,52,45,0.3)] transition-all duration-200 hover:-translate-y-0.5 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-foliage disabled:cursor-not-allowed disabled:opacity-55"
                   >
                     {pending ? (
                       <>
@@ -900,7 +914,7 @@ export default function SubmissionFormSection() {
       </section>
 
       {/* About */}
-      <section className="bg-white px-6 py-20">
+      <section className="bg-white px-6 py-20" aria-label="About MurphsLife Foundation and Casa Conejo">
         <div className="mx-auto max-w-5xl">
           <p className="font-sans mb-3 text-xs font-bold uppercase tracking-[0.16em] text-gold">
             About MurphsLife & Casa Conejo
@@ -967,7 +981,7 @@ export default function SubmissionFormSection() {
       </section>
 
       {/* Final CTA */}
-      <section className="relative overflow-hidden bg-foliage px-6 py-24 text-center">
+      <section className="relative overflow-hidden bg-foliage px-6 py-24 text-center" aria-label="Final call to action">
         <div
           className="pointer-events-none absolute inset-0 bg-cover bg-center opacity-[0.08]"
           style={{
@@ -1015,7 +1029,9 @@ export default function SubmissionFormSection() {
         </div>
       </section>
 
-      <footer className="bg-[#0f0f0f] px-6 py-8 text-center">
+      </main>
+
+      <footer className="bg-[#0f0f0f] px-6 py-8 text-center" aria-label="Site footer">
         <Image
           src={MURPHS_LOGO_WHITE}
           alt="MurphsLife Foundation"
@@ -1034,6 +1050,30 @@ export default function SubmissionFormSection() {
           and complete program details coming soon. Partnerships and the speaker
           lineup are currently being finalized.
         </p>
+        <nav aria-label="Footer links" className="mt-6 flex flex-wrap justify-center gap-x-6 gap-y-2">
+          <a
+            href="https://murphslifefoundation.org"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="font-sans text-xs text-white/30 transition-colors hover:text-white/60"
+          >
+            MurphsLife Foundation
+          </a>
+          <a
+            href="https://casaconejo.io"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="font-sans text-xs text-white/30 transition-colors hover:text-white/60"
+          >
+            Casa Conejo
+          </a>
+          <a
+            href="/sitemap.xml"
+            className="font-sans text-xs text-white/30 transition-colors hover:text-white/60"
+          >
+            Sitemap
+          </a>
+        </nav>
       </footer>
     </>
   );
