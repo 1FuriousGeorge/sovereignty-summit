@@ -499,7 +499,8 @@ export default function SubmissionFormSection() {
               className="flex items-center gap-2 rounded-full border border-white/35 bg-white/10 px-7 py-4 text-sm font-semibold tracking-wide text-white backdrop-blur-md transition-transform duration-200 hover:-translate-y-0.5"
             >
               <ClipboardList className="size-4 shrink-0 stroke-[2]" aria-hidden />
-              Tell Us How You Want to Be Involved
+              <span className="hidden sm:inline">Tell Us How You Want to Be Involved</span>
+              <span className="sm:hidden">Get Involved</span>
             </button>
           </motion.div>
           <motion.p
@@ -864,7 +865,7 @@ export default function SubmissionFormSection() {
                   <input type="hidden" name="referral_source" value={referralSource} />
 
                   {/* Name row */}
-                  <div className="grid grid-cols-2 gap-4">
+                  <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
                     <div>
                       <label htmlFor="first_name" className={labelClass}>
                         First Name <span className="text-red-500">*</span>
@@ -1086,7 +1087,7 @@ export default function SubmissionFormSection() {
                   )}
 
                   {/* Location + phone row */}
-                  <div className="grid grid-cols-2 gap-4">
+                  <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
                     <div>
                       <label htmlFor="location" className={labelClass}>
                         City / Country{" "}
