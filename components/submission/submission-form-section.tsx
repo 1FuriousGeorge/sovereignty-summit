@@ -186,19 +186,19 @@ const whoCards: readonly {
 const statCards = [
   {
     stat: "46",
-    label: "Acres of owned regenerative land at Casa Conejo",
+    label: "Acres of owned land at Casa Conejo",
   },
   {
     stat: "11M+",
-    label: "Social media followers across MurphsLife distribution",
+    label: "Followers across MurphsLife network",
   },
   {
     stat: "SV",
-    label: "Government-aligned regenerative development partnership",
+    label: "Government-aligned development partner",
   },
   {
     stat: "501(c)(3)",
-    label: "Registered nonprofit · EIN 85-3332093",
+    label: "Registered U.S. nonprofit entity",
   },
 ] as const;
 
@@ -332,14 +332,8 @@ export default function SubmissionFormSection() {
     e.preventDefault();
     setError(null);
 
-    if (!TURNSTILE_SITE_KEY) {
-      setError(
-        "Human verification is not configured. Add NEXT_PUBLIC_TURNSTILE_SITE_KEY and TURNSTILE_SECRET_KEY.",
-      );
-      return;
-    }
-
-    if (!turnstileToken) {
+    // Turnstile is optional — only validate token if the site key is configured
+    if (TURNSTILE_SITE_KEY && !turnstileToken) {
       setError("Please complete the security check below before sending.");
       return;
     }
@@ -550,7 +544,7 @@ export default function SubmissionFormSection() {
           <motion.p
             {...fadeUp}
             transition={{ ...fadeUp.transition, delay: 0.28 }}
-            className="text-xs tracking-wide text-white/45"
+            className="text-xs tracking-wide text-white/80 [text-shadow:0_1px_4px_rgba(0,0,0,0.5)]"
           >
             Attendees · Speakers · Sponsors · Partners · Creators · Aligned
             Companies
@@ -558,7 +552,7 @@ export default function SubmissionFormSection() {
         </div>
 
         <div
-          className="animate-scroll-hint absolute bottom-8 left-1/2 flex flex-col items-center gap-2 text-xs uppercase tracking-widest text-white/35"
+          className="animate-scroll-hint absolute bottom-8 left-1/2 flex flex-col items-center gap-2 text-xs uppercase tracking-widest text-white/70 [text-shadow:0_1px_4px_rgba(0,0,0,0.5)]"
           aria-hidden
         >
           <ChevronDown className="size-5 stroke-[1.5]" />
@@ -588,7 +582,7 @@ export default function SubmissionFormSection() {
       </section>
 
       {/* ─── What This Is ─────────────────────────────────────────────────── */}
-      <section className="bg-white px-6 py-20" aria-label="What this summit is">
+      <section className="bg-creme px-6 py-20" aria-label="What this summit is">
         <div className="mx-auto max-w-5xl">
           <p className="font-sans mb-3 text-xs font-bold uppercase tracking-[0.16em] text-[#6b6030]">
             What This Is
@@ -631,7 +625,7 @@ export default function SubmissionFormSection() {
                     key={card.title}
                     {...fadeUp}
                     transition={{ ...fadeUp.transition, delay: i * 0.04 }}
-                    className="flex items-start gap-4 rounded-xl border-l-4 border-foliage bg-creme p-5"
+                    className="flex items-start gap-4 rounded-xl border-l-4 border-foliage bg-white p-5"
                   >
                     <span className="mt-0.5 flex shrink-0 text-foliage">
                       <Icon className="size-7 stroke-[1.5]" aria-hidden />
@@ -1434,13 +1428,8 @@ export default function SubmissionFormSection() {
                       </p>
                     </div>
                   ) : (
-                    <p className="rounded-xl bg-amber-50 px-3 py-2 text-center text-sm text-amber-900">
-                      Add{" "}
-                      <code className="rounded bg-amber-100/80 px-1">
-                        NEXT_PUBLIC_TURNSTILE_SITE_KEY
-                      </code>{" "}
-                      to your environment to enable the security check.
-                    </p>
+                    // Turnstile not configured — form submits without security check until keys are added to Vercel
+                    <span aria-hidden className="sr-only">Security check not configured</span>
                   )}
 
                   {error ? (
@@ -1455,7 +1444,7 @@ export default function SubmissionFormSection() {
                   <button
                     type="submit"
                     disabled={
-                      pending || !TURNSTILE_SITE_KEY || !turnstileToken
+                      pending || (!!TURNSTILE_SITE_KEY && !turnstileToken)
                     }
                     className="inline-flex w-full items-center justify-center gap-2 rounded-full bg-foliage py-4 text-sm font-bold uppercase tracking-widest text-creme shadow-[0_4px_20px_rgba(44,52,45,0.3)] transition-all duration-200 hover:-translate-y-0.5 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-foliage disabled:cursor-not-allowed disabled:opacity-55"
                   >

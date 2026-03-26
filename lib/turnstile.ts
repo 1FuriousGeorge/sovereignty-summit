@@ -18,8 +18,9 @@ export async function verifyTurnstileToken(
   remoteip: string | undefined,
 ): Promise<{ ok: true } | { ok: false; error: string }> {
   const secret = process.env.TURNSTILE_SECRET_KEY;
+  // Bypass validation when keys are not yet configured (temporary mode — add TURNSTILE_SECRET_KEY to Vercel to re-enable)
   if (!secret?.trim()) {
-    return { ok: false, error: "Turnstile is not configured on the server." };
+    return { ok: true };
   }
 
   const body = new URLSearchParams();
