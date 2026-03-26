@@ -153,7 +153,7 @@ const whoCards: readonly {
 }[] = [
   {
     icon: Backpack,
-    title: "Aspiring Attendees",
+    title: "Attendees",
     body: "You want to learn, connect, and leave with skills and relationships that last.",
   },
   {
@@ -451,7 +451,7 @@ export default function SubmissionFormSection() {
       >
         <a
           href="https://murphslifefoundation.org"
-          className="shrink-0"
+          className="flex shrink-0 items-center"
           aria-label="MurphsLife Foundation homepage"
           target="_blank"
           rel="noopener noreferrer"
@@ -464,6 +464,9 @@ export default function SubmissionFormSection() {
             className="h-8 w-auto object-contain opacity-90"
             priority
           />
+          <span className="ml-2.5 hidden text-xs font-bold uppercase tracking-[0.18em] text-white/80 sm:inline">
+            MurphsLife Foundation
+          </span>
         </a>
         <button
           type="button"
@@ -471,7 +474,7 @@ export default function SubmissionFormSection() {
           className="inline-flex items-center gap-2 rounded-full bg-foliage px-5 py-2.5 text-xs font-bold uppercase tracking-widest text-creme transition-transform duration-200 hover:-translate-y-0.5 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-creme"
         >
           <ArrowDown className="size-3.5 shrink-0 stroke-[2.5]" aria-hidden />
-          Join the Interest List
+          Raise My Hand
         </button>
       </nav>
 
@@ -537,7 +540,7 @@ export default function SubmissionFormSection() {
               className="flex items-center gap-2 rounded-full bg-foliage px-8 py-4 text-sm font-bold tracking-wide text-creme shadow-[0_4px_20px_rgba(44,52,45,0.5)] transition-transform duration-200 hover:-translate-y-0.5"
             >
               <ArrowDown className="size-4 shrink-0 stroke-[2.5]" aria-hidden />
-              Join the Interest List
+              Raise My Hand
             </button>
 
           </motion.div>
@@ -792,7 +795,7 @@ export default function SubmissionFormSection() {
       </section>
 
       {/* ─── Who This Is For ──────────────────────────────────────────────── */}
-      <section className="bg-white px-6 py-20" aria-label="Who this summit is for">
+      <section className="bg-creme px-6 py-20" aria-label="Who this summit is for">
         <div className="mx-auto max-w-5xl">
           <p className="font-sans mb-3 text-xs font-bold uppercase tracking-[0.16em] text-[#6b6030]">
             Who This Is For
