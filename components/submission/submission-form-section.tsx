@@ -43,7 +43,7 @@ const MURPHS_LOGO_WHITE =
 
 const TURNSTILE_SITE_KEY = process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY ?? "";
 
-// Role options — expanded to include creator and volunteer
+// Role options — used for form validation and backend whitelist
 const requestTypeOptions = [
   { value: "", label: "Select your role" },
   { value: "attendee", label: "Attendee — I want to come and learn" },
@@ -51,6 +51,7 @@ const requestTypeOptions = [
   { value: "sponsor", label: "Sponsor / Brand / Partner — I want to support or collaborate" },
   { value: "creator", label: "Creator / Media — I want to document and share this" },
   { value: "volunteer", label: "Volunteer / Local Support — I want to help build this on the ground" },
+  { value: "partner", label: "Partner Company — My product or service belongs in this ecosystem" },
 ] as const;
 
 type RequestTypeValue = (typeof requestTypeOptions)[number]["value"];
@@ -202,6 +203,51 @@ const statCards = [
   },
 ] as const;
 
+// Role card options for the visual role selector grid
+const roleCardOptions: readonly {
+  value: Exclude<RequestTypeValue, "">;
+  icon: LucideIcon;
+  title: string;
+  description: string;
+}[] = [
+  {
+    value: "attendee",
+    icon: Backpack,
+    title: "Attendee",
+    description: "I want to come, learn, and connect",
+  },
+  {
+    value: "event_speaker",
+    icon: Mic,
+    title: "Speaker / Teacher",
+    description: "I have knowledge worth sharing",
+  },
+  {
+    value: "sponsor",
+    icon: Tag,
+    title: "Sponsor / Brand",
+    description: "I want to support or collaborate",
+  },
+  {
+    value: "creator",
+    icon: Camera,
+    title: "Creator / Media",
+    description: "I want to document and amplify this",
+  },
+  {
+    value: "volunteer",
+    icon: Globe,
+    title: "Volunteer",
+    description: "I want to help build this on the ground",
+  },
+  {
+    value: "partner",
+    icon: Building2,
+    title: "Partner Company",
+    description: "My product or service belongs in this ecosystem",
+  },
+] as const;
+
 function scrollToForm() {
   document
     .getElementById("form-section")
@@ -330,7 +376,7 @@ export default function SubmissionFormSection() {
       return;
     }
 
-    const validRoles = ["attendee", "event_speaker", "sponsor", "creator", "volunteer"];
+    const validRoles = ["attendee", "event_speaker", "sponsor", "creator", "volunteer", "partner"];
     if (!validRoles.includes(requestType)) {
       setError("Please choose how you'd like to connect with the summit.");
       return;
@@ -362,6 +408,13 @@ export default function SubmissionFormSection() {
         sponsorBudget: sponsorBudget || undefined,
         creatorPlatform: creatorPlatform || undefined,
         creatorAudience: creatorAudience || undefined,
+        // Partner fields
+        partnerOrg: String(fd.get("partner_org") ?? "").trim() || undefined,
+        partnerWebsite: String(fd.get("partner_website") ?? "").trim() || undefined,
+        partnerType: String(fd.get("partner_type") ?? "").trim() || undefined,
+        // Volunteer fields
+        volunteerSkills: String(fd.get("volunteer_skills") ?? "").trim() || undefined,
+        volunteerLocal: String(fd.get("volunteer_local") ?? "").trim() || undefined,
         // UTM tracking
         utmSource: utmSource || undefined,
         utmMedium: utmMedium || undefined,
@@ -519,6 +572,27 @@ export default function SubmissionFormSection() {
         >
           <ChevronDown className="size-5 stroke-[1.5]" />
           Scroll
+        </div>
+      </section>
+
+      {/* ─── Credibility Stat Strip ─────────────────────────────────────── */}
+      <section
+        className="bg-foliage px-6 py-8"
+        aria-label="MurphsLife Foundation key facts"
+      >
+        <div className="mx-auto max-w-5xl">
+          <dl className="grid grid-cols-2 gap-6 md:grid-cols-4">
+            {statCards.map(({ stat, label }) => (
+              <div key={stat} className="text-center">
+                <dt className="font-display text-[clamp(1.6rem,4vw,2.4rem)] font-bold leading-none text-gold">
+                  {stat}
+                </dt>
+                <dd className="mt-2 font-sans text-[0.7rem] font-semibold uppercase tracking-[0.12em] leading-snug text-white/60">
+                  {label}
+                </dd>
+              </div>
+            ))}
+          </dl>
         </div>
       </section>
 
@@ -914,30 +988,72 @@ export default function SubmissionFormSection() {
                     />
                   </div>
 
-                  {/* Role selector */}
+                  {/* Role selector — visual card grid */}
                   <div>
-                    <label htmlFor="request_type" className={labelClass}>
+                    <p className={labelClass} id="role-selector-label">
                       I&apos;m interested as a…{" "}
                       <span className="text-red-500">*</span>
-                    </label>
-                    <select
-                      id="request_type"
+                    </p>
+                    {/* Hidden input carries the selected value for form submission */}
+                    <input
+                      type="hidden"
                       name="request_type"
-                      required
                       value={selectedRole}
-                      onChange={(e) => setSelectedRole(e.target.value as RequestTypeValue)}
-                      className={`${fieldClass} appearance-none bg-[rgba(242,235,217,0.6)]`}
+                      required
+                    />
+                    <div
+                      role="radiogroup"
+                      aria-labelledby="role-selector-label"
+                      aria-required="true"
+                      className="grid grid-cols-2 gap-2.5 sm:grid-cols-3"
                     >
-                      {requestTypeOptions.map((opt) => (
-                        <option
-                          key={opt.value || "placeholder"}
-                          value={opt.value}
-                          disabled={opt.value === ""}
-                        >
-                          {opt.label}
-                        </option>
-                      ))}
-                    </select>
+                      {roleCardOptions.map((role) => {
+                        const Icon = role.icon;
+                        const isSelected = selectedRole === role.value;
+                        return (
+                          <button
+                            key={role.value}
+                            type="button"
+                            role="radio"
+                            aria-checked={isSelected}
+                            onClick={() => setSelectedRole(role.value)}
+                            className={[
+                              "flex flex-col items-start gap-2 rounded-xl border-2 p-3.5 text-left transition-all duration-150 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-foliage",
+                              isSelected
+                                ? "border-foliage bg-foliage text-creme shadow-[0_4px_16px_rgba(44,52,45,0.25)]"
+                                : "border-foliage/20 bg-creme/60 text-foliage hover:border-foliage/50 hover:bg-creme",
+                            ].join(" ")}
+                          >
+                            <Icon
+                              className={[
+                                "size-5 stroke-[1.75] shrink-0",
+                                isSelected ? "text-gold" : "text-foliage/60",
+                              ].join(" ")}
+                              aria-hidden
+                            />
+                            <span>
+                              <span className="block text-xs font-bold uppercase tracking-wide leading-tight">
+                                {role.title}
+                              </span>
+                              <span
+                                className={[
+                                  "mt-0.5 block text-[0.65rem] leading-snug",
+                                  isSelected ? "text-creme/75" : "text-foliage/50",
+                                ].join(" ")}
+                              >
+                                {role.description}
+                              </span>
+                            </span>
+                          </button>
+                        );
+                      })}
+                    </div>
+                    {/* Validation hint — shown when form is submitted without a role */}
+                    {!selectedRole && (
+                      <p className="mt-1.5 text-[0.7rem] text-foliage/45">
+                        Select the role that best describes you
+                      </p>
+                    )}
                   </div>
 
                   {/* ── Role-specific conditional fields ── */}
@@ -1081,6 +1197,106 @@ export default function SubmissionFormSection() {
                           <option value="50k_250k">50K – 250K</option>
                           <option value="250k_1m">250K – 1M</option>
                           <option value="1m_plus">1M+</option>
+                        </select>
+                      </div>
+                    </motion.div>
+                  )}
+
+                  {/* PARTNER fields */}
+                  {selectedRole === "partner" && (
+                    <motion.div
+                      initial={{ opacity: 0, y: 8 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ duration: 0.25 }}
+                      className="space-y-4 rounded-xl border border-foliage/15 bg-foliage/5 p-4"
+                    >
+                      <p className="text-xs font-bold uppercase tracking-wide text-foliage/60">
+                        Partner Company Details
+                      </p>
+                      <div>
+                        <label htmlFor="partner_org" className={labelClass}>
+                          Organization name <span className="text-red-500">*</span>
+                        </label>
+                        <input
+                          id="partner_org"
+                          name="partner_org"
+                          type="text"
+                          required
+                          placeholder="Your company or organization"
+                          className={fieldClass}
+                        />
+                      </div>
+                      <div>
+                        <label htmlFor="partner_website" className={labelClass}>
+                          Website{" "}
+                          <span className="font-normal normal-case tracking-normal text-foliage/40">(optional)</span>
+                        </label>
+                        <input
+                          id="partner_website"
+                          name="partner_website"
+                          type="url"
+                          placeholder="https://yourcompany.com"
+                          className={fieldClass}
+                        />
+                      </div>
+                      <div>
+                        <label htmlFor="partner_type" className={labelClass}>
+                          Type of partnership interest{" "}
+                          <span className="font-normal normal-case tracking-normal text-foliage/40">(optional)</span>
+                        </label>
+                        <select
+                          id="partner_type"
+                          name="partner_type"
+                          className={`${fieldClass} appearance-none bg-[rgba(242,235,217,0.6)]`}
+                        >
+                          <option value="">Select a type</option>
+                          <option value="product_alignment">Product / service alignment</option>
+                          <option value="co_programming">Co-programming or workshops</option>
+                          <option value="distribution">Distribution or retail</option>
+                          <option value="investment">Investment or equity</option>
+                          <option value="other">Other / exploring</option>
+                        </select>
+                      </div>
+                    </motion.div>
+                  )}
+
+                  {/* VOLUNTEER fields */}
+                  {selectedRole === "volunteer" && (
+                    <motion.div
+                      initial={{ opacity: 0, y: 8 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ duration: 0.25 }}
+                      className="space-y-4 rounded-xl border border-foliage/15 bg-foliage/5 p-4"
+                    >
+                      <p className="text-xs font-bold uppercase tracking-wide text-foliage/60">
+                        Volunteer Details
+                      </p>
+                      <div>
+                        <label htmlFor="volunteer_skills" className={labelClass}>
+                          Skills you&apos;d bring{" "}
+                          <span className="font-normal normal-case tracking-normal text-foliage/40">(optional)</span>
+                        </label>
+                        <textarea
+                          id="volunteer_skills"
+                          name="volunteer_skills"
+                          rows={2}
+                          placeholder="e.g. Construction, cooking, logistics, translation, farming…"
+                          className={`${fieldClass} resize-y`}
+                        />
+                      </div>
+                      <div>
+                        <label htmlFor="volunteer_local" className={labelClass}>
+                          Are you local to El Salvador or traveling?
+                        </label>
+                        <select
+                          id="volunteer_local"
+                          name="volunteer_local"
+                          className={`${fieldClass} appearance-none bg-[rgba(242,235,217,0.6)]`}
+                        >
+                          <option value="">Select one</option>
+                          <option value="local_sv">Local — I&apos;m in El Salvador</option>
+                          <option value="nearby">Nearby — Central America / Mexico</option>
+                          <option value="traveling">Traveling from the US or elsewhere</option>
                         </select>
                       </div>
                     </motion.div>

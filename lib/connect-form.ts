@@ -14,7 +14,8 @@ export type ValidRequestType =
   | "event_speaker"
   | "sponsor"
   | "creator"
-  | "volunteer";
+  | "volunteer"
+  | "partner";
 
 export function isValidRequestType(v: string): v is ValidRequestType {
   return (
@@ -22,7 +23,8 @@ export function isValidRequestType(v: string): v is ValidRequestType {
     v === "event_speaker" ||
     v === "sponsor" ||
     v === "creator" ||
-    v === "volunteer"
+    v === "volunteer" ||
+    v === "partner"
   );
 }
 
@@ -43,6 +45,13 @@ export interface ConnectFormMetadataInput {
   // Creator-specific
   creatorPlatform?: string;
   creatorAudience?: string;
+  // Partner-specific
+  partnerOrg?: string;
+  partnerWebsite?: string;
+  partnerType?: string;
+  // Volunteer-specific
+  volunteerSkills?: string;
+  volunteerLocal?: string;
   // UTM / source tracking
   utmSource?: string;
   utmMedium?: string;
@@ -77,6 +86,15 @@ export function buildConnectFormMetadata(
   // Creator fields
   if (input.creatorPlatform?.trim()) meta.creator_platform = input.creatorPlatform.trim();
   if (input.creatorAudience?.trim()) meta.creator_audience = input.creatorAudience.trim();
+
+  // Partner fields
+  if (input.partnerOrg?.trim()) meta.partner_org = input.partnerOrg.trim();
+  if (input.partnerWebsite?.trim()) meta.partner_website = input.partnerWebsite.trim();
+  if (input.partnerType?.trim()) meta.partner_type = input.partnerType.trim();
+
+  // Volunteer fields
+  if (input.volunteerSkills?.trim()) meta.volunteer_skills = input.volunteerSkills.trim();
+  if (input.volunteerLocal?.trim()) meta.volunteer_local = input.volunteerLocal.trim();
 
   // UTM / source tracking
   if (input.utmSource?.trim()) meta.utm_source = input.utmSource.trim();

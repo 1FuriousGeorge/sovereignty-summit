@@ -44,6 +44,13 @@ type Body = {
   // Creator-specific
   creatorPlatform?: string;
   creatorAudience?: string;
+  // Partner-specific
+  partnerOrg?: string;
+  partnerWebsite?: string;
+  partnerType?: string;
+  // Volunteer-specific
+  volunteerSkills?: string;
+  volunteerLocal?: string;
   // UTM / source tracking
   utmSource?: string;
   utmMedium?: string;
@@ -101,6 +108,15 @@ export async function POST(request: Request) {
   const creatorPlatform = String(json.creatorPlatform ?? "").trim().slice(0, MAX_SHORT);
   const creatorAudience = String(json.creatorAudience ?? "").trim().slice(0, 50);
 
+  // Partner-specific fields
+  const partnerOrg = String(json.partnerOrg ?? "").trim().slice(0, MAX_SHORT);
+  const partnerWebsite = String(json.partnerWebsite ?? "").trim().slice(0, MAX_SHORT);
+  const partnerType = String(json.partnerType ?? "").trim().slice(0, 100);
+
+  // Volunteer-specific fields
+  const volunteerSkills = String(json.volunteerSkills ?? "").trim().slice(0, MAX_LONG);
+  const volunteerLocal = String(json.volunteerLocal ?? "").trim().slice(0, 100);
+
   // UTM / source tracking
   const utmSource = String(json.utmSource ?? "").trim().slice(0, 200);
   const utmMedium = String(json.utmMedium ?? "").trim().slice(0, 200);
@@ -154,6 +170,11 @@ export async function POST(request: Request) {
     sponsorBudget,
     creatorPlatform,
     creatorAudience,
+    partnerOrg,
+    partnerWebsite,
+    partnerType,
+    volunteerSkills,
+    volunteerLocal,
     utmSource,
     utmMedium,
     utmCampaign,
