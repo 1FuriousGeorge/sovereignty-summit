@@ -254,7 +254,7 @@ function scrollToForm() {
 }
 
 const fieldClass =
-  "w-full rounded-md border border-gold/25 bg-creme/60 px-4 py-3 text-sm text-foliage outline-none transition-[border-color,background-color] placeholder:text-foliage/35 focus:border-foliage focus:bg-creme";
+  "w-full rounded-md border border-gold/25 bg-creme/60 px-4 py-3 text-sm text-foliage outline-none ring-0 transition-[border-color,background-color,box-shadow] placeholder:text-foliage/35 focus:border-foliage/60 focus:bg-creme focus:ring-2 focus:ring-gold/30 focus:ring-offset-0";
 
 const labelClass =
   "mb-1.5 block text-xs font-semibold tracking-wide text-foliage/70 uppercase";
@@ -471,7 +471,7 @@ export default function SubmissionFormSection() {
         <button
           type="button"
           onClick={scrollToForm}
-          className="inline-flex items-center gap-2 rounded-full bg-foliage px-5 py-2.5 text-xs font-bold uppercase tracking-widest text-creme transition-transform duration-200 hover:-translate-y-0.5 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-creme"
+          className="inline-flex items-center gap-2 rounded-full bg-foliage px-5 py-2.5 text-xs font-bold uppercase tracking-[0.12em] text-creme shadow-[0_2px_10px_rgba(44,52,45,0.35)] transition-all duration-200 hover:-translate-y-0.5 hover:shadow-[0_6px_20px_rgba(44,52,45,0.45)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-creme"
         >
           <ArrowDown className="size-3.5 shrink-0 stroke-[2.5]" aria-hidden />
           Raise My Hand
@@ -537,7 +537,7 @@ export default function SubmissionFormSection() {
             <button
               type="button"
               onClick={scrollToForm}
-              className="flex items-center gap-2 rounded-full bg-foliage px-8 py-4 text-sm font-bold tracking-wide text-creme shadow-[0_4px_20px_rgba(44,52,45,0.5)] transition-transform duration-200 hover:-translate-y-0.5"
+              className="flex items-center gap-2 rounded-full bg-foliage px-8 py-4 text-sm font-bold tracking-[0.08em] text-creme shadow-[0_4px_20px_rgba(44,52,45,0.5)] transition-all duration-200 hover:-translate-y-1 hover:shadow-[0_10px_32px_rgba(44,52,45,0.6)]"
             >
               <ArrowDown className="size-4 shrink-0 stroke-[2.5]" aria-hidden />
               Raise My Hand
@@ -739,7 +739,7 @@ export default function SubmissionFormSection() {
               <button
                 type="button"
                 onClick={scrollToForm}
-                className="inline-flex items-center gap-2 rounded-full bg-foliage px-6 py-3 text-xs font-bold uppercase tracking-widest text-creme transition-transform duration-200 hover:-translate-y-0.5"
+                    className="inline-flex items-center gap-2 rounded-full bg-foliage px-6 py-3 text-xs font-bold uppercase tracking-[0.12em] text-creme shadow-[0_2px_10px_rgba(44,52,45,0.3)] transition-all duration-200 hover:-translate-y-0.5 hover:shadow-[0_6px_20px_rgba(44,52,45,0.42)]"
               >
                 Raise My Hand
                 <ArrowRight className="size-3.5 shrink-0 stroke-[2.5]" aria-hidden />
@@ -1008,8 +1008,8 @@ export default function SubmissionFormSection() {
                             className={[
                               "flex flex-col items-start gap-2 rounded-xl border-2 p-3.5 text-left transition-all duration-150 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-foliage",
                               isSelected
-                                ? "border-foliage bg-foliage text-creme shadow-[0_4px_16px_rgba(44,52,45,0.25)]"
-                                : "border-foliage/20 bg-creme/60 text-foliage hover:border-foliage/50 hover:bg-creme",
+                                ? "border-foliage bg-foliage text-creme shadow-[0_4px_20px_rgba(44,52,45,0.3)] ring-2 ring-foliage/20 ring-offset-1"
+                                : "border-foliage/20 bg-creme/60 text-foliage hover:border-foliage/50 hover:bg-creme hover:shadow-[0_2px_12px_rgba(44,52,45,0.1)]",
                             ].join(" ")}
                           >
                             <Icon
@@ -1449,7 +1449,7 @@ export default function SubmissionFormSection() {
                     disabled={
                       pending || (!!TURNSTILE_SITE_KEY && !turnstileToken)
                     }
-                    className="inline-flex w-full items-center justify-center gap-2 rounded-full bg-foliage py-4 text-sm font-bold uppercase tracking-widest text-creme shadow-[0_4px_20px_rgba(44,52,45,0.3)] transition-all duration-200 hover:-translate-y-0.5 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-foliage disabled:cursor-not-allowed disabled:opacity-55"
+                    className="inline-flex w-full items-center justify-center gap-2 rounded-full bg-foliage py-4 text-sm font-bold uppercase tracking-[0.12em] text-creme shadow-[0_4px_20px_rgba(44,52,45,0.3)] transition-all duration-200 hover:-translate-y-1 hover:shadow-[0_10px_32px_rgba(44,52,45,0.45)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-foliage disabled:cursor-not-allowed disabled:opacity-55"
                   >
                     {pending ? (
                       <>
@@ -1589,7 +1589,7 @@ export default function SubmissionFormSection() {
           </motion.h2>
           <motion.p
             {...fadeUp}
-            className="mx-auto mb-4 max-w-lg text-sm leading-relaxed text-white/70"
+            className="mx-auto mb-4 max-w-lg text-sm leading-relaxed text-white/85"
           >
             The summit is coming. Dates and full details will be announced
             soon. If you want to attend, speak, sponsor, partner, or create —
@@ -1598,7 +1598,7 @@ export default function SubmissionFormSection() {
           {/* Emotional hook from Grok feedback */}
           <motion.p
             {...fadeUp}
-            className="mx-auto mb-10 max-w-lg text-sm leading-relaxed text-white/55 italic"
+            className="mx-auto mb-10 max-w-lg text-sm leading-relaxed text-white/70 italic"
           >
             Most people won&apos;t think seriously about food sovereignty until it&apos;s too late.
             This is a chance to get ahead of that curve.
@@ -1607,12 +1607,12 @@ export default function SubmissionFormSection() {
             <button
               type="button"
               onClick={scrollToForm}
-              className="inline-flex items-center gap-3 rounded-full bg-creme px-10 py-4 text-sm font-bold uppercase tracking-widest text-foliage shadow-[0_4px_24px_rgba(0,0,0,0.3)] transition-transform duration-200 hover:-translate-y-0.5"
+              className="inline-flex items-center gap-3 rounded-full bg-creme px-10 py-4 text-sm font-bold uppercase tracking-[0.12em] text-foliage shadow-[0_4px_24px_rgba(0,0,0,0.3)] transition-all duration-200 hover:-translate-y-1 hover:shadow-[0_12px_36px_rgba(0,0,0,0.4)]"
             >
               Raise Your Hand
               <ArrowRight className="size-4 shrink-0 stroke-[2.5]" aria-hidden />
             </button>
-            <p className="mt-5 font-sans text-xs text-white/30">
+            <p className="mt-5 font-sans text-xs text-white/45">
               Dates and details coming soon. We&apos;ll reach out to everyone
               on the list first.
             </p>
