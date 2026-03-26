@@ -488,8 +488,8 @@ export default function SubmissionFormSection() {
         aria-label="Summit hero — The Regenerative Homestead Sovereignty Summit at Casa Conejo"
       >
         <div
-          className="animate-hero-kenburns pointer-events-none absolute inset-0 bg-cover bg-center"
-          style={{ backgroundImage: `url("${HERO_BACKGROUND}")`, willChange: "transform", transform: "translateZ(0)" }}
+          className="animate-hero-kenburns pointer-events-none absolute inset-0 bg-cover"
+          style={{ backgroundImage: `url("${HERO_BACKGROUND}")`, backgroundPosition: "center 65%", willChange: "transform", transform: "translateZ(0)" }}
           aria-hidden
         />
         <div
@@ -623,7 +623,7 @@ export default function SubmissionFormSection() {
                 learn things that actually matter.
               </blockquote>
             </motion.div>
-            <div className="space-y-3">
+            <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
               {pillarCards.map((card, i) => {
                 const Icon = card.icon;
                 return (
