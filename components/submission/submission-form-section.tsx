@@ -11,7 +11,6 @@ import {
   Building2,
   Camera,
   ChevronDown,
-  ClipboardList,
   ExternalLink,
   FlaskConical,
   Globe,
@@ -267,13 +266,13 @@ export default function SubmissionFormSection() {
     ? {
         initial: { opacity: 0 },
         whileInView: { opacity: 1 },
-        viewport: { once: true, margin: "0px 0px -10px 0px" as const },
+        viewport: { once: true, margin: "0px 0px -80px 0px" as const },
         transition: { duration: 0.2, ease: "easeOut" as const },
       }
     : {
         initial: { opacity: 0, y: 16 },
         whileInView: { opacity: 1, y: 0 },
-        viewport: { once: true, margin: "0px 0px -10px 0px" as const },
+        viewport: { once: true, margin: "0px 0px -80px 0px" as const },
         transition: { duration: 0.45, ease: [0.22, 1, 0.36, 1] as const },
       };
 
@@ -494,7 +493,7 @@ export default function SubmissionFormSection() {
           aria-hidden
         />
         <div
-          className="pointer-events-none absolute inset-0 bg-gradient-to-b from-[rgba(15,15,15,0.45)] via-foliage/55 to-[rgba(15,15,15,0.82)]"
+          className="pointer-events-none absolute inset-0 bg-gradient-to-b from-[rgba(15,15,15,0.35)] via-foliage/40 to-[rgba(15,15,15,0.72)]"
           aria-hidden
         />
 
@@ -546,15 +545,7 @@ export default function SubmissionFormSection() {
               <ArrowDown className="size-4 shrink-0 stroke-[2.5]" aria-hidden />
               Join the Interest List
             </button>
-            <button
-              type="button"
-              onClick={scrollToForm}
-              className="flex items-center gap-2 rounded-full border border-white/35 bg-white/10 px-7 py-4 text-sm font-semibold tracking-wide text-white backdrop-blur-md transition-transform duration-200 hover:-translate-y-0.5"
-            >
-              <ClipboardList className="size-4 shrink-0 stroke-[2]" aria-hidden />
-              <span className="hidden sm:inline">Tell Us How You Want to Be Involved</span>
-              <span className="sm:hidden">Get Involved</span>
-            </button>
+
           </motion.div>
           <motion.p
             {...fadeUp}
@@ -695,7 +686,7 @@ export default function SubmissionFormSection() {
           </motion.h2>
           <motion.p
             {...fadeUp}
-            className="mb-12 max-w-xl text-sm leading-relaxed text-foliage/60"
+            className="mb-12 max-w-xl text-sm leading-relaxed text-foliage/70"
           >
             Whether you&apos;re a builder, a learner, a brand, or a creator —
             here&apos;s why this summit is worth showing up for.
@@ -710,13 +701,13 @@ export default function SubmissionFormSection() {
                   transition={{ ...fadeUp.transition, delay: i * 0.04 }}
                   className="cursor-default rounded-2xl border border-gold/15 bg-white p-8 shadow-[0_2px_8px_rgba(44,52,45,0.06)] transition-[transform,box-shadow] duration-200 hover:-translate-y-1 hover:shadow-[0_12px_40px_rgba(44,52,45,0.12)]"
                 >
-                  <div className="mb-5 flex h-14 w-14 items-center justify-center rounded-2xl bg-foliage/10 text-foliage">
+                  <div className="mb-5 flex h-14 w-14 items-center justify-center rounded-2xl bg-gold/15 text-foliage">
                     <Icon className="size-7 stroke-[1.5]" aria-hidden />
                   </div>
                   <h3 className="font-display mb-2 text-lg font-bold text-foliage">
                     {card.title}
                   </h3>
-                  <p className="font-sans text-sm leading-relaxed text-foliage/60">
+                  <p className="font-sans text-sm leading-relaxed text-foliage/70">
                     {card.body}
                   </p>
                 </motion.div>
@@ -775,7 +766,7 @@ export default function SubmissionFormSection() {
           </motion.h2>
           <motion.p
             {...fadeUp}
-            className="mb-12 max-w-xl text-sm leading-relaxed text-white/55"
+            className="mb-12 max-w-xl text-sm leading-relaxed text-white/70"
           >
             The full program is being built now. These are the core areas —
             practical, hands-on, and grounded in what actually works.
@@ -790,13 +781,13 @@ export default function SubmissionFormSection() {
                   transition={{ ...fadeUp.transition, delay: i * 0.04 }}
                   className="rounded-2xl border border-white/10 bg-white/8 p-7 transition-[transform,background-color] duration-200 hover:-translate-y-0.5 hover:bg-white/12"
                 >
-                  <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-xl bg-white/10 text-white">
+                  <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-xl bg-gold/20 text-gold">
                     <Icon className="size-6 stroke-[1.5]" aria-hidden />
                   </div>
                   <h3 className="font-display mb-2 text-base font-bold text-white">
                     {card.title}
                   </h3>
-                  <p className="font-sans text-sm leading-relaxed text-white/55">
+                  <p className="font-sans text-sm leading-relaxed text-white/75">
                     {card.body}
                   </p>
                 </motion.div>
@@ -835,13 +826,13 @@ export default function SubmissionFormSection() {
                   transition={{ ...fadeUp.transition, delay: i * 0.04 }}
                   className="cursor-default rounded-2xl border border-foliage/10 bg-creme p-7 transition-[transform,box-shadow] duration-200 hover:-translate-y-1 hover:shadow-[0_8px_30px_rgba(44,52,45,0.1)]"
                 >
-                  <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-xl bg-foliage/10 text-foliage">
+                  <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-xl bg-gold/15 text-foliage">
                     <Icon className="size-6 stroke-[1.5]" aria-hidden />
                   </div>
                   <h3 className="font-display mb-2 text-base font-bold text-foliage">
                     {card.title}
                   </h3>
-                  <p className="font-sans text-sm leading-relaxed text-foliage/60">
+                  <p className="font-sans text-sm leading-relaxed text-foliage/70">
                     {card.body}
                   </p>
                 </motion.div>
@@ -908,7 +899,7 @@ export default function SubmissionFormSection() {
             </div>
 
             {/* Right form */}
-            <div className="rounded-2xl bg-white p-8 shadow-[0_8px_40px_rgba(44,52,45,0.12)]">
+            <div className="rounded-2xl bg-white p-8 shadow-[0_16px_60px_rgba(44,52,45,0.22),0_4px_16px_rgba(44,52,45,0.10)]">
               {submitted ? (
                 <motion.div
                   {...fadeUp}
@@ -1507,7 +1498,7 @@ export default function SubmissionFormSection() {
             We&apos;re not planning this from a conference room.
           </motion.h2>
           <div className="grid items-start gap-12 md:grid-cols-2">
-            <motion.div {...fadeUp} className="space-y-4 text-sm leading-relaxed text-foliage/65">
+            <motion.div {...fadeUp} className="space-y-4 text-sm leading-relaxed text-foliage/70">
               <p>
                 <strong className="text-foliage">MurphsLife Foundation</strong>{" "}
                 is a 501(c)(3) nonprofit building regenerative communities,
@@ -1541,7 +1532,7 @@ export default function SubmissionFormSection() {
               </div>
             </motion.div>
             <div className="space-y-4">
-              {/* Aerial drone photo above stat cards */}
+              {/* Aerial drone photo */}
               <motion.div {...fadeUp} className="overflow-hidden rounded-2xl shadow-md">
                 <Image
                   src="/aerial-site.jpg"
@@ -1551,23 +1542,30 @@ export default function SubmissionFormSection() {
                   className="w-full object-cover"
                 />
               </motion.div>
-              <div className="grid grid-cols-2 gap-4">
-                {statCards.map((s, i) => (
-                  <motion.div
-                    key={s.label}
-                    {...fadeUp}
-                    transition={{ ...fadeUp.transition, delay: i * 0.04 }}
-                    className="rounded-xl border-l-4 border-gold bg-creme p-5"
-                  >
-                    <p className="font-display text-3xl font-bold leading-none text-foliage">
-                      {s.stat}
-                    </p>
-                    <p className="mt-1 font-sans text-xs leading-snug text-foliage/55">
-                      {s.label}
-                    </p>
-                  </motion.div>
-                ))}
-              </div>
+              {/* Key differentiators — distinct from the stat strip above the fold */}
+              <motion.div
+                {...fadeUp}
+                className="rounded-xl border-l-4 border-gold bg-creme p-5"
+              >
+                <p className="font-display text-lg font-bold leading-snug text-foliage">
+                  Real land. Real systems. Real outcomes.
+                </p>
+                <p className="mt-2 font-sans text-xs leading-relaxed text-foliage/60">
+                  Casa Conejo is a working campus — not a venue rental. The summit happens on land we actively steward, with teachers who live these systems.
+                </p>
+              </motion.div>
+              <motion.div
+                {...fadeUp}
+                transition={{ ...fadeUp.transition, delay: 0.06 }}
+                className="rounded-xl border-l-4 border-foliage bg-foliage/5 p-5"
+              >
+                <p className="font-display text-lg font-bold leading-snug text-foliage">
+                  Government-aligned. Nonprofit-backed.
+                </p>
+                <p className="mt-2 font-sans text-xs leading-relaxed text-foliage/60">
+                  MurphsLife Foundation is a registered 501(c)(3) with an active regenerative development partnership with the Salvadoran government. EIN 85-3332093.
+                </p>
+              </motion.div>
             </div>
           </div>
         </div>
@@ -1646,7 +1644,7 @@ export default function SubmissionFormSection() {
         <p className="mt-2 font-sans text-xs text-white/50">
           El Salvador & United States
         </p>
-        <p className="mx-auto mt-4 max-w-md font-sans text-xs leading-relaxed text-white/45">
+        <p className="mx-auto mt-4 max-w-md font-sans text-xs leading-relaxed text-white/55">
           The Regenerative Homestead Sovereignty Summit at Casa Conejo. Dates
           and complete program details coming soon. Partnerships and the speaker
           lineup are currently being finalized.
@@ -1675,6 +1673,9 @@ export default function SubmissionFormSection() {
             Sitemap
           </a>
         </nav>
+        <p className="mt-6 font-sans text-[0.65rem] text-white/30">
+          &copy; {new Date().getFullYear()} MurphsLife Foundation. All rights reserved.
+        </p>
       </footer>
     </>
   );
