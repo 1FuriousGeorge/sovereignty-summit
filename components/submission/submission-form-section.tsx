@@ -21,7 +21,7 @@ import {
   Loader2,
   Mic,
   Package,
-  Smartphone,
+  Network,
   Sprout,
   Tag,
   Wrench,
@@ -140,7 +140,7 @@ const topicCards: readonly {
     body: "Water, energy, waste, and infrastructure for long-term self-sufficiency",
   },
   {
-    icon: Smartphone,
+    icon: Network,
     title: "Modern Tools & Community",
     body: "Business systems, digital tools, and community models that support sovereignty",
   },
@@ -486,7 +486,7 @@ export default function SubmissionFormSection() {
       >
         <div
           className="animate-hero-kenburns pointer-events-none absolute inset-0 bg-cover"
-          style={{ backgroundImage: `url("${HERO_BACKGROUND}")`, backgroundPosition: "center 65%", willChange: "transform", transform: "translateZ(0)" }}
+          style={{ backgroundImage: `url("${HERO_BACKGROUND}")`, backgroundPosition: "center 82%", willChange: "transform", transform: "translateZ(0)" }}
           aria-hidden
         />
         <div
@@ -585,7 +585,7 @@ export default function SubmissionFormSection() {
       </section>
 
       {/* ─── What This Is ─────────────────────────────────────────────────── */}
-      <section className="bg-creme px-6 py-20" aria-label="What this summit is">
+      <section className="bg-creme px-6 py-12 md:py-20" aria-label="What this summit is">
         <div className="mx-auto max-w-5xl">
           <p className="font-sans mb-3 text-xs font-bold uppercase tracking-[0.16em] text-[#6b6030]">
             What This Is
@@ -670,7 +670,7 @@ export default function SubmissionFormSection() {
       </div>
 
       {/* ─── Why ──────────────────────────────────────────────────────────── */}
-      <section className="bg-creme px-6 py-20" aria-label="Why people are interested">
+      <section className="bg-creme px-6 py-12 md:py-20" aria-label="Why people are interested">
         <div className="mx-auto max-w-5xl">
           <p className="font-sans mb-3 text-xs font-bold uppercase tracking-[0.16em] text-[#6b6030]">
             Why People Are Interested
@@ -750,7 +750,7 @@ export default function SubmissionFormSection() {
       </section>
 
       {/* ─── Topics ───────────────────────────────────────────────────────── */}
-      <section className="bg-foliage px-6 py-20" aria-label="Summit topics and themes">
+      <section className="bg-foliage px-6 py-12 md:py-20" aria-label="Summit topics and themes">
         <div className="mx-auto max-w-5xl">
           <p className="font-sans mb-3 text-xs font-bold uppercase tracking-[0.16em] text-[#a89a5a]">
             Topics & Themes
@@ -795,7 +795,7 @@ export default function SubmissionFormSection() {
       </section>
 
       {/* ─── Who This Is For ──────────────────────────────────────────────── */}
-      <section className="bg-creme px-6 py-20" aria-label="Who this summit is for">
+      <section className="bg-creme px-6 py-12 md:py-20" aria-label="Who this summit is for">
         <div className="mx-auto max-w-5xl">
           <p className="font-sans mb-3 text-xs font-bold uppercase tracking-[0.16em] text-[#6b6030]">
             Who This Is For
@@ -842,7 +842,7 @@ export default function SubmissionFormSection() {
       {/* ─── Interest Form ────────────────────────────────────────────────── */}
       <section
         id="form-section"
-        className="relative overflow-hidden px-6 py-20"
+        className="relative overflow-hidden px-6 py-12 md:py-20"
         aria-label="Summit interest form"
         style={{ background: "linear-gradient(160deg, #f2ebd9 0%, #e8dfc8 100%)" }}
       >
@@ -896,7 +896,7 @@ export default function SubmissionFormSection() {
             </div>
 
             {/* Right form */}
-            <div className="rounded-2xl bg-white p-8 shadow-[0_16px_60px_rgba(44,52,45,0.22),0_4px_16px_rgba(44,52,45,0.10)]">
+            <div className="rounded-2xl bg-white p-8 ring-1 ring-black/[0.06] shadow-[0_20px_70px_rgba(44,52,45,0.18),0_6px_20px_rgba(44,52,45,0.08)]">
               {submitted ? (
                 <motion.div
                   {...fadeUp}
@@ -1607,7 +1607,7 @@ export default function SubmissionFormSection() {
             <button
               type="button"
               onClick={scrollToForm}
-              className="inline-flex items-center gap-3 rounded-full bg-creme px-10 py-4 text-sm font-bold uppercase tracking-[0.12em] text-foliage shadow-[0_4px_24px_rgba(0,0,0,0.3)] transition-all duration-200 hover:-translate-y-1 hover:shadow-[0_12px_36px_rgba(0,0,0,0.4)]"
+              className="inline-flex items-center gap-3 rounded-full bg-white px-10 py-4 text-sm font-bold uppercase tracking-[0.12em] text-foliage shadow-[0_4px_28px_rgba(0,0,0,0.35)] transition-all duration-200 hover:-translate-y-1.5 hover:bg-[#fffef8] hover:shadow-[0_16px_44px_rgba(0,0,0,0.5)]"
             >
               Raise Your Hand
               <ArrowRight className="size-4 shrink-0 stroke-[2.5]" aria-hidden />
