@@ -254,7 +254,7 @@ function scrollToForm() {
 }
 
 const fieldClass =
-  "w-full rounded-md border border-gold/25 bg-creme/60 px-4 py-3 text-sm text-foliage outline-none ring-0 transition-[border-color,background-color,box-shadow] placeholder:text-foliage/35 focus:border-foliage/60 focus:bg-creme focus:ring-2 focus:ring-gold/30 focus:ring-offset-0";
+  "w-full rounded-md border border-gold/25 bg-creme/60 px-4 py-3 text-sm text-foliage outline-none ring-0 transition-[border-color,background-color,box-shadow] placeholder:text-foliage/35 focus:border-foliage/60 focus:bg-white focus:ring-2 focus:ring-gold/30 focus:ring-offset-0";
 
 const labelClass =
   "mb-1.5 block text-xs font-semibold tracking-wide text-foliage/70 uppercase";
@@ -306,9 +306,11 @@ export default function SubmissionFormSection() {
       if (window.scrollY > 60) {
         nav.style.background = "rgba(15,15,15,0.92)";
         nav.style.backdropFilter = "blur(12px)";
+        nav.style.borderColor = "rgba(255,255,255,0.05)";
       } else {
         nav.style.background = "transparent";
         nav.style.backdropFilter = "none";
+        nav.style.borderColor = "transparent";
       }
     };
     window.addEventListener("scroll", onScroll, { passive: true });
@@ -447,7 +449,7 @@ export default function SubmissionFormSection() {
       <nav
         id="main-nav"
         aria-label="Main navigation"
-        className="fixed left-0 right-0 top-0 z-50 flex items-center justify-between px-6 py-4 transition-[background,backdrop-filter] duration-300"
+        className="fixed left-0 right-0 top-0 z-50 flex items-center justify-between px-6 py-4 transition-all duration-300 border-b border-transparent"
       >
         <a
           href="https://murphslifefoundation.org"
@@ -565,7 +567,7 @@ export default function SubmissionFormSection() {
 
       {/* ─── Credibility Stat Strip ─────────────────────────────────────── */}
       <section
-        className="bg-foliage px-6 py-8"
+        className="bg-foliage px-6 py-8 shadow-[inset_0_4px_20px_rgba(0,0,0,0.2)]"
         aria-label="MurphsLife Foundation key facts"
       >
         <div className="mx-auto max-w-5xl">
@@ -696,7 +698,7 @@ export default function SubmissionFormSection() {
                   key={card.title}
                   {...fadeUp}
                   transition={{ ...fadeUp.transition, delay: i * 0.04 }}
-                  className="cursor-default rounded-2xl border border-gold/15 bg-white p-8 shadow-[0_2px_8px_rgba(44,52,45,0.06)] transition-[transform,box-shadow] duration-200 hover:-translate-y-1 hover:shadow-[0_12px_40px_rgba(44,52,45,0.12)]"
+                  className="cursor-default rounded-2xl border border-gold/15 bg-white p-8 shadow-[0_2px_8px_rgba(44,52,45,0.06)] transition-all duration-200 hover:-translate-y-1 hover:border-gold/30 hover:shadow-[0_12px_40px_rgba(44,52,45,0.12)]"
                 >
                   <div className="mb-5 flex h-14 w-14 items-center justify-center rounded-2xl bg-gold/15 text-foliage">
                     <Icon className="size-7 stroke-[1.5]" aria-hidden />
@@ -776,7 +778,7 @@ export default function SubmissionFormSection() {
                   key={card.title}
                   {...fadeUp}
                   transition={{ ...fadeUp.transition, delay: i * 0.04 }}
-                  className="rounded-2xl border border-white/10 bg-white/8 p-7 transition-[transform,background-color] duration-200 hover:-translate-y-0.5 hover:bg-white/12"
+                  className="rounded-2xl border border-white/10 bg-white/8 p-7 transition-all duration-200 hover:-translate-y-0.5 hover:border-white/20 hover:bg-white/12"
                 >
                   <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-xl bg-gold/20 text-gold">
                     <Icon className="size-6 stroke-[1.5]" aria-hidden />
@@ -1466,7 +1468,7 @@ export default function SubmissionFormSection() {
                       </>
                     )}
                   </button>
-                  <p className="text-center font-sans text-xs text-foliage/60">
+                  <p className="text-center font-sans text-xs text-foliage/80">
                     We&apos;ll reach out with dates and details as
                     they&apos;re confirmed.
                   </p>
@@ -1612,7 +1614,7 @@ export default function SubmissionFormSection() {
               Raise Your Hand
               <ArrowRight className="size-4 shrink-0 stroke-[2.5]" aria-hidden />
             </button>
-            <p className="mt-5 font-sans text-xs text-white/45">
+            <p className="mt-5 font-sans text-xs text-white/60">
               Dates and details coming soon. We&apos;ll reach out to everyone
               on the list first.
             </p>
