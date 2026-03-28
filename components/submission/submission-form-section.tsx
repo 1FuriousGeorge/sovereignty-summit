@@ -262,7 +262,7 @@ function scrollToForm() {
 }
 
 const fieldClass =
-  "w-full rounded-md border border-gold/25 bg-creme/60 px-4 py-3 text-sm text-foliage outline-none ring-0 transition-[border-color,background-color,box-shadow] placeholder:text-foliage/35 focus:border-foliage/60 focus:bg-white focus:ring-2 focus:ring-gold/30 focus:ring-offset-0";
+  "w-full rounded-md border border-foliage/20 bg-white/70 px-4 py-3 text-sm text-foliage outline-none ring-0 transition-[border-color,background-color,box-shadow] placeholder:text-foliage/35 focus:border-foliage/50 focus:bg-white focus:ring-2 focus:ring-gold/25 focus:ring-offset-0";
 
 const labelClass =
   "mb-1.5 block text-xs font-semibold tracking-wide text-foliage/70 uppercase";
@@ -481,7 +481,7 @@ export default function SubmissionFormSection() {
       <nav
         id="main-nav"
         aria-label="Main navigation"
-        className="fixed left-0 right-0 top-0 z-50 flex items-center justify-between px-6 py-4 transition-all duration-300 border-b border-transparent"
+        className="fixed left-0 right-0 top-0 z-50 flex items-center justify-between px-6 py-4 transition-all duration-300 border-b border-white/[0.04]"
       >
         <a
           href="https://murphslifefoundation.org"
@@ -539,7 +539,7 @@ export default function SubmissionFormSection() {
 
         <div className="relative z-10 mx-auto max-w-3xl px-6 pb-20 pt-28">
           <motion.div {...fadeUp} transition={{ ...fadeUp.transition, delay: 0 }} style={{ willChange: "opacity, transform" }}>
-            <span className="font-sans mb-6 inline-block rounded-full border border-gold/40 bg-gold/15 px-5 py-1.5 text-[0.65rem] font-bold uppercase tracking-[0.2em] text-gold shadow-[0_0_20px_rgba(188,178,115,0.15)]">
+            <span className="font-sans mb-6 inline-block rounded-full border border-gold/50 bg-gold/20 px-5 py-1.5 text-[0.65rem] font-bold uppercase tracking-[0.2em] text-gold shadow-[0_0_28px_rgba(188,178,115,0.22),0_0_0_1px_rgba(188,178,115,0.08)]">
               Casa Conejo · El Salvador · Coming 2026
             </span>
           </motion.div>
@@ -547,7 +547,7 @@ export default function SubmissionFormSection() {
             {...fadeUp}
             transition={{ ...fadeUp.transition, delay: 0.08 }}
             className="font-display mb-5 text-[clamp(2.2rem,5.5vw,4rem)] font-bold leading-[1.1] tracking-[-0.01em] text-white"
-            style={{ textShadow: "0 2px 32px rgba(0,0,0,0.55), 0 1px 4px rgba(0,0,0,0.3)" }}
+              style={{ textShadow: "0 2px 40px rgba(0,0,0,0.5), 0 1px 0 rgba(0,0,0,0.25), 0 4px 80px rgba(0,0,0,0.3)" }}
           >
             The Regenerative Homestead
             <br />
@@ -631,7 +631,7 @@ export default function SubmissionFormSection() {
                 <div key={stat} className="text-center">
                   <dt
                     ref={counterRef as React.RefObject<HTMLElement> | null}
-                    className="font-display text-[clamp(1.8rem,4.5vw,2.8rem)] font-bold leading-none text-gold"
+                    className="font-display text-[clamp(2rem,5vw,3.2rem)] font-bold leading-none text-gold"
                     style={{ textShadow: "0 0 24px rgba(188,178,115,0.25)" }}
                   >
                     {displayValue}
@@ -647,8 +647,9 @@ export default function SubmissionFormSection() {
         </div>
       </section>
 
-      {/* ─── What This Is ───────────────────────────────────────────────────── */}
-      <section className="bg-creme px-6 pb-14 pt-14 md:pb-24 md:pt-24" aria-label="What this summit is">
+      {/* ─── Gold micro-divider between stat strip and What This Is ─────────── */}
+      <div className="h-px" style={{ background: "linear-gradient(90deg, transparent, rgba(188,178,115,0.15) 30%, rgba(188,178,115,0.15) 70%, transparent)" }} aria-hidden />
+      {/* ─── What This Is ────────────────────────────────────────────────────── */}      <section className="bg-creme px-6 pb-14 pt-14 md:pb-24 md:pt-24" aria-label="What this summit is">
         <div className="mx-auto max-w-5xl">
           <motion.p {...fadeUp} className="font-sans mb-3 text-[0.7rem] font-bold uppercase tracking-[0.18em] text-gold-accessible">
             What This Is
@@ -691,7 +692,7 @@ export default function SubmissionFormSection() {
                     key={card.title}
                     {...fadeUp}
                     transition={{ ...fadeUp.transition, delay: i * 0.04 }}
-                    className="group flex items-start gap-4 rounded-xl border border-foliage/10 bg-white p-5 shadow-[0_1px_6px_rgba(44,52,45,0.06)] transition-all duration-200 hover:-translate-y-0.5 hover:border-gold/30 hover:shadow-[0_6px_24px_rgba(44,52,45,0.1)]"
+                    className="group flex items-start gap-4 rounded-xl border border-foliage/10 bg-parchment p-5 shadow-[0_1px_6px_rgba(44,52,45,0.06)] transition-all duration-200 hover:-translate-y-0.5 hover:border-gold/35 hover:shadow-[0_6px_24px_rgba(44,52,45,0.12)]"
                   >
                     <span className="mt-0.5 flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-gold/12 text-foliage transition-colors duration-200 group-hover:bg-gold/20">
                       <Icon className="size-5 stroke-[1.5]" aria-hidden />
@@ -765,7 +766,7 @@ export default function SubmissionFormSection() {
                   key={card.title}
                   {...fadeUp}
                   transition={{ ...fadeUp.transition, delay: i * 0.04 }}
-                  className="group cursor-default rounded-2xl border border-gold/15 bg-white p-7 shadow-[0_2px_10px_rgba(44,52,45,0.07)] transition-all duration-200 hover:-translate-y-1.5 hover:border-gold/35 hover:shadow-[0_16px_48px_rgba(44,52,45,0.14)]"
+                  className="group cursor-default rounded-2xl border border-gold/15 bg-parchment p-7 shadow-[0_2px_10px_rgba(44,52,45,0.07)] transition-all duration-200 hover:-translate-y-1.5 hover:border-gold/35 hover:shadow-[0_16px_48px_rgba(44,52,45,0.14)]"
                 >
                   <div className="mb-5 flex h-12 w-12 items-center justify-center rounded-xl bg-gold/15 text-foliage transition-colors duration-200 group-hover:bg-gold/25">
                     <Icon className="size-6 stroke-[1.5]" aria-hidden />
@@ -942,7 +943,7 @@ export default function SubmissionFormSection() {
                   key={card.title}
                   {...fadeUp}
                   transition={{ ...fadeUp.transition, delay: i * 0.04 }}
-                  className="group cursor-default rounded-2xl border border-foliage/10 bg-white p-7 shadow-[0_1px_6px_rgba(44,52,45,0.05)] transition-all duration-200 hover:-translate-y-1.5 hover:border-gold/25 hover:shadow-[0_12px_40px_rgba(44,52,45,0.12)]"
+                  className="group cursor-default rounded-2xl border border-foliage/10 bg-parchment p-7 shadow-[0_1px_6px_rgba(44,52,45,0.05)] transition-all duration-200 hover:-translate-y-1.5 hover:border-gold/30 hover:shadow-[0_12px_40px_rgba(44,52,45,0.12)]"
                 >
                   <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-xl bg-gold/15 text-foliage transition-colors duration-200 group-hover:bg-gold/25">
                     <Icon className="size-6 stroke-[1.5]" aria-hidden />
@@ -971,7 +972,7 @@ export default function SubmissionFormSection() {
                   return (
                     <div
                       key={card.title}
-                      className="w-[72vw] max-w-[280px] flex-shrink-0 rounded-2xl border border-foliage/10 bg-white/70 p-6"
+                      className="w-[72vw] max-w-[280px] flex-shrink-0 rounded-2xl border border-foliage/10 bg-parchment p-6"
                       style={{ scrollSnapAlign: 'start' }}
                     >
                       <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-xl bg-gold/15 text-foliage">
@@ -1071,7 +1072,7 @@ export default function SubmissionFormSection() {
             </div>
 
             {/* Right form */}
-            <div className="rounded-2xl bg-white p-8 ring-1 ring-black/[0.05] shadow-[0_24px_80px_rgba(44,52,45,0.22),0_8px_24px_rgba(44,52,45,0.10)]">
+            <div className="rounded-2xl bg-white p-8 ring-1 ring-foliage/[0.07] shadow-[0_32px_96px_rgba(44,52,45,0.26),0_8px_32px_rgba(44,52,45,0.12)]">
               {submitted ? (
                 <motion.div
                   {...fadeUp}
@@ -1564,7 +1565,7 @@ export default function SubmissionFormSection() {
                         name="mailing_list_event"
                         type="checkbox"
                         defaultChecked
-                        className="border-gold/40 text-foliage mt-0.5 h-4 w-4 shrink-0 rounded focus:ring-foliage"
+                        className="accent-foliage mt-0.5 h-4 w-4 shrink-0 rounded border-gold/40 text-foliage focus:ring-foliage cursor-pointer"
                       />
                       <span>
                         Email me about{" "}
@@ -1578,7 +1579,7 @@ export default function SubmissionFormSection() {
                       <input
                         name="mailing_list_general"
                         type="checkbox"
-                        className="border-gold/40 text-foliage mt-0.5 h-4 w-4 shrink-0 rounded focus:ring-foliage"
+                        className="accent-foliage mt-0.5 h-4 w-4 shrink-0 rounded border-gold/40 text-foliage focus:ring-foliage cursor-pointer"
                       />
                       <span>
                         Also include me in broader MurphsLife updates{" "}
@@ -1652,8 +1653,10 @@ export default function SubmissionFormSection() {
         </div>
       </section>
 
+      {/* ─── Organic transition: creme-dark → creme ─────────────────────── */}
+      <div className="h-8 bg-gradient-to-b from-[#e5d9be] to-creme pointer-events-none" aria-hidden />
       {/* ─── About ────────────────────────────────────────────────────────── */}
-      <section className="bg-white px-6 py-14 md:py-24" aria-label="About MurphsLife Foundation and Casa Conejo">
+      <section className="bg-creme px-6 py-14 md:py-24" aria-label="About MurphsLife Foundation and Casa Conejo">
         <div className="mx-auto max-w-5xl">
           <motion.p {...fadeUp} className="font-sans mb-3 text-[0.7rem] font-bold uppercase tracking-[0.18em] text-gold-accessible">
             About MurphsLife & Casa Conejo
@@ -1691,7 +1694,7 @@ export default function SubmissionFormSection() {
                   href="https://casaconejo.io"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex items-center gap-2 font-sans text-xs font-bold uppercase tracking-widest text-foliage/50 transition-colors hover:text-foliage"
+                  className="inline-flex items-center gap-2 font-sans text-xs font-bold uppercase tracking-widest text-foliage/60 transition-colors duration-150 hover:text-gold-accessible"
                 >
                   Explore the Casa Conejo Ecosystem
                   <ExternalLink className="size-3.5 shrink-0 stroke-[2]" aria-hidden />
@@ -1714,8 +1717,8 @@ export default function SubmissionFormSection() {
               {/* Key differentiators — distinct from the stat strip above the fold */}
               <motion.div
                 {...fadeUp}
-                className="rounded-xl border border-gold/25 bg-creme p-5 shadow-[0_1px_8px_rgba(44,52,45,0.06)]"
-                style={{ borderLeftWidth: '3px', borderLeftColor: '#bcb273' }}
+                className="rounded-xl border border-gold/30 bg-parchment p-5 shadow-[0_2px_12px_rgba(44,52,45,0.08)]"
+                style={{ borderLeftWidth: '4px', borderLeftColor: '#bcb273' }}
               >
                 <p className="font-display text-lg font-bold leading-snug text-foliage">
                   Real land. Real systems. Real outcomes.
@@ -1727,8 +1730,8 @@ export default function SubmissionFormSection() {
               <motion.div
                 {...fadeUp}
                 transition={{ ...fadeUp.transition, delay: 0.06 }}
-                className="rounded-xl border border-foliage/15 bg-foliage/5 p-5 shadow-[0_1px_8px_rgba(44,52,45,0.06)]"
-                style={{ borderLeftWidth: '3px', borderLeftColor: '#2c342d' }}
+                className="rounded-xl border border-foliage/20 bg-foliage/8 p-5 shadow-[0_2px_12px_rgba(44,52,45,0.08)]"
+                style={{ borderLeftWidth: '4px', borderLeftColor: '#2c342d' }}
               >
                 <p className="font-display text-lg font-bold leading-snug text-foliage">
                   Government-aligned. Nonprofit-backed.
