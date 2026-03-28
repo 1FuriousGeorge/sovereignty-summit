@@ -37,16 +37,20 @@ import {
   TERRACES_VOLCANO_BLUR,
 } from "@/lib/image-placeholders";
 import { useCountUp } from "@/hooks/use-count-up";
+import {
+  useScrollDepthTracking,
+  trackFormStart,
+  trackFormSubmit,
+  trackFormError,
+  trackCTAClick,
+} from "@/hooks/use-analytics";
 
-const HERO_BACKGROUND =
-  "https://assets.murphslifefoundation.com/hero.jpg";
+const HERO_BACKGROUND = "/hero.webp";
 
-const SUBMISSION_BACKGROUND =
-  "https://assets.murphslifefoundation.com/blue-bg.jpg";
+const SUBMISSION_BACKGROUND = "/blue-bg.webp";
 
 /** MurphsLife logo — kept per product request (reference HTML used Casa Conejo mark). */
-const MURPHS_LOGO_WHITE =
-  "https://assets.murphslifefoundation.com/logo-variations/white-logo.png";
+const MURPHS_LOGO_WHITE = "/logo-white.png";
 
 const TURNSTILE_SITE_KEY = process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY ?? "";
 
@@ -268,6 +272,9 @@ const labelClass =
   "mb-1.5 block text-xs font-semibold tracking-wide text-foliage/70 uppercase";
 
 export default function SubmissionFormSection() {
+  // Analytics: track scroll depth and send events to Vercel Analytics
+  useScrollDepthTracking();
+
   const prefersReducedMotion = useReducedMotion();
 
   const fadeUp = prefersReducedMotion
@@ -455,12 +462,15 @@ export default function SubmissionFormSection() {
     setPending(false);
 
     if (!res.ok) {
+      const reason = data.error || "api_error";
       setError(data.error || "Something went wrong. Please try again.");
+      trackFormError(reason);
       turnstileRef.current?.reset();
       setTurnstileToken(null);
       return;
     }
 
+    trackFormSubmit(requestType);
     setSubmitted(true);
     form.reset();
     setSelectedRole("");

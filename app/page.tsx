@@ -41,26 +41,53 @@ const jsonLd = {
   startDate: "2026",
   location: {
     "@type": "Place",
-    name: "Casa Conejo",
-    description: "46-acre regenerative farm campus",
+    name: "Casa Conejo — Regenerative Farm Campus",
+    description: "46-acre regenerative farm and education campus in El Salvador",
     address: {
       "@type": "PostalAddress",
       addressCountry: "SV",
       addressRegion: "El Salvador",
+    },
+    geo: {
+      "@type": "GeoCoordinates",
+      addressCountry: "SV",
     },
   },
   organizer: {
     "@type": "Organization",
     name: "MurphsLife Foundation",
     url: "https://murphslifefoundation.org",
+    sameAs: [
+      "https://murphslifefoundation.org",
+      "https://summit.murphslifefoundation.com",
+    ],
   },
-  image: SHARE_IMAGE,
+  about: [
+    { "@type": "Thing", name: "Food Sovereignty" },
+    { "@type": "Thing", name: "Regenerative Agriculture" },
+    { "@type": "Thing", name: "Permaculture" },
+    { "@type": "Thing", name: "Self-Sufficiency" },
+    { "@type": "Thing", name: "Homesteading" },
+  ],
+  keywords: "food sovereignty, regenerative agriculture, homesteading, self-sufficiency, El Salvador, Casa Conejo, permaculture, farm summit",
+  image: [
+    SHARE_IMAGE,
+    `${siteUrl}/hero.webp`,
+    `${siteUrl}/farm-volcano.webp`,
+  ],
   url: siteUrl,
   offers: {
     "@type": "Offer",
     url: siteUrl,
     availability: "https://schema.org/PreOrder",
     validFrom: "2026-01-01",
+    price: "0",
+    priceCurrency: "USD",
+    description: "Register your interest — early access and updates",
+  },
+  audience: {
+    "@type": "Audience",
+    audienceType: "Farmers, Homesteaders, Educators, Entrepreneurs, Regenerative Agriculture Practitioners",
   },
 };
 

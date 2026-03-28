@@ -17,7 +17,7 @@ const securityHeaders = [
       "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://challenges.cloudflare.com",
       "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
       "font-src 'self' https://fonts.gstatic.com",
-      "img-src 'self' data: https://assets.murphslifefoundation.com https://summit.murphslifefoundation.com",
+      "img-src 'self' data: https://summit.murphslifefoundation.com",
       "connect-src 'self' https://*.supabase.co https://challenges.cloudflare.com",
       "frame-src https://challenges.cloudflare.com",
     ].join("; "),
@@ -30,17 +30,12 @@ const securityHeaders = [
 ];
 
 const nextConfig: NextConfig = {
-  // ── Image optimization
+  // ── Image optimization — AVIF/WebP auto-conversion for next/image components
   images: {
-    remotePatterns: [
-      {
-        protocol: "https",
-        hostname: "assets.murphslifefoundation.com",
-        pathname: "/**",
-      },
-    ],
-    // Modern formats for smaller file sizes
+    // All images are now local — no remote patterns needed
     formats: ["image/avif", "image/webp"],
+    deviceSizes: [640, 750, 828, 1080, 1200, 1920, 2048],
+    imageSizes: [16, 32, 48, 64, 96, 128, 256, 384],
   },
 
   // ── HTTP headers
@@ -51,7 +46,26 @@ const nextConfig: NextConfig = {
         source: "/(.*)",
         headers: securityHeaders,
       },
-      // Long-lived cache for static assets
+      // Immutable long-lived cache for all static images (1 year)
+      {
+        source: "/:path*.webp",
+        headers: [
+          { key: "Cache-Control", value: "public, max-age=31536000, immutable" },
+        ],
+      },
+      {
+        source: "/:path*.jpg",
+        headers: [
+          { key: "Cache-Control", value: "public, max-age=31536000, immutable" },
+        ],
+      },
+      {
+        source: "/:path*.png",
+        headers: [
+          { key: "Cache-Control", value: "public, max-age=31536000, immutable" },
+        ],
+      },
+      // OG image — shorter cache so social shares update within 24h
       {
         source: "/og.jpg",
         headers: [

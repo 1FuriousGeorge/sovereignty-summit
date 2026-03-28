@@ -1,5 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import { Cormorant_Garamond, Josefin_Sans } from "next/font/google";
+import { Analytics } from "@vercel/analytics/react";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 import { getSiteUrl } from "@/lib/site-url";
 import "./globals.css";
 
@@ -8,6 +10,7 @@ const josefinSans = Josefin_Sans({
   subsets: ["latin"],
   weight: ["300", "400", "600", "700"],
   display: "swap",
+  preload: true,
 });
 
 const cormorantDisplay = Cormorant_Garamond({
@@ -16,6 +19,7 @@ const cormorantDisplay = Cormorant_Garamond({
   weight: ["600", "700"],
   style: ["normal", "italic"],
   display: "swap",
+  preload: true,
 });
 
 export const viewport: Viewport = {
@@ -58,18 +62,23 @@ export default function RootLayout({
       className={`${josefinSans.variable} ${cormorantDisplay.variable} h-full scroll-smooth antialiased`}
     >
       <head>
-        {/* Preconnect to external asset CDN for faster hero image load */}
-        <link rel="preconnect" href="https://assets.murphslifefoundation.com" />
-        <link rel="dns-prefetch" href="https://assets.murphslifefoundation.com" />
+        {/* Preload hero image — highest priority LCP asset, served locally via Vercel CDN */}
+        <link rel="preload" as="image" href="/hero.webp" type="image/webp" />
         {/* Preconnect to Google Fonts (already loaded by next/font but belt-and-suspenders) */}
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+        {/* Preconnect to Supabase for faster form submission */}
+        <link rel="preconnect" href="https://vwmknvlaxkxbcjpbfqkj.supabase.co" />
         {/* Apple Touch Icon for iOS home screen */}
         <link rel="apple-touch-icon" sizes="192x192" href="/icon-192.png" />
         <link rel="apple-touch-icon" sizes="512x512" href="/icon-512.png" />
       </head>
       <body className="font-sans text-foliage flex min-h-full flex-col bg-creme">
         {children}
+        {/* Vercel Analytics — real-user pageview and event tracking */}
+        <Analytics />
+        {/* Vercel Speed Insights — real-user Core Web Vitals (LCP, CLS, INP) */}
+        <SpeedInsights />
       </body>
     </html>
   );
