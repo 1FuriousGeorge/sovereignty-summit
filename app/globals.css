@@ -142,3 +142,12 @@ button:disabled {
 ::-webkit-scrollbar-thumb:hover {
   background: #2c342d;
 }
+
+/* ── Hide scrollbar for mobile carousels ────────────────────────────────── */
+.scrollbar-none {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+.scrollbar-none::-webkit-scrollbar {
+  display: none;
+}

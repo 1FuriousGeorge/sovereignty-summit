@@ -680,6 +680,8 @@ export default function SubmissionFormSection() {
         </div>
       </section>
 
+      {/* ─── Organic transition: creme → photo ─────────────────────────── */}
+      <div className="h-8 bg-gradient-to-b from-creme to-transparent -mb-8 relative z-10 pointer-events-none" aria-hidden />
       {/* ─── Farm Photo Break 1 — volcano view ───────────────────────────── */}
       <div className="relative h-[420px] overflow-hidden md:h-[520px]" aria-hidden>
         <Image
@@ -702,6 +704,8 @@ export default function SubmissionFormSection() {
         </div>
       </div>
 
+      {/* ─── Organic transition: photo → creme ─────────────────────────── */}
+      <div className="h-8 bg-gradient-to-t from-creme to-transparent -mt-8 relative z-10 pointer-events-none" aria-hidden />
       {/* ─── Why ──────────────────────────────────────────────────────────── */}
       <section className="bg-creme px-6 py-12 md:py-20" aria-label="Why people are interested">
         <div className="mx-auto max-w-5xl">
@@ -784,6 +788,8 @@ export default function SubmissionFormSection() {
         </div>
       </section>
 
+      {/* ─── Organic transition: creme → foliage ───────────────────────── */}
+      <div className="h-10 bg-gradient-to-b from-creme to-foliage relative z-10 pointer-events-none" aria-hidden />
       {/* ─── Topics ───────────────────────────────────────────────────────── */}
       <section className="bg-foliage px-6 py-12 md:py-20" aria-label="Summit topics and themes">
         <div className="mx-auto max-w-5xl">
@@ -803,7 +809,8 @@ export default function SubmissionFormSection() {
             The full program is being built now. These are the core areas —
             practical, hands-on, and grounded in what actually works.
           </motion.p>
-          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          {/* Desktop: 3-col grid | Mobile: horizontal swipe carousel */}
+          <div className="hidden sm:grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
             {topicCards.map((card, i) => {
               const Icon = card.icon;
               return (
@@ -826,9 +833,35 @@ export default function SubmissionFormSection() {
               );
             })}
           </div>
+          {/* Mobile-only horizontal swipe carousel */}
+          <div className="sm:hidden -mx-6 overflow-x-auto scrollbar-none">
+            <div className="flex gap-4 px-6 pb-2" style={{ width: 'max-content' }}>
+              {topicCards.map((card) => {
+                const Icon = card.icon;
+                return (
+                  <div
+                    key={card.title}
+                    className="w-[72vw] max-w-[280px] flex-shrink-0 rounded-2xl border border-white/10 bg-white/8 p-6"
+                  >
+                    <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-xl bg-gold/20 text-gold">
+                      <Icon className="size-6 stroke-[1.5]" aria-hidden />
+                    </div>
+                    <h3 className="font-display mb-2 text-base font-bold text-white">
+                      {card.title}
+                    </h3>
+                    <p className="font-sans text-sm leading-relaxed text-white/75">
+                      {card.body}
+                    </p>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
         </div>
       </section>
 
+      {/* ─── Organic transition: foliage → creme ───────────────────────── */}
+      <div className="h-10 bg-gradient-to-b from-foliage to-creme relative z-10 pointer-events-none" aria-hidden />
       {/* ─── Who This Is For ──────────────────────────────────────────────── */}
       <section className="bg-creme px-6 py-12 md:py-20" aria-label="Who this summit is for">
         <div className="mx-auto max-w-5xl">
@@ -848,7 +881,8 @@ export default function SubmissionFormSection() {
             This isn&apos;t a general-audience event. It&apos;s for people who
             are already building, learning, or investing in this direction.
           </motion.p>
-          <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+          {/* Desktop: 3-col grid | Mobile: horizontal swipe carousel */}
+          <div className="hidden sm:grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
             {whoCards.map((card, i) => {
               const Icon = card.icon;
               return (
@@ -871,6 +905,30 @@ export default function SubmissionFormSection() {
               );
             })}
           </div>
+          {/* Mobile-only horizontal swipe carousel */}
+          <div className="sm:hidden -mx-6 overflow-x-auto scrollbar-none">
+            <div className="flex gap-4 px-6 pb-2" style={{ width: 'max-content' }}>
+              {whoCards.map((card) => {
+                const Icon = card.icon;
+                return (
+                  <div
+                    key={card.title}
+                    className="w-[72vw] max-w-[280px] flex-shrink-0 rounded-2xl border border-foliage/10 bg-creme p-6"
+                  >
+                    <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-xl bg-gold/15 text-foliage">
+                      <Icon className="size-6 stroke-[1.5]" aria-hidden />
+                    </div>
+                    <h3 className="font-display mb-2 text-base font-bold text-foliage">
+                      {card.title}
+                    </h3>
+                    <p className="font-sans text-sm leading-relaxed text-foliage/70">
+                      {card.body}
+                    </p>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
         </div>
       </section>
 
@@ -882,7 +940,7 @@ export default function SubmissionFormSection() {
         style={{ background: "linear-gradient(160deg, #f2ebd9 0%, #e8dfc8 100%)" }}
       >
         <div className="mx-auto max-w-5xl">
-          <div className="grid items-start gap-12 lg:grid-cols-[1fr_480px]">
+          <div className="grid items-start gap-12 lg:grid-cols-[1fr_540px]">
             {/* Left copy */}
             <div>
               <p className="font-sans mb-3 text-xs font-bold uppercase tracking-[0.16em] text-[#6b6030]">
