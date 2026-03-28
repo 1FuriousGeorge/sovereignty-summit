@@ -64,6 +64,9 @@ export default function RootLayout({
         {/* Preconnect to Google Fonts (already loaded by next/font but belt-and-suspenders) */}
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+        {/* Apple Touch Icon for iOS home screen */}
+        <link rel="apple-touch-icon" sizes="192x192" href="/icon-192.png" />
+        <link rel="apple-touch-icon" sizes="512x512" href="/icon-512.png" />
       </head>
       <body className="font-sans text-foliage flex min-h-full flex-col bg-creme">
         {children}

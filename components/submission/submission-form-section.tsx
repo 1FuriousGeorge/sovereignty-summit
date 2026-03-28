@@ -29,6 +29,13 @@ import {
 } from "lucide-react";
 import Image from "next/image";
 import { FormEvent, useCallback, useEffect, useRef, useState } from "react";
+import {
+  AERIAL_SITE_BLUR,
+  FARM_VOLCANO_BLUR,
+  WOMEN_HARVESTING_BLUR,
+  TERRACES_VOLCANO_BLUR,
+} from "@/lib/image-placeholders";
+import { useCountUp } from "@/hooks/use-count-up";
 
 const HERO_BACKGROUND =
   "https://assets.murphslifefoundation.com/hero.jpg";
@@ -318,6 +325,10 @@ export default function SubmissionFormSection() {
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
+  // Animated stat counters
+  const acresCounter = useCountUp(46, "", 1200);
+  const followersCounter = useCountUp(11, "M+", 1600);
+
   const handleTurnstileSuccess = useCallback((token: string) => {
     setTurnstileToken(token);
   }, []);
@@ -572,16 +583,34 @@ export default function SubmissionFormSection() {
       >
         <div className="mx-auto max-w-5xl">
           <dl className="grid grid-cols-2 gap-6 md:grid-cols-4">
-            {statCards.map(({ stat, label }) => (
-              <div key={stat} className="text-center">
-                <dt className="font-display text-[clamp(1.6rem,4vw,2.4rem)] font-bold leading-none text-gold">
-                  {stat}
-                </dt>
-                <dd className="mt-2 font-sans text-[0.7rem] font-semibold uppercase tracking-[0.12em] leading-snug text-white/60">
-                  {label}
-                </dd>
-              </div>
-            ))}
+            {statCards.map(({ stat, label }) => {
+              // Wire animated counters for the two numeric stats
+              const isAcres = stat === "46";
+              const isFollowers = stat === "11M+";
+              const counterRef = isAcres
+                ? acresCounter.ref
+                : isFollowers
+                ? followersCounter.ref
+                : null;
+              const displayValue = isAcres
+                ? acresCounter.display
+                : isFollowers
+                ? followersCounter.display
+                : stat;
+              return (
+                <div key={stat} className="text-center">
+                  <dt
+                    ref={counterRef as React.RefObject<HTMLElement> | null}
+                    className="font-display text-[clamp(1.6rem,4vw,2.4rem)] font-bold leading-none text-gold"
+                  >
+                    {displayValue}
+                  </dt>
+                  <dd className="mt-2 font-sans text-[0.7rem] font-semibold uppercase tracking-[0.12em] leading-snug text-white/60">
+                    {label}
+                  </dd>
+                </div>
+              );
+            })}
           </dl>
         </div>
       </section>
@@ -659,6 +688,8 @@ export default function SubmissionFormSection() {
           fill
           className="object-cover object-center"
           sizes="100vw"
+          placeholder="blur"
+          blurDataURL={FARM_VOLCANO_BLUR}
         />
         <div className="absolute inset-0 bg-gradient-to-b from-white/30 via-transparent to-foliage/60" />
         <div className="absolute bottom-8 left-1/2 -translate-x-1/2 text-center">
@@ -723,6 +754,8 @@ export default function SubmissionFormSection() {
                 fill
                 className="object-cover object-center"
                 sizes="(max-width: 768px) 100vw, 50vw"
+                placeholder="blur"
+                blurDataURL={WOMEN_HARVESTING_BLUR}
               />
             </div>
             <div className="space-y-3 text-sm leading-relaxed text-foliage/65">
@@ -893,6 +926,8 @@ export default function SubmissionFormSection() {
                   width={560}
                   height={315}
                   className="w-full object-cover"
+                  placeholder="blur"
+                  blurDataURL={TERRACES_VOLCANO_BLUR}
                 />
               </motion.div>
             </div>
@@ -1534,6 +1569,8 @@ export default function SubmissionFormSection() {
                   width={560}
                   height={315}
                   className="w-full object-cover"
+                  placeholder="blur"
+                  blurDataURL={AERIAL_SITE_BLUR}
                 />
               </motion.div>
               {/* Key differentiators — distinct from the stat strip above the fold */}

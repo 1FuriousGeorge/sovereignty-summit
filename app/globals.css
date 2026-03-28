@@ -117,3 +117,28 @@ button:not(:disabled) {
 button:disabled {
   cursor: not-allowed;
 }
+
+/* ── Branded text selection ─────────────────────────────────────────────── */
+::selection {
+  background-color: #bcb273;
+  color: #2c342d;
+}
+::-moz-selection {
+  background-color: #bcb273;
+  color: #2c342d;
+}
+
+/* ── Branded scrollbar (Chromium/Safari) ────────────────────────────────── */
+::-webkit-scrollbar {
+  width: 6px;
+}
+::-webkit-scrollbar-track {
+  background: #f2ebd9;
+}
+::-webkit-scrollbar-thumb {
+  background: #bcb273;
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #2c342d;
+}
