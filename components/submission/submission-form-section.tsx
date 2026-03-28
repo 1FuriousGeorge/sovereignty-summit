@@ -551,7 +551,7 @@ export default function SubmissionFormSection() {
           >
             The Regenerative Homestead
             <br />
-            <em className="italic" style={{ color: '#bcb273' }}>Sovereignty Summit</em>
+            <em className="italic" style={{ color: '#d4a843' }}>Sovereignty Summit</em>
             <br />
             at Casa Conejo.
           </motion.h1>
