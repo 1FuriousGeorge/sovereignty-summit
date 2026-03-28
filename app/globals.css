@@ -14,95 +14,90 @@
   /* Accessible gold — passes 4.5:1 on white and creme; used for eyebrow labels */
   --color-gold-accessible: #6b6030;
   --color-creme: #f2ebd9;
+  --color-creme-dark: #e8dfc8;
   --color-clay: #deddd4;
-  --color-summit-mint: #a8d5b5;
+  /* Warm off-white for card surfaces */
+  --color-parchment: #faf7f0;
   --font-sans: var(--font-josefin), ui-sans-serif, system-ui, sans-serif;
   --font-display: var(--font-cormorant), ui-serif, Georgia, serif;
 }
 
-@keyframes float-right {
-  from {
-    transform: translateX(0);
-  }
-  to {
-    transform: translateX(-50%);
-  }
-}
-
-@keyframes float-left {
-  from {
-    transform: translateX(-50%);
-  }
-  to {
-    transform: translateX(0);
-  }
-}
-
-@keyframes hero-logo-in {
-  from {
-    opacity: 0;
-    transform: translateY(20px) scale(0.96);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0) scale(1);
-  }
-}
-
-@keyframes float-up-down {
-  0%,
-  100% {
-    transform: translateY(0);
-  }
-  50% {
-    transform: translateY(-10px);
-  }
-}
+/* ── Keyframes ──────────────────────────────────────────────────────────────── */
 
 @keyframes kenburns-summit {
   0% {
-    transform: scale(1.04);
+    transform: scale(1.08);
   }
   100% {
-    transform: scale(1);
+    transform: scale(1.0);
   }
 }
 
 @keyframes scroll-hint-bounce {
-  0%,
-  100% {
+  0%, 100% {
     transform: translateX(-50%) translateY(0);
+    opacity: 0.7;
   }
   50% {
-    transform: translateX(-50%) translateY(-8px);
+    transform: translateX(-50%) translateY(-7px);
+    opacity: 1;
   }
 }
 
+@keyframes swipe-pulse {
+  0%, 100% { opacity: 1; transform: translateX(0); }
+  50% { opacity: 0.55; transform: translateX(4px); }
+}
+
+/* Gentle fade-in for section eyebrow labels */
+@keyframes eyebrow-in {
+  from { opacity: 0; letter-spacing: 0.08em; }
+  to { opacity: 1; letter-spacing: 0.18em; }
+}
+
+/* Shimmer effect for gold accents */
+@keyframes gold-shimmer {
+  0% { background-position: -200% center; }
+  100% { background-position: 200% center; }
+}
+
+/* Subtle pulse for the stat numbers */
+@keyframes stat-glow {
+  0%, 100% { text-shadow: 0 0 0 transparent; }
+  50% { text-shadow: 0 0 18px rgba(188, 178, 115, 0.4); }
+}
+
+/* Floating up-down for decorative elements */
+@keyframes float-up-down {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-8px); }
+}
+
+/* ── Animation utility classes ──────────────────────────────────────────────── */
+
 .animate-hero-kenburns {
-  animation: kenburns-summit 18s ease-out forwards;
+  animation: kenburns-summit 22s ease-out forwards;
 }
 
 .animate-scroll-hint {
-  animation: scroll-hint-bounce 2s ease-in-out infinite;
+  animation: scroll-hint-bounce 2.2s ease-in-out infinite;
 }
 
-/* Smooth scroll for the whole page */
+.animate-swipe-pulse {
+  animation: swipe-pulse 1.5s ease-in-out infinite;
+}
+
+.animate-float {
+  animation: float-up-down 4s ease-in-out infinite;
+}
+
+/* ── Global base ────────────────────────────────────────────────────────────── */
+
 html {
   scroll-behavior: smooth;
-}
-
-/* Respect user's reduced-motion preference */
-@media (prefers-reduced-motion: reduce) {
-  html {
-    scroll-behavior: auto;
-  }
-  .animate-hero-kenburns {
-    animation: none;
-    transform: scale(1.02);
-  }
-  .animate-scroll-hint {
-    animation: none;
-  }
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
 }
 
 body {
@@ -118,7 +113,28 @@ button:disabled {
   cursor: not-allowed;
 }
 
-/* ── Branded text selection ─────────────────────────────────────────────── */
+/* ── Reduced motion ─────────────────────────────────────────────────────────── */
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  .animate-hero-kenburns {
+    animation: none;
+    transform: scale(1.02);
+  }
+  .animate-scroll-hint {
+    animation: none;
+  }
+  .animate-swipe-pulse {
+    animation: none;
+  }
+  .animate-float {
+    animation: none;
+  }
+}
+
+/* ── Branded text selection ─────────────────────────────────────────────────── */
 ::selection {
   background-color: #bcb273;
   color: #2c342d;
@@ -128,22 +144,22 @@ button:disabled {
   color: #2c342d;
 }
 
-/* ── Branded scrollbar (Chromium/Safari) ────────────────────────────────── */
+/* ── Branded scrollbar (Chromium/Safari) ────────────────────────────────────── */
 ::-webkit-scrollbar {
-  width: 6px;
+  width: 5px;
 }
 ::-webkit-scrollbar-track {
   background: #f2ebd9;
 }
 ::-webkit-scrollbar-thumb {
-  background: #bcb273;
+  background: linear-gradient(180deg, #bcb273, #9a9260);
   border-radius: 3px;
 }
 ::-webkit-scrollbar-thumb:hover {
   background: #2c342d;
 }
 
-/* ── Hide scrollbar for mobile carousels ────────────────────────────────── */
+/* ── Hide scrollbar for mobile carousels ────────────────────────────────────── */
 .scrollbar-none {
   -ms-overflow-style: none;
   scrollbar-width: none;
@@ -152,17 +168,52 @@ button:disabled {
   display: none;
 }
 
-/* ── Swipe affordance pulsing arrow ─────────────────────────────────────── */
-@keyframes swipe-pulse {
-  0%, 100% { opacity: 1; transform: translateX(0); }
-  50% { opacity: 0.6; transform: translateX(3px); }
-}
-.animate-swipe-pulse {
-  animation: swipe-pulse 1.4s ease-in-out infinite;
+/* ── Gold gradient text utility ─────────────────────────────────────────────── */
+.text-gold-gradient {
+  background: linear-gradient(135deg, #d4c87a 0%, #bcb273 40%, #9a9260 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
 }
 
-@media (prefers-reduced-motion: reduce) {
-  .animate-swipe-pulse {
-    animation: none;
-  }
+/* ── Decorative gold hairline divider ───────────────────────────────────────── */
+.gold-divider {
+  height: 1px;
+  background: linear-gradient(90deg, transparent, #bcb273 30%, #bcb273 70%, transparent);
+  opacity: 0.35;
+}
+
+/* ── Section eyebrow label base style ──────────────────────────────────────── */
+.eyebrow {
+  font-family: var(--font-sans);
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--color-gold-accessible);
+}
+
+/* On dark backgrounds, eyebrow uses lighter gold */
+.eyebrow-light {
+  font-family: var(--font-sans);
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: #a89a5a;
+}
+
+/* ── Card hover lift ────────────────────────────────────────────────────────── */
+.card-lift {
+  transition: transform 0.2s cubic-bezier(0.22, 1, 0.36, 1),
+              box-shadow 0.2s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.card-lift:hover {
+  transform: translateY(-4px);
+}
+
+/* ── Focus ring ─────────────────────────────────────────────────────────────── */
+:focus-visible {
+  outline: 2px solid #bcb273;
+  outline-offset: 3px;
 }

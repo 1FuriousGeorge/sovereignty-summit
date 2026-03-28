@@ -505,7 +505,7 @@ export default function SubmissionFormSection() {
         <button
           type="button"
           onClick={scrollToForm}
-          className="inline-flex items-center gap-2 rounded-full bg-foliage px-5 py-2.5 text-xs font-bold uppercase tracking-[0.12em] text-creme shadow-[0_2px_10px_rgba(44,52,45,0.35)] transition-all duration-200 hover:-translate-y-0.5 hover:shadow-[0_6px_20px_rgba(44,52,45,0.45)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-creme"
+          className="inline-flex items-center gap-2 rounded-full bg-foliage px-5 py-2.5 text-xs font-bold uppercase tracking-[0.12em] text-creme shadow-[0_2px_12px_rgba(44,52,45,0.4)] transition-all duration-200 hover:-translate-y-0.5 hover:bg-[#3a4a3b] hover:shadow-[0_6px_22px_rgba(44,52,45,0.5)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gold"
         >
           <ArrowDown className="size-3.5 shrink-0 stroke-[2.5]" aria-hidden />
           Raise My Hand
@@ -530,26 +530,28 @@ export default function SubmissionFormSection() {
           }}
           aria-hidden
         />
+        {/* Multi-stop gradient: subtle at top, rich in middle where text sits, deep at bottom */}
         <div
-          className="pointer-events-none absolute inset-0 bg-gradient-to-b from-[rgba(15,15,15,0.35)] via-foliage/40 to-[rgba(15,15,15,0.72)]"
+          className="pointer-events-none absolute inset-0"
+          style={{ background: "linear-gradient(to bottom, rgba(10,10,10,0.25) 0%, rgba(15,20,15,0.50) 35%, rgba(20,30,20,0.62) 60%, rgba(10,10,10,0.78) 100%)" }}
           aria-hidden
         />
 
         <div className="relative z-10 mx-auto max-w-3xl px-6 pb-20 pt-28">
           <motion.div {...fadeUp} transition={{ ...fadeUp.transition, delay: 0 }} style={{ willChange: "opacity, transform" }}>
-            <span className="font-sans mb-6 inline-block rounded-full border border-gold/35 bg-gold/20 px-4 py-1.5 text-xs font-bold uppercase tracking-[0.16em] text-gold">
+            <span className="font-sans mb-6 inline-block rounded-full border border-gold/40 bg-gold/15 px-5 py-1.5 text-[0.65rem] font-bold uppercase tracking-[0.2em] text-gold shadow-[0_0_20px_rgba(188,178,115,0.15)]">
               Casa Conejo · El Salvador · Coming 2026
             </span>
           </motion.div>
           <motion.h1
             {...fadeUp}
             transition={{ ...fadeUp.transition, delay: 0.08 }}
-            className="font-display mb-4 text-[clamp(2rem,5vw,3.5rem)] font-bold leading-tight text-white"
-            style={{ textShadow: "0 2px 20px rgba(0,0,0,0.4)" }}
+            className="font-display mb-5 text-[clamp(2.2rem,5.5vw,4rem)] font-bold leading-[1.1] tracking-[-0.01em] text-white"
+            style={{ textShadow: "0 2px 32px rgba(0,0,0,0.55), 0 1px 4px rgba(0,0,0,0.3)" }}
           >
             The Regenerative Homestead
             <br />
-            <em className="text-summit-mint italic">Sovereignty Summit</em>
+            <em className="text-gold italic">Sovereignty Summit</em>
             <br />
             at Casa Conejo.
           </motion.h1>
@@ -557,7 +559,7 @@ export default function SubmissionFormSection() {
           <motion.p
             {...fadeUp}
             transition={{ ...fadeUp.transition, delay: 0.13 }}
-            className="mx-auto mb-5 max-w-lg font-sans text-[clamp(0.95rem,2vw,1.1rem)] font-semibold leading-relaxed text-white/90 tracking-wide"
+            className="mx-auto mb-5 max-w-lg font-sans text-[clamp(0.9rem,2vw,1.05rem)] font-semibold leading-relaxed text-white/85 tracking-[0.04em]"
           >
             Grow food. Preserve it. Build products. Learn systems. Meet aligned people.
           </motion.p>
@@ -578,7 +580,7 @@ export default function SubmissionFormSection() {
             <button
               type="button"
               onClick={scrollToForm}
-              className="flex items-center gap-2 rounded-full bg-foliage px-8 py-4 text-sm font-bold tracking-[0.08em] text-creme shadow-[0_4px_20px_rgba(44,52,45,0.5)] transition-all duration-200 hover:-translate-y-1 hover:shadow-[0_10px_32px_rgba(44,52,45,0.6)]"
+              className="flex items-center gap-2 rounded-full bg-foliage px-8 py-4 text-sm font-bold tracking-[0.08em] text-creme shadow-[0_4px_24px_rgba(44,52,45,0.55)] transition-all duration-200 hover:-translate-y-1 hover:bg-[#3a4a3b] hover:shadow-[0_12px_36px_rgba(44,52,45,0.65)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gold"
             >
               <ArrowDown className="size-4 shrink-0 stroke-[2.5]" aria-hidden />
               Raise My Hand
@@ -596,7 +598,7 @@ export default function SubmissionFormSection() {
         </div>
 
         <div
-          className="animate-scroll-hint absolute bottom-8 left-1/2 flex flex-col items-center gap-2 text-xs uppercase tracking-widest text-white/70 [text-shadow:0_1px_4px_rgba(0,0,0,0.5)]"
+          className="animate-scroll-hint absolute bottom-8 left-1/2 flex flex-col items-center gap-1.5 text-[0.6rem] uppercase tracking-[0.2em] text-white/50 [text-shadow:0_1px_4px_rgba(0,0,0,0.5)]"
           aria-hidden
         >
           <ChevronDown className="size-5 stroke-[1.5]" />
@@ -606,12 +608,12 @@ export default function SubmissionFormSection() {
 
       {/* ─── Credibility Stat Strip ─────────────────────────────────────── */}
       <section
-        className="bg-foliage px-6 py-8 shadow-[inset_0_4px_20px_rgba(0,0,0,0.2)]"
+        className="bg-foliage px-6 py-10 shadow-[inset_0_4px_24px_rgba(0,0,0,0.25),inset_0_-1px_0_rgba(188,178,115,0.12)]"
         aria-label="MurphsLife Foundation key facts"
       >
         <div className="mx-auto max-w-5xl">
-          <dl className="grid grid-cols-2 gap-6 md:grid-cols-4">
-            {statCards.map(({ stat, label }) => {
+          <dl className="grid grid-cols-2 gap-8 md:grid-cols-4">
+            {statCards.map(({ stat, label }, idx) => {
               // Wire animated counters for the two numeric stats
               const isAcres = stat === "46";
               const isFollowers = stat === "11M+";
@@ -629,11 +631,13 @@ export default function SubmissionFormSection() {
                 <div key={stat} className="text-center">
                   <dt
                     ref={counterRef as React.RefObject<HTMLElement> | null}
-                    className="font-display text-[clamp(1.6rem,4vw,2.4rem)] font-bold leading-none text-gold"
+                    className="font-display text-[clamp(1.8rem,4.5vw,2.8rem)] font-bold leading-none text-gold"
+                    style={{ textShadow: "0 0 24px rgba(188,178,115,0.25)" }}
                   >
                     {displayValue}
                   </dt>
-                  <dd className="mt-2 font-sans text-[0.7rem] font-semibold uppercase tracking-[0.12em] leading-snug text-white/60">
+                  <div className="mx-auto mt-2 mb-2 w-8 h-px bg-gold/25" aria-hidden />
+                  <dd className="font-sans text-[0.65rem] font-semibold uppercase tracking-[0.14em] leading-snug text-white/55">
                     {label}
                   </dd>
                 </div>
@@ -643,15 +647,15 @@ export default function SubmissionFormSection() {
         </div>
       </section>
 
-      {/* ─── What This Is ─────────────────────────────────────────────────── */}
-      <section className="bg-creme px-6 py-12 md:py-20" aria-label="What this summit is">
+      {/* ─── What This Is ───────────────────────────────────────────────────── */}
+      <section className="bg-creme px-6 pb-14 pt-14 md:pb-24 md:pt-24" aria-label="What this summit is">
         <div className="mx-auto max-w-5xl">
-          <p className="font-sans mb-3 text-xs font-bold uppercase tracking-[0.16em] text-[#6b6030]">
+          <motion.p {...fadeUp} className="font-sans mb-3 text-[0.7rem] font-bold uppercase tracking-[0.18em] text-gold-accessible">
             What This Is
-          </p>
+          </motion.p>
           <motion.h2
             {...fadeUp}
-            className="font-display mb-12 text-[clamp(1.6rem,3.5vw,2.4rem)] font-bold text-foliage"
+            className="font-display mb-10 text-[clamp(1.8rem,4vw,2.8rem)] font-bold leading-tight text-foliage"
           >
             Not a conference. A real farm. A real community.
           </motion.h2>
@@ -672,8 +676,8 @@ export default function SubmissionFormSection() {
                 becomes.
               </p>
               {/* Standout block — per Grok feedback */}
-              <blockquote className="rounded-xl border-l-4 border-foliage bg-foliage px-6 py-5 text-sm leading-relaxed text-white not-italic">
-                <strong className="block mb-1 text-gold text-xs font-bold uppercase tracking-widest">The difference</strong>
+              <blockquote className="rounded-xl border-l-[3px] border-gold bg-foliage px-6 py-5 text-sm leading-relaxed text-white not-italic shadow-[0_4px_20px_rgba(44,52,45,0.2)]">
+                <strong className="block mb-2 text-[0.65rem] font-bold uppercase tracking-[0.18em]" style={{ color: '#d4c87a' }}>The difference</strong>
                 Real land. Real teachers. Real skills. Real people. Not a
                 ballroom. Not a panel circuit. A working farm and a chance to
                 learn things that actually matter.
@@ -687,10 +691,10 @@ export default function SubmissionFormSection() {
                     key={card.title}
                     {...fadeUp}
                     transition={{ ...fadeUp.transition, delay: i * 0.04 }}
-                    className="flex items-start gap-4 rounded-xl border-l-4 border-foliage bg-white p-5"
+                    className="group flex items-start gap-4 rounded-xl border border-foliage/10 bg-white p-5 shadow-[0_1px_6px_rgba(44,52,45,0.06)] transition-all duration-200 hover:-translate-y-0.5 hover:border-gold/30 hover:shadow-[0_6px_24px_rgba(44,52,45,0.1)]"
                   >
-                    <span className="mt-0.5 flex shrink-0 text-foliage">
-                      <Icon className="size-7 stroke-[1.5]" aria-hidden />
+                    <span className="mt-0.5 flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-gold/12 text-foliage transition-colors duration-200 group-hover:bg-gold/20">
+                      <Icon className="size-5 stroke-[1.5]" aria-hidden />
                     </span>
                     <div>
                       <h3 className="font-sans text-sm font-semibold text-foliage">
@@ -723,10 +727,10 @@ export default function SubmissionFormSection() {
         />
         <div className="absolute inset-0 bg-gradient-to-b from-white/30 via-transparent to-foliage/60" />
         <div className="absolute bottom-8 left-1/2 -translate-x-1/2 text-center">
-          <p className="font-sans text-xs font-bold uppercase tracking-[0.18em] text-white/80">
+          <p className="font-sans text-[0.65rem] font-bold uppercase tracking-[0.2em] text-white/70">
             Casa Conejo · El Salvador
           </p>
-          <p className="mt-1 font-sans text-sm text-white/60">
+          <p className="mt-1 font-sans text-xs text-white/50">
             46 acres of regenerative land, with volcano views
           </p>
         </div>
@@ -735,14 +739,14 @@ export default function SubmissionFormSection() {
       {/* ─── Organic transition: photo → creme ─────────────────────────── */}
       <div className="h-8 bg-gradient-to-t from-creme to-transparent -mt-8 relative z-10 pointer-events-none" aria-hidden />
       {/* ─── Why ──────────────────────────────────────────────────────────── */}
-      <section className="bg-creme px-6 py-12 md:py-20" aria-label="Why people are interested">
+      <section className="bg-creme px-6 py-14 md:py-24" aria-label="Why people are interested">
         <div className="mx-auto max-w-5xl">
-          <p className="font-sans mb-3 text-xs font-bold uppercase tracking-[0.16em] text-[#6b6030]">
+          <motion.p {...fadeUp} className="font-sans mb-3 text-[0.7rem] font-bold uppercase tracking-[0.18em] text-gold-accessible">
             Why People Are Interested
-          </p>
+          </motion.p>
           <motion.h2
             {...fadeUp}
-            className="font-display mb-4 text-[clamp(1.6rem,3.5vw,2.4rem)] font-bold text-foliage"
+            className="font-display mb-4 text-[clamp(1.8rem,4vw,2.8rem)] font-bold leading-tight text-foliage"
           >
             Four reasons this matters right now.
           </motion.h2>
@@ -761,10 +765,10 @@ export default function SubmissionFormSection() {
                   key={card.title}
                   {...fadeUp}
                   transition={{ ...fadeUp.transition, delay: i * 0.04 }}
-                  className="cursor-default rounded-2xl border border-gold/15 bg-white p-8 shadow-[0_2px_8px_rgba(44,52,45,0.06)] transition-all duration-200 hover:-translate-y-1 hover:border-gold/30 hover:shadow-[0_12px_40px_rgba(44,52,45,0.12)]"
+                  className="group cursor-default rounded-2xl border border-gold/15 bg-white p-7 shadow-[0_2px_10px_rgba(44,52,45,0.07)] transition-all duration-200 hover:-translate-y-1.5 hover:border-gold/35 hover:shadow-[0_16px_48px_rgba(44,52,45,0.14)]"
                 >
-                  <div className="mb-5 flex h-14 w-14 items-center justify-center rounded-2xl bg-gold/15 text-foliage">
-                    <Icon className="size-7 stroke-[1.5]" aria-hidden />
+                  <div className="mb-5 flex h-12 w-12 items-center justify-center rounded-xl bg-gold/15 text-foliage transition-colors duration-200 group-hover:bg-gold/25">
+                    <Icon className="size-6 stroke-[1.5]" aria-hidden />
                   </div>
                   <h3 className="font-display mb-2 text-lg font-bold text-foliage">
                     {card.title}
@@ -791,10 +795,10 @@ export default function SubmissionFormSection() {
               />
             </div>
             <div className="space-y-3 text-sm leading-relaxed text-foliage/65">
-              <p className="font-sans text-xs font-bold uppercase tracking-[0.14em] text-[#6b6030]">
+              <p className="font-sans text-[0.65rem] font-bold uppercase tracking-[0.18em] text-gold-accessible">
                 Real Work. Real People.
               </p>
-              <p className="font-display text-xl font-bold text-foliage leading-snug">
+              <p className="font-display text-2xl font-bold text-foliage leading-snug">
                 This is what food sovereignty looks like in practice.
               </p>
               <p>
@@ -819,14 +823,14 @@ export default function SubmissionFormSection() {
       {/* ─── Organic transition: creme → foliage ───────────────────────── */}
       <div className="h-10 bg-gradient-to-b from-creme to-foliage relative z-10 pointer-events-none" aria-hidden />
       {/* ─── Topics ───────────────────────────────────────────────────────── */}
-      <section className="bg-foliage px-6 py-12 md:py-20" aria-label="Summit topics and themes">
+      <section className="bg-foliage px-6 py-14 md:py-24" aria-label="Summit topics and themes">
         <div className="mx-auto max-w-5xl">
-          <p className="font-sans mb-3 text-xs font-bold uppercase tracking-[0.16em] text-[#a89a5a]">
+          <motion.p {...fadeUp} className="font-sans mb-3 text-[0.7rem] font-bold uppercase tracking-[0.18em] text-[#a89a5a]">
             Topics & Themes
-          </p>
+          </motion.p>
           <motion.h2
             {...fadeUp}
-            className="font-display mb-4 text-[clamp(1.6rem,3.5vw,2.4rem)] font-bold text-white"
+            className="font-display mb-4 text-[clamp(1.8rem,4vw,2.8rem)] font-bold leading-tight text-white"
           >
             What we&apos;re covering.
           </motion.h2>
@@ -911,14 +915,14 @@ export default function SubmissionFormSection() {
       {/* ─── Organic transition: foliage → creme ───────────────────────── */}
       <div className="h-10 bg-gradient-to-b from-foliage to-creme relative z-10 pointer-events-none" aria-hidden />
       {/* ─── Who This Is For ──────────────────────────────────────────────── */}
-      <section className="bg-creme px-6 py-12 md:py-20" aria-label="Who this summit is for">
+      <section className="bg-creme px-6 py-14 md:py-24" aria-label="Who this summit is for">
         <div className="mx-auto max-w-5xl">
-          <p className="font-sans mb-3 text-xs font-bold uppercase tracking-[0.16em] text-[#6b6030]">
+          <motion.p {...fadeUp} className="font-sans mb-3 text-[0.7rem] font-bold uppercase tracking-[0.18em] text-gold-accessible">
             Who This Is For
-          </p>
+          </motion.p>
           <motion.h2
             {...fadeUp}
-            className="font-display mb-4 text-[clamp(1.6rem,3.5vw,2.4rem)] font-bold text-foliage"
+            className="font-display mb-4 text-[clamp(1.8rem,4vw,2.8rem)] font-bold leading-tight text-foliage"
           >
             Builders, learners, brands, and creators.
           </motion.h2>
@@ -938,15 +942,15 @@ export default function SubmissionFormSection() {
                   key={card.title}
                   {...fadeUp}
                   transition={{ ...fadeUp.transition, delay: i * 0.04 }}
-                  className="cursor-default rounded-2xl border border-foliage/10 bg-creme p-7 transition-[transform,box-shadow] duration-200 hover:-translate-y-1 hover:shadow-[0_8px_30px_rgba(44,52,45,0.1)]"
+                  className="group cursor-default rounded-2xl border border-foliage/10 bg-white p-7 shadow-[0_1px_6px_rgba(44,52,45,0.05)] transition-all duration-200 hover:-translate-y-1.5 hover:border-gold/25 hover:shadow-[0_12px_40px_rgba(44,52,45,0.12)]"
                 >
-                  <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-xl bg-gold/15 text-foliage">
+                  <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-xl bg-gold/15 text-foliage transition-colors duration-200 group-hover:bg-gold/25">
                     <Icon className="size-6 stroke-[1.5]" aria-hidden />
                   </div>
                   <h3 className="font-display mb-2 text-base font-bold text-foliage">
                     {card.title}
                   </h3>
-                  <p className="font-sans text-sm leading-relaxed text-foliage/70">
+                  <p className="font-sans text-sm leading-relaxed text-foliage/65">
                     {card.body}
                   </p>
                 </motion.div>
@@ -1003,20 +1007,26 @@ export default function SubmissionFormSection() {
       {/* ─── Interest Form ────────────────────────────────────────────────── */}
       <section
         id="form-section"
-        className="relative overflow-hidden px-6 py-12 md:py-20"
+        className="relative overflow-hidden px-6 py-14 md:py-24"
         aria-label="Summit interest form"
-        style={{ background: "linear-gradient(160deg, #f2ebd9 0%, #e8dfc8 100%)" }}
+        style={{ background: "linear-gradient(155deg, #f5eedc 0%, #ede3cc 50%, #e5d9be 100%)" }}
       >
+        {/* Subtle grain texture overlay */}
+        <div
+          className="pointer-events-none absolute inset-0 opacity-[0.025]"
+          style={{ backgroundImage: "url(\"data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E\")" }}
+          aria-hidden
+        />
         <div className="mx-auto max-w-5xl">
           <div className="grid items-start gap-12 lg:grid-cols-[1fr_540px]">
             {/* Left copy */}
             <div>
-              <p className="font-sans mb-3 text-xs font-bold uppercase tracking-[0.16em] text-[#6b6030]">
+              <motion.p {...fadeUp} className="font-sans mb-3 text-[0.7rem] font-bold uppercase tracking-[0.18em] text-gold-accessible">
                 Join the Interest List
-              </p>
+              </motion.p>
               <motion.h2
                 {...fadeUp}
-                className="font-display mb-4 text-[clamp(1.6rem,3.5vw,2.4rem)] font-bold text-foliage"
+                className="font-display mb-4 text-[clamp(1.8rem,4vw,2.8rem)] font-bold leading-tight text-foliage"
               >
                 Raise your hand early.
               </motion.h2>
@@ -1032,9 +1042,11 @@ export default function SubmissionFormSection() {
                   "Sponsors get a direct intro to the team",
                   "Creators get media credentials and access",
                 ].map((item) => (
-                  <div key={item} className="flex items-start gap-3 text-sm text-foliage/65">
-                    <span className="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-foliage/10 text-foliage">
-                      <ArrowRight className="size-3 stroke-[2.5]" aria-hidden />
+                  <div key={item} className="flex items-start gap-3 text-sm text-foliage/70">
+                    <span className="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-gold/20 text-foliage">
+                      <svg className="size-3" viewBox="0 0 12 12" fill="none" aria-hidden>
+                        <path d="M2 6l3 3 5-5" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round" />
+                      </svg>
                     </span>
                     {item}
                   </div>
@@ -1059,7 +1071,7 @@ export default function SubmissionFormSection() {
             </div>
 
             {/* Right form */}
-            <div className="rounded-2xl bg-white p-8 ring-1 ring-black/[0.06] shadow-[0_20px_70px_rgba(44,52,45,0.18),0_6px_20px_rgba(44,52,45,0.08)]">
+            <div className="rounded-2xl bg-white p-8 ring-1 ring-black/[0.05] shadow-[0_24px_80px_rgba(44,52,45,0.22),0_8px_24px_rgba(44,52,45,0.10)]">
               {submitted ? (
                 <motion.div
                   {...fadeUp}
@@ -1612,7 +1624,7 @@ export default function SubmissionFormSection() {
                     disabled={
                       pending || (!!TURNSTILE_SITE_KEY && !turnstileToken)
                     }
-                    className="inline-flex w-full items-center justify-center gap-2 rounded-full bg-foliage py-4 text-sm font-bold uppercase tracking-[0.12em] text-creme shadow-[0_4px_20px_rgba(44,52,45,0.3)] transition-all duration-200 hover:-translate-y-1 hover:shadow-[0_10px_32px_rgba(44,52,45,0.45)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-foliage disabled:cursor-not-allowed disabled:opacity-55"
+                    className="inline-flex w-full items-center justify-center gap-2 rounded-full bg-foliage py-4 text-sm font-bold uppercase tracking-[0.12em] text-creme shadow-[0_4px_20px_rgba(44,52,45,0.3)] transition-all duration-200 hover:-translate-y-1 hover:bg-[#3a4a3b] hover:shadow-[0_12px_36px_rgba(44,52,45,0.48)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gold disabled:cursor-not-allowed disabled:opacity-55"
                   >
                     {pending ? (
                       <>
@@ -1641,14 +1653,14 @@ export default function SubmissionFormSection() {
       </section>
 
       {/* ─── About ────────────────────────────────────────────────────────── */}
-      <section className="bg-white px-6 py-20" aria-label="About MurphsLife Foundation and Casa Conejo">
+      <section className="bg-white px-6 py-14 md:py-24" aria-label="About MurphsLife Foundation and Casa Conejo">
         <div className="mx-auto max-w-5xl">
-          <p className="font-sans mb-3 text-xs font-bold uppercase tracking-[0.16em] text-[#6b6030]">
+          <motion.p {...fadeUp} className="font-sans mb-3 text-[0.7rem] font-bold uppercase tracking-[0.18em] text-gold-accessible">
             About MurphsLife & Casa Conejo
-          </p>
+          </motion.p>
           <motion.h2
             {...fadeUp}
-            className="font-display mb-12 text-[clamp(1.6rem,3.5vw,2.4rem)] font-bold text-foliage"
+            className="font-display mb-10 text-[clamp(1.8rem,4vw,2.8rem)] font-bold leading-tight text-foliage"
           >
             We&apos;re not planning this from a conference room.
           </motion.h2>
@@ -1702,7 +1714,8 @@ export default function SubmissionFormSection() {
               {/* Key differentiators — distinct from the stat strip above the fold */}
               <motion.div
                 {...fadeUp}
-                className="rounded-xl border-l-4 border-gold bg-creme p-5"
+                className="rounded-xl border border-gold/25 bg-creme p-5 shadow-[0_1px_8px_rgba(44,52,45,0.06)]"
+                style={{ borderLeftWidth: '3px', borderLeftColor: '#bcb273' }}
               >
                 <p className="font-display text-lg font-bold leading-snug text-foliage">
                   Real land. Real systems. Real outcomes.
@@ -1714,7 +1727,8 @@ export default function SubmissionFormSection() {
               <motion.div
                 {...fadeUp}
                 transition={{ ...fadeUp.transition, delay: 0.06 }}
-                className="rounded-xl border-l-4 border-foliage bg-foliage/5 p-5"
+                className="rounded-xl border border-foliage/15 bg-foliage/5 p-5 shadow-[0_1px_8px_rgba(44,52,45,0.06)]"
+                style={{ borderLeftWidth: '3px', borderLeftColor: '#2c342d' }}
               >
                 <p className="font-display text-lg font-bold leading-snug text-foliage">
                   Government-aligned. Nonprofit-backed.
@@ -1729,26 +1743,33 @@ export default function SubmissionFormSection() {
       </section>
 
       {/* ─── Final CTA ────────────────────────────────────────────────────── */}
-      <section className="relative overflow-hidden bg-foliage px-6 py-24 text-center" aria-label="Final call to action">
+      <section className="relative overflow-hidden bg-foliage px-6 py-28 text-center" aria-label="Final call to action">
+        {/* Background image at low opacity for texture */}
         <div
-          className="pointer-events-none absolute inset-0 bg-cover bg-center opacity-[0.08]"
+          className="pointer-events-none absolute inset-0 bg-cover bg-center opacity-[0.12]"
           style={{
             backgroundImage: `url("${SUBMISSION_BACKGROUND}")`,
             backgroundPosition: "center 60%",
           }}
           aria-hidden
         />
+        {/* Radial vignette to focus attention on center */}
+        <div
+          className="pointer-events-none absolute inset-0"
+          style={{ background: "radial-gradient(ellipse 80% 70% at 50% 50%, transparent 40%, rgba(10,15,10,0.35) 100%)" }}
+          aria-hidden
+        />
         <div className="relative z-10 mx-auto max-w-2xl">
           <motion.p
             {...fadeUp}
-            className="font-sans mb-4 text-xs font-bold uppercase tracking-[0.16em] text-[#d4c87a]"
+            className="font-sans mb-4 text-[0.65rem] font-bold uppercase tracking-[0.2em] text-gold/70"
           >
-            The Regenerative Homestead Sovereignty Summit · Casa Conejo · El
-            Salvador
+            The Regenerative Homestead Sovereignty Summit · Casa Conejo · El Salvador
           </motion.p>
           <motion.h2
             {...fadeUp}
-            className="font-display mb-5 text-[clamp(1.8rem,4vw,2.8rem)] font-bold text-white"
+            className="font-display mb-5 text-[clamp(2rem,5vw,3.4rem)] font-bold leading-tight text-white"
+            style={{ textShadow: "0 2px 20px rgba(0,0,0,0.3)" }}
           >
             Raise your hand early.
           </motion.h2>
@@ -1772,7 +1793,7 @@ export default function SubmissionFormSection() {
             <button
               type="button"
               onClick={scrollToForm}
-              className="inline-flex items-center gap-3 rounded-full bg-white px-10 py-4 text-sm font-bold uppercase tracking-[0.12em] text-foliage shadow-[0_4px_28px_rgba(0,0,0,0.35)] transition-all duration-200 hover:-translate-y-1.5 hover:bg-[#fffef8] hover:shadow-[0_16px_44px_rgba(0,0,0,0.5)]"
+              className="inline-flex items-center gap-3 rounded-full bg-white px-10 py-4 text-sm font-bold uppercase tracking-[0.12em] text-foliage shadow-[0_4px_28px_rgba(0,0,0,0.35)] transition-all duration-200 hover:-translate-y-1.5 hover:bg-[#fffef8] hover:shadow-[0_18px_48px_rgba(0,0,0,0.55)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gold"
             >
               Raise Your Hand
               <ArrowRight className="size-4 shrink-0 stroke-[2.5]" aria-hidden />
@@ -1787,21 +1808,23 @@ export default function SubmissionFormSection() {
 
       </main>
 
-      <footer className="bg-[#0f0f0f] px-6 py-8 text-center" aria-label="Site footer">
+      <footer className="bg-[#0d0d0d] px-6 py-12 text-center" aria-label="Site footer">
+        {/* Gold hairline divider at top */}
+        <div className="mx-auto mb-10 max-w-xs h-px" style={{ background: "linear-gradient(90deg, transparent, rgba(188,178,115,0.3) 30%, rgba(188,178,115,0.3) 70%, transparent)" }} aria-hidden />
         <Image
           src={MURPHS_LOGO_WHITE}
           alt="MurphsLife Foundation"
           width={160}
           height={40}
-          className="mx-auto mb-4 h-7 w-auto object-contain opacity-60"
+          className="mx-auto mb-5 h-8 w-auto object-contain opacity-55"
         />
-        <p className="font-sans text-xs text-white/60">
-          MurphsLife Foundation · 501(c)(3) Nonprofit · EIN 85-3332093
+        <p className="font-sans text-[0.7rem] font-semibold uppercase tracking-[0.14em] text-white/50">
+          MurphsLife Foundation
         </p>
-        <p className="mt-2 font-sans text-xs text-white/50">
-          El Salvador & United States
+        <p className="mt-1 font-sans text-xs text-white/35">
+          501(c)(3) Nonprofit · EIN 85-3332093 · El Salvador & United States
         </p>
-        <p className="mx-auto mt-4 max-w-md font-sans text-xs leading-relaxed text-white/55">
+        <p className="mx-auto mt-5 max-w-md font-sans text-xs leading-relaxed text-white/40">
           The Regenerative Homestead Sovereignty Summit at Casa Conejo. Dates
           and complete program details coming soon. Partnerships and the speaker
           lineup are currently being finalized.
@@ -1811,26 +1834,28 @@ export default function SubmissionFormSection() {
             href="https://murphslifefoundation.org"
             target="_blank"
             rel="noopener noreferrer"
-            className="font-sans text-xs text-white/55 transition-colors hover:text-white"
+            className="font-sans text-[0.7rem] font-semibold uppercase tracking-[0.1em] text-white/40 transition-colors hover:text-gold"
           >
             MurphsLife Foundation
           </a>
+          <span className="text-white/20" aria-hidden>·</span>
           <a
             href="https://casaconejo.io"
             target="_blank"
             rel="noopener noreferrer"
-            className="font-sans text-xs text-white/55 transition-colors hover:text-white"
+            className="font-sans text-[0.7rem] font-semibold uppercase tracking-[0.1em] text-white/40 transition-colors hover:text-gold"
           >
             Casa Conejo
           </a>
+          <span className="text-white/20" aria-hidden>·</span>
           <a
             href="/sitemap.xml"
-            className="font-sans text-xs text-white/55 transition-colors hover:text-white"
+            className="font-sans text-[0.7rem] font-semibold uppercase tracking-[0.1em] text-white/40 transition-colors hover:text-gold"
           >
             Sitemap
           </a>
         </nav>
-        <p className="mt-6 font-sans text-[0.65rem] text-white/30">
+        <p className="mt-8 font-sans text-[0.6rem] text-white/20">
           &copy; {new Date().getFullYear()} MurphsLife Foundation. All rights reserved.
         </p>
       </footer>
