@@ -481,7 +481,7 @@ export default function SubmissionFormSection() {
       <nav
         id="main-nav"
         aria-label="Main navigation"
-        className="fixed left-0 right-0 top-0 z-50 flex items-center justify-between px-6 py-4 transition-all duration-300 border-b border-white/[0.04]"
+        className="fixed left-0 right-0 top-0 z-50 flex items-center justify-between px-6 py-4 transition-all duration-300 border-b border-white/[0.06] backdrop-blur-md" style={{ background: 'linear-gradient(180deg, rgba(0,0,0,0.45) 0%, rgba(0,0,0,0.15) 100%)' }}
       >
         <a
           href="https://murphslifefoundation.org"
@@ -533,7 +533,10 @@ export default function SubmissionFormSection() {
         {/* Multi-stop gradient: subtle at top, rich in middle where text sits, deep at bottom */}
         <div
           className="pointer-events-none absolute inset-0"
-          style={{ background: "linear-gradient(to bottom, rgba(10,10,10,0.25) 0%, rgba(15,20,15,0.50) 35%, rgba(20,30,20,0.62) 60%, rgba(10,10,10,0.78) 100%)" }}
+          style={{
+            background:
+              "linear-gradient(to bottom, rgba(0,0,0,0.5) 0%, rgba(0,0,0,0.2) 25%, rgba(0,0,0,0.25) 55%, rgba(0,0,0,0.78) 100%)",
+          }}
           aria-hidden
         />
 
@@ -547,11 +550,11 @@ export default function SubmissionFormSection() {
             {...fadeUp}
             transition={{ ...fadeUp.transition, delay: 0.08 }}
             className="font-display mb-5 text-[clamp(2.2rem,5.5vw,4rem)] font-bold leading-[1.1] tracking-[-0.01em] text-white"
-              style={{ textShadow: "0 2px 40px rgba(0,0,0,0.5), 0 1px 0 rgba(0,0,0,0.25), 0 4px 80px rgba(0,0,0,0.3)" }}
+            style={{ textShadow: "0 2px 40px rgba(0,0,0,0.55), 0 1px 0 rgba(0,0,0,0.3), 0 4px 80px rgba(0,0,0,0.35)" }}
           >
             The Regenerative Homestead
             <br />
-            <em className="italic" style={{ color: '#d4a843' }}>Sovereignty Summit</em>
+            <span className="font-display italic" style={{ color: '#d4a843', fontStyle: 'italic' }}>Sovereignty Summit</span>
             <br />
             at Casa Conejo.
           </motion.h1>
@@ -1027,7 +1030,7 @@ export default function SubmissionFormSection() {
               </motion.p>
               <motion.h2
                 {...fadeUp}
-                className="font-display mb-4 text-[clamp(1.8rem,4vw,2.8rem)] font-bold leading-tight text-foliage"
+                className="font-display mb-5 text-[clamp(1.8rem,4vw,2.8rem)] font-bold leading-[1.1] text-foliage"
               >
                 Raise your hand early.
               </motion.h2>
@@ -1771,15 +1774,14 @@ export default function SubmissionFormSection() {
           </motion.p>
           <motion.h2
             {...fadeUp}
-            className="font-display mb-5 text-[clamp(2rem,5vw,3.4rem)] font-bold leading-tight text-white"
-            style={{ textShadow: "0 2px 20px rgba(0,0,0,0.3)" }}
+            className="font-display mb-6 text-[clamp(2rem,5vw,3.4rem)] font-bold leading-[1.05] text-white"
+            style={{ textShadow: "0 2px 32px rgba(0,0,0,0.4)" }}
           >
             Raise your hand early.
           </motion.h2>
           <motion.p
             {...fadeUp}
-            className="mx-auto mb-4 max-w-lg text-sm leading-relaxed text-white/85"
-          >
+            className="mx-auto mb-8 max-w-xl text-base leading-relaxed text-white/90"         >
             The summit is coming. Dates and full details will be announced
             soon. If you want to attend, speak, sponsor, partner, or create —
             add your info now and be among the first to know.
@@ -1819,15 +1821,15 @@ export default function SubmissionFormSection() {
           alt="MurphsLife Foundation"
           width={160}
           height={40}
-          className="mx-auto mb-5 h-8 w-auto object-contain opacity-55"
+          className="mx-auto mb-5 h-8 w-auto object-contain opacity-75"
         />
         <p className="font-sans text-[0.7rem] font-semibold uppercase tracking-[0.14em] text-white/50">
           MurphsLife Foundation
         </p>
-        <p className="mt-1 font-sans text-xs text-white/35">
+        <p className="mt-1 font-sans text-xs text-white/50">
           501(c)(3) Nonprofit · EIN 85-3332093 · El Salvador & United States
         </p>
-        <p className="mx-auto mt-5 max-w-md font-sans text-xs leading-relaxed text-white/40">
+        <p className="mx-auto mt-5 max-w-md font-sans text-xs leading-relaxed text-white/50">
           The Regenerative Homestead Sovereignty Summit at Casa Conejo. Dates
           and complete program details coming soon. Partnerships and the speaker
           lineup are currently being finalized.
@@ -1837,7 +1839,7 @@ export default function SubmissionFormSection() {
             href="https://murphslifefoundation.org"
             target="_blank"
             rel="noopener noreferrer"
-            className="font-sans text-[0.7rem] font-semibold uppercase tracking-[0.1em] text-white/40 transition-colors hover:text-gold"
+            className="font-sans text-[0.7rem] font-semibold uppercase tracking-[0.1em] text-white/55 transition-colors hover:text-gold"
           >
             MurphsLife Foundation
           </a>
@@ -1846,19 +1848,19 @@ export default function SubmissionFormSection() {
             href="https://casaconejo.io"
             target="_blank"
             rel="noopener noreferrer"
-            className="font-sans text-[0.7rem] font-semibold uppercase tracking-[0.1em] text-white/40 transition-colors hover:text-gold"
+            className="font-sans text-[0.7rem] font-semibold uppercase tracking-[0.1em] text-white/55 transition-colors hover:text-gold"
           >
             Casa Conejo
           </a>
           <span className="text-white/20" aria-hidden>·</span>
           <a
             href="/sitemap.xml"
-            className="font-sans text-[0.7rem] font-semibold uppercase tracking-[0.1em] text-white/40 transition-colors hover:text-gold"
+            className="font-sans text-[0.7rem] font-semibold uppercase tracking-[0.1em] text-white/55 transition-colors hover:text-gold"
           >
             Sitemap
           </a>
         </nav>
-        <p className="mt-8 font-sans text-[0.6rem] text-white/20">
+        <p className="mt-8 font-sans text-[0.6rem] text-white/35">
           &copy; {new Date().getFullYear()} MurphsLife Foundation. All rights reserved.
         </p>
       </footer>
