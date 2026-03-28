@@ -151,3 +151,18 @@ button:disabled {
 .scrollbar-none::-webkit-scrollbar {
   display: none;
 }
+
+/* ── Swipe affordance pulsing arrow ─────────────────────────────────────── */
+@keyframes swipe-pulse {
+  0%, 100% { opacity: 1; transform: translateX(0); }
+  50% { opacity: 0.6; transform: translateX(3px); }
+}
+.animate-swipe-pulse {
+  animation: swipe-pulse 1.4s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-swipe-pulse {
+    animation: none;
+  }
+}

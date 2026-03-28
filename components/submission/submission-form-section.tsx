@@ -1,7 +1,7 @@
 "use client";
 
 import { Turnstile, type TurnstileInstance } from "@marsidev/react-turnstile";
-import { motion, useReducedMotion } from "framer-motion";
+import { motion, useReducedMotion, useScroll, useTransform, useSpring } from "framer-motion";
 import type { LucideIcon } from "lucide-react";
 import {
   ArrowDown,
@@ -11,6 +11,7 @@ import {
   Building2,
   Camera,
   ChevronDown,
+  ChevronRight,
   ExternalLink,
   FlaskConical,
   Globe,
@@ -292,6 +293,19 @@ export default function SubmissionFormSection() {
   // Role-based conditional form state
   const [selectedRole, setSelectedRole] = useState<RequestTypeValue>("");
 
+  // Swipe affordance — hide hint after user swipes either carousel
+  const [topicsSwipeSeen, setTopicsSwipeSeen] = useState(false);
+  const [whoSwipeSeen, setWhoSwipeSeen] = useState(false);
+  const topicsCarouselRef = useRef<HTMLDivElement>(null);
+  const whoCarouselRef = useRef<HTMLDivElement>(null);
+
+  // Parallax — hero background scrolls at 40% of scroll speed
+  const heroRef = useRef<HTMLElement>(null);
+  const { scrollY } = useScroll();
+  const rawParallax = useTransform(scrollY, [0, 800], [0, 120]);
+  // Spring-smooth the parallax to eliminate jitter
+  const parallaxY = useSpring(rawParallax, { stiffness: 80, damping: 20, mass: 0.5 });
+
   // UTM / source tracking — read from URL on mount
   const [utmSource, setUtmSource] = useState<string>("");
   const [utmMedium, setUtmMedium] = useState<string>("");
@@ -309,20 +323,27 @@ export default function SubmissionFormSection() {
   useEffect(() => {
     const nav = document.getElementById("main-nav");
     if (!nav) return;
+    let rafId: number;
     const onScroll = () => {
-      if (window.scrollY > 60) {
-        nav.style.background = "rgba(15,15,15,0.92)";
-        nav.style.backdropFilter = "blur(12px)";
-        nav.style.borderColor = "rgba(255,255,255,0.05)";
-      } else {
-        nav.style.background = "transparent";
-        nav.style.backdropFilter = "none";
-        nav.style.borderColor = "transparent";
-      }
+      cancelAnimationFrame(rafId);
+      rafId = requestAnimationFrame(() => {
+        if (window.scrollY > 60) {
+          nav.style.background = "rgba(15,15,15,0.92)";
+          nav.style.backdropFilter = "blur(12px)";
+          nav.style.borderColor = "rgba(255,255,255,0.05)";
+        } else {
+          nav.style.background = "transparent";
+          nav.style.backdropFilter = "none";
+          nav.style.borderColor = "transparent";
+        }
+      });
     };
     window.addEventListener("scroll", onScroll, { passive: true });
     onScroll();
-    return () => window.removeEventListener("scroll", onScroll);
+    return () => {
+      window.removeEventListener("scroll", onScroll);
+      cancelAnimationFrame(rafId);
+    };
   }, []);
 
   // Animated stat counters
@@ -494,12 +515,19 @@ export default function SubmissionFormSection() {
       {/* ─── Hero ─────────────────────────────────────────────────────────── */}
       <main id="main-content">
       <section
+        ref={heroRef}
         className="relative flex min-h-screen items-center justify-center overflow-hidden text-center"
         aria-label="Summit hero — The Regenerative Homestead Sovereignty Summit at Casa Conejo"
       >
-        <div
+        <motion.div
           className="animate-hero-kenburns pointer-events-none absolute inset-0 bg-cover"
-          style={{ backgroundImage: `url("${HERO_BACKGROUND}")`, backgroundPosition: "center 82%", willChange: "transform", transform: "translateZ(0)" }}
+          style={{
+            backgroundImage: `url("${HERO_BACKGROUND}")`,
+            backgroundPosition: "center 82%",
+            willChange: "transform",
+            y: prefersReducedMotion ? 0 : parallaxY,
+            scale: 1.18,
+          }}
           aria-hidden
         />
         <div
@@ -834,28 +862,48 @@ export default function SubmissionFormSection() {
             })}
           </div>
           {/* Mobile-only horizontal swipe carousel */}
-          <div className="sm:hidden -mx-6 overflow-x-auto scrollbar-none">
-            <div className="flex gap-4 px-6 pb-2" style={{ width: 'max-content' }}>
-              {topicCards.map((card) => {
-                const Icon = card.icon;
-                return (
-                  <div
-                    key={card.title}
-                    className="w-[72vw] max-w-[280px] flex-shrink-0 rounded-2xl border border-white/10 bg-white/8 p-6"
-                  >
-                    <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-xl bg-gold/20 text-gold">
-                      <Icon className="size-6 stroke-[1.5]" aria-hidden />
+          <div className="sm:hidden relative">
+            <div
+              ref={topicsCarouselRef}
+              onScroll={() => setTopicsSwipeSeen(true)}
+              className="-mx-6 overflow-x-auto scrollbar-none"
+              style={{ scrollSnapType: 'x mandatory', WebkitOverflowScrolling: 'touch' }}
+            >
+              <div className="flex gap-4 px-6 pb-4" style={{ width: 'max-content' }}>
+                {topicCards.map((card) => {
+                  const Icon = card.icon;
+                  return (
+                    <div
+                      key={card.title}
+                      className="w-[72vw] max-w-[280px] flex-shrink-0 rounded-2xl border border-white/10 bg-white/8 p-6"
+                      style={{ scrollSnapAlign: 'start' }}
+                    >
+                      <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-xl bg-gold/20 text-gold">
+                        <Icon className="size-6 stroke-[1.5]" aria-hidden />
+                      </div>
+                      <h3 className="font-display mb-2 text-base font-bold text-white">
+                        {card.title}
+                      </h3>
+                      <p className="font-sans text-sm leading-relaxed text-white/75">
+                        {card.body}
+                      </p>
                     </div>
-                    <h3 className="font-display mb-2 text-base font-bold text-white">
-                      {card.title}
-                    </h3>
-                    <p className="font-sans text-sm leading-relaxed text-white/75">
-                      {card.body}
-                    </p>
-                  </div>
-                );
-              })}
+                  );
+                })}
+              </div>
             </div>
+            {/* Swipe affordance hint — fades out after first swipe */}
+            {!topicsSwipeSeen && (
+              <div
+                className="pointer-events-none absolute right-0 top-0 flex h-full items-center pr-2"
+                aria-hidden
+              >
+                <div className="flex flex-col items-center gap-1 rounded-full bg-foliage/80 px-2 py-3 backdrop-blur-sm">
+                  <ChevronRight className="size-4 text-gold animate-swipe-pulse" />
+                  <span className="text-[9px] font-bold uppercase tracking-widest text-gold/80" style={{ writingMode: 'vertical-rl' }}>Swipe</span>
+                </div>
+              </div>
+            )}
           </div>
         </div>
       </section>
@@ -906,28 +954,48 @@ export default function SubmissionFormSection() {
             })}
           </div>
           {/* Mobile-only horizontal swipe carousel */}
-          <div className="sm:hidden -mx-6 overflow-x-auto scrollbar-none">
-            <div className="flex gap-4 px-6 pb-2" style={{ width: 'max-content' }}>
-              {whoCards.map((card) => {
-                const Icon = card.icon;
-                return (
-                  <div
-                    key={card.title}
-                    className="w-[72vw] max-w-[280px] flex-shrink-0 rounded-2xl border border-foliage/10 bg-creme p-6"
-                  >
-                    <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-xl bg-gold/15 text-foliage">
-                      <Icon className="size-6 stroke-[1.5]" aria-hidden />
+          <div className="sm:hidden relative">
+            <div
+              ref={whoCarouselRef}
+              onScroll={() => setWhoSwipeSeen(true)}
+              className="-mx-6 overflow-x-auto scrollbar-none"
+              style={{ scrollSnapType: 'x mandatory', WebkitOverflowScrolling: 'touch' }}
+            >
+              <div className="flex gap-4 px-6 pb-4" style={{ width: 'max-content' }}>
+                {whoCards.map((card) => {
+                  const Icon = card.icon;
+                  return (
+                    <div
+                      key={card.title}
+                      className="w-[72vw] max-w-[280px] flex-shrink-0 rounded-2xl border border-foliage/10 bg-white/70 p-6"
+                      style={{ scrollSnapAlign: 'start' }}
+                    >
+                      <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-xl bg-gold/15 text-foliage">
+                        <Icon className="size-6 stroke-[1.5]" aria-hidden />
+                      </div>
+                      <h3 className="font-display mb-2 text-base font-bold text-foliage">
+                        {card.title}
+                      </h3>
+                      <p className="font-sans text-sm leading-relaxed text-foliage/70">
+                        {card.body}
+                      </p>
                     </div>
-                    <h3 className="font-display mb-2 text-base font-bold text-foliage">
-                      {card.title}
-                    </h3>
-                    <p className="font-sans text-sm leading-relaxed text-foliage/70">
-                      {card.body}
-                    </p>
-                  </div>
-                );
-              })}
+                  );
+                })}
+              </div>
             </div>
+            {/* Swipe affordance hint — fades out after first swipe */}
+            {!whoSwipeSeen && (
+              <div
+                className="pointer-events-none absolute right-0 top-0 flex h-full items-center pr-2"
+                aria-hidden
+              >
+                <div className="flex flex-col items-center gap-1 rounded-full bg-foliage/80 px-2 py-3 backdrop-blur-sm">
+                  <ChevronRight className="size-4 text-gold animate-swipe-pulse" />
+                  <span className="text-[9px] font-bold uppercase tracking-widest text-gold/80" style={{ writingMode: 'vertical-rl' }}>Swipe</span>
+                </div>
+              </div>
+            )}
           </div>
         </div>
       </section>
